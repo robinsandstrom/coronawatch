@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0 minimal-ui"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.0/css/mdb.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.0/js/mdb.min.js"></script>
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body class="grey darken-4">
+        <!-- As a link -->
+    <nav class="navbar navbar-dark special-color z-depth-0 text-left">
+        <img style="height: 2.5rem;" src="{% static 'logob.svg' %}" class="pr-4">
+        <a class="navbar-brand mr-auto py-0 my-0" href="#" style="font-family: biohazard;">CoVidInfo</a>
+        <h6 class="text-white text-uppercase">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>Idag 20:06</strong></h4>
+    </nav>
+
+    <div class="row">
+        <div class="col-sm-12 col-lg-3">
+            <div class="card border-dark ml-lg-2 mr-lg-0 my-2 z-depth-0">
+                <div class="card-header text-white special-color-dark text-center">
+                    Totalt antal fall
+                </div>
+                <div class="card-body text-center text-danger special-color">
+                    <h1>136</h1>
+                </div>
+            </div>
+            <div class="card border-dark ml-lg-2 mr-lg-0 my-2 z-depth-0">
+                <div class="card-header text-white special-color-dark text-center">
+                    Fall per region
+                </div>
+                <div class="card-body text-danger special-color">
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <td class="text-white text-uppercase">Stockholm:</td>
+                            <td style="text-align: right !important;" class="text-danger"><strong>80</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-white text-uppercase">Västra Götaland:</td>
+                            <td style="text-align: right !important;" class="text-danger"><strong>14</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-white text-uppercase">Skåne:</td>
+                            <td style="text-align: right !important;" class="text-danger"><strong>14</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-white text-uppercase">Värmland:</td>
+                            <td style="text-align: right !important;" class="text-danger"><strong>13</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-white text-uppercase">Jönköpings län:</td>
+                            <td style="text-align: right !important;" class="text-danger"><strong>8</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-white text-uppercase">Uppsala:</td>
+                            <td style="text-align: right !important;" class="text-danger"><strong>5</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-white text-uppercase">Örebro län:</td>
+                            <td style="text-align: right !important;" class="text-danger"><strong>1</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-white text-uppercase">Gävleborg:</td>
+                            <td style="text-align: right !important;" class="text-danger"><strong>1</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            <div class="card border-dark mx-lg-0 my-2 z-depth-0">
+                <div class="card-header text-white special-color-dark text-center">
+                    Utveckling
+                </div>
+                <div class="card-body text-center text-danger special-color">
+                    <div id="chartdiv"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-lg-3">
+            <div class="card border-dark mr-lg-1 my-2 z-depth-0">
+                <div class="card-header text-white special-color-dark text-center">
+                    Utveckling
+                </div>
+                <div class="card-body special-color">
+                    <table class="table table-borderless table-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-white">Datum</th>
+                                <th class="text-white">Prognos</th>
+                                <th class="text-white">Utfall</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-white">6e Mars</td>
+                                <td class="text-danger">72</td>
+                                <td class="text-warning">94</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">7e Mars</td>
+                                <td class="text-danger">137</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">8e Mars</td>
+                                <td class="text-danger">200</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">9e Mars</td>
+                                <td class="text-danger">291</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">10e Mars</td>
+                                <td class="text-danger">425</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">11e Mars</td>
+                                <td class="text-danger">620</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">12e Mars</td>
+                                <td class="text-danger">904</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">13e Mars</td>
+                                <td class="text-danger">1320</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">14e Mars</td>
+                                <td class="text-danger">1924</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">15e Mars</td>
+                                <td class="text-danger">2807</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">16e Mars</td>
+                                <td class="text-danger">4094</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                            <tr>
+                                <td class="text-white">17e Mars</td>
+                                <td class="text-danger">5000+</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+<script>
+am4core.ready(function() {
+
+    // Themes begin
+    am4core.useTheme(am4themes_dark);
+    // Themes end
+
+
+function createLineChart(){
+
+    // Create chart instance
+    var chart = am4core.create("chartdiv", am4charts.XYChart);
+
+    // Create axes
+    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+    var data = {{ data|safe }}
+
+    var land = {
+            1: 'Kina',
+            2: 'Iran',
+            3: 'Italien',
+            4: 'Sydkorea',
+            5: 'Frankrike',
+            6: 'Tyskland',
+            7: 'Spanien',
+            8: 'Sverige',
+    }
+
+    for (var i = 1; i < 9; i++) {
+      createSeries("value" + i, land[i], data[i]);
+    }
+
+    // Create series
+    function createSeries(s, name, data_row) {
+        var series = chart.series.push(new am4charts.LineSeries());
+        series.dataFields.valueY = "value" + s;
+        series.dataFields.dateX = "date";
+        series.name = name;
+
+        var segment = series.segments.template;
+        segment.interactionsEnabled = true;
+
+        var hoverState = segment.states.create("hover");
+        hoverState.properties.strokeWidth = 3;
+
+        var dimmed = segment.states.create("dimmed");
+        dimmed.properties.stroke = am4core.color("#dadada");
+
+        segment.events.on("over", function(event) {
+          processOver(event.target.parent.parent.parent);
+        });
+
+        segment.events.on("out", function(event) {
+          processOut(event.target.parent.parent.parent);
+        });
+
+        for (var i = 0; i < data_row.length; i++) {
+          value = data_row[i];
+          var dataItem = {date: new Date(2020, 2, i) };
+          dataItem["value" + s] = value;
+              if(value != 0){
+                  data.push(dataItem);
+            }
+        }
+
+        series.data = data;
+        return series;
+    }
+
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = "right";
+    chart.legend.scrollable = true;
+    chart.legend.itemContainers.template.events.on("over", function(event) {
+      processOver(event.target.dataItem.dataContext);
+    })
+
+    chart.legend.itemContainers.template.events.on("out", function(event) {
+      processOut(event.target.dataItem.dataContext);
+    })
+
+    function processOver(hoveredSeries) {
+      hoveredSeries.toFront();
+
+      hoveredSeries.segments.each(function(segment) {
+        segment.setState("hover");
+      })
+
+      chart.series.each(function(series) {
+        if (series != hoveredSeries) {
+          series.segments.each(function(segment) {
+            segment.setState("dimmed");
+          })
+          series.bulletsContainer.setState("dimmed");
+        }
+      });
+    }
+
+    function processOut(hoveredSeries) {
+      chart.series.each(function(series) {
+        series.segments.each(function(segment) {
+          segment.setState("default");
+        })
+        series.bulletsContainer.setState("default");
+      });
+    }
+}
+
+createLineChart();
+
+function createHorizontalChart(){
+
+    var chart = am4core.create("horizontal_chart", am4charts.XYChart);
+
+    chart.data = [{
+            "year": "Stockholm",
+            "income": 23.5,
+        }, {
+            "year": "Götebort",
+            "income": 26.2,
+        }, {
+            "year": "Småland",
+            "income": 30.1,
+        }, {
+            "year": "Västkusten",
+            "income": 29.5,
+        }, {
+            "year": "Hej och hå",
+            "income": 24.6,
+        }];
+
+    //create category axis for years
+    var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "year";
+    categoryAxis.renderer.inversed = true;
+    categoryAxis.renderer.grid.template.location = 0;
+
+    //create value axis for income and expenses
+    var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+    valueAxis.renderer.opposite = true;
+
+
+    //create columns
+    var series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.categoryY = "year";
+    series.dataFields.valueX = "income";
+    series.name = "Income";
+    series.columns.template.fillOpacity = 0.5;
+    series.columns.template.strokeOpacity = 0;
+    series.tooltipText = "Income in {categoryY}: {valueX.value}";
+
+    //add chart cursor
+    chart.cursor = new am4charts.XYCursor();
+    chart.cursor.behavior = "zoomY";
+
+    //add legend
+    chart.legend = new am4charts.Legend();
+
+
+};
+
+//createHorizontalChart();
+
+}); // end am4core.ready()
+</script>
+
+
+</html>
