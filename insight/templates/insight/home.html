@@ -294,7 +294,14 @@ am4core.ready(function() {
         chart.legend.scrollable = false;
         chart.mouseWheelBehavior = "none";
         chart.chartContainer.wheelable = false;
-
+        chart.panEventsEnabled = false;
+        chart.zoomable = false;
+        chart.pan = false;
+        chart.chartContainer.ChartCursor.zoomable = false;
+        chart.chartContainer.ChartCursor.zoomable = false;
+        chart.tapToActivate = true;
+        chart.tapTimeout = 5000;
+        chart.dragGrip.disabled = false;
     }
 
 
@@ -334,7 +341,7 @@ function createMapChart(data){
     var columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
     columnTemplate.strokeOpacity = 1;
-    
+
     chart.legend.position = "bottom";
     chart.legend.scrollable = false;
     chart.mouseWheelBehavior = "none";
