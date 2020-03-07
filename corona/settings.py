@@ -26,7 +26,7 @@ SECRET_KEY = '$8t4_!4*v137lkl-i)avb-vn4%!n7l&m=#vgspg+m64xqqkh!7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*.herokuapp.com, coronawatch.se, 127.0.0.1']
 
 
 # Application definition

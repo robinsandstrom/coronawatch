@@ -19,29 +19,34 @@
     <script src="https://www.amcharts.com/lib/4/charts.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="https://www.amcharts.com/lib/4/maps.js"></script>
+    <script src="https://www.amcharts.com/lib/4/geodata/usaLow.js"></script>
+
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
+
 </head>
 
 <body class="grey darken-4">
         <!-- As a link -->
     <nav class="navbar navbar-dark special-color z-depth-0 text-left">
         <img style="height: 2.5rem;" src="{% static 'logob.svg' %}" class="pr-4">
-        <a class="navbar-brand mr-auto py-0 my-0" href="#" style="font-family: biohazard;">CoVidInfo</a>
+        <a class="navbar-brand mr-auto py-0 my-0" href="#" style="font-family: biohazard;">Coronawatch.se</a>
         <h6 class="text-white text-uppercase">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>Idag 20:06</strong></h4>
     </nav>
-
     <div class="row">
-        <div class="col-sm-12 col-lg-3">
-            <div class="card border-dark ml-lg-2 mr-lg-0 my-2 z-depth-0">
+        <div class="col-sm-12 col-lg-3 pr-0">
+            <div class="card h-100 border-dark ml-lg-2 mr-lg-0 my-2 z-depth-0">
                 <div class="card-header text-white special-color-dark text-center">
                     Totalt antal fall
                 </div>
                 <div class="card-body text-center text-danger special-color">
                     <h1>136</h1>
+                    <hr>
+                    <h2 class="text-white">+45</h2>
+                    <h6 class="text-muted">(senaste 24h)</h6>
                 </div>
-            </div>
-            <div class="card border-dark ml-lg-2 mr-lg-0 my-2 z-depth-0">
+
                 <div class="card-header text-white special-color-dark text-center">
                     Fall per region
                 </div>
@@ -83,8 +88,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-lg-6">
-            <div class="card border-dark mx-lg-0 my-2 z-depth-0">
+        <div class="col-sm-12 col-lg-6 px-2" >
+            <div class="card border-dark mx-lg-0 my-2 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Utveckling
                 </div>
@@ -93,9 +98,8 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-12 col-lg-3">
-            <div class="card border-dark mr-lg-1 my-2 z-depth-0">
+        <div class="col-sm-12 col-lg-3 pl-0" >
+            <div class="card border-dark mr-lg-1 my-2 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Utveckling
                 </div>
@@ -176,7 +180,18 @@
             </div>
         </div>
 
+        <div class="col-lg-12">
+            <div class="card border-dark mx-lg-0 my-4 z-depth-0 h-100">
+                <div class="card-header text-white special-color-dark text-center">
+                    Utveckling
+                </div>
+                <div class="card-body text-center text-danger special-color">
+                    <div id="map_chart_div"></div>
+                </div>
+            </div>
+        </div>
     </div>
+
 
 </body>
 <script>
@@ -289,59 +304,227 @@ function createLineChart(){
 }
 
 createLineChart();
+createMapChart();
 
-function createHorizontalChart(){
+function createMapChart(){
+    var chart = am4core.create("map_chart_div", am4maps.MapChart);
+    chart.maxZoomLevel = 64;
 
-    var chart = am4core.create("horizontal_chart", am4charts.XYChart);
+    // Set map definition
+    chart.geodata = am4geodata_usaLow;
 
-    chart.data = [{
-            "year": "Stockholm",
-            "income": 23.5,
-        }, {
-            "year": "Götebort",
-            "income": 26.2,
-        }, {
-            "year": "Småland",
-            "income": 30.1,
-        }, {
-            "year": "Västkusten",
-            "income": 29.5,
-        }, {
-            "year": "Hej och hå",
-            "income": 24.6,
-        }];
+    // Set projection
+    chart.projection = new am4maps.projections.AlbersUsa();
 
-    //create category axis for years
-    var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = "year";
-    categoryAxis.renderer.inversed = true;
-    categoryAxis.renderer.grid.template.location = 0;
-
-    //create value axis for income and expenses
-    var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
-    valueAxis.renderer.opposite = true;
+    // Add button
+    var zoomOut = chart.tooltipContainer.createChild(am4core.ZoomOutButton);
+    zoomOut.align = "right";
+    zoomOut.valign = "top";
+    zoomOut.margin(20, 20, 20, 20);
+    zoomOut.events.on("hit", function() {
+      if (currentSeries) {
+        currentSeries.hide();
+      }
+      chart.goHome();
+      zoomOut.hide();
+      currentSeries = regionalSeries.US.series;
+      currentSeries.show();
+    });
+    zoomOut.hide();
 
 
-    //create columns
-    var series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.categoryY = "year";
-    series.dataFields.valueX = "income";
-    series.name = "Income";
-    series.columns.template.fillOpacity = 0.5;
-    series.columns.template.strokeOpacity = 0;
-    series.tooltipText = "Income in {categoryY}: {valueX.value}";
+    // Create map polygon series
+    var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+    polygonSeries.useGeodata = true;
+    polygonSeries.calculateVisualCenter = true;
 
-    //add chart cursor
-    chart.cursor = new am4charts.XYCursor();
-    chart.cursor.behavior = "zoomY";
+    // Configure series
+    var polygonTemplate = polygonSeries.mapPolygons.template;
+    polygonTemplate.tooltipText = "{name}";
+    polygonTemplate.fill = chart.colors.getIndex(0);
 
-    //add legend
-    chart.legend = new am4charts.Legend();
+    // Load data when map polygons are ready
+    chart.events.on("ready", loadStores);
 
+    // Loads store data
+    function loadStores() {
+      var loader = new am4core.DataSource();
+      loader.url = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-160/TargetStores.json";
+      loader.events.on("parseended", function(ev) {
+        setupStores(ev.target.data);
+      });
+      loader.load();
+    }
 
-};
+    // Creates a series
+    function createSeries(heatfield) {
+      var series = chart.series.push(new am4maps.MapImageSeries());
+      series.dataFields.value = heatfield;
 
-//createHorizontalChart();
+      var template = series.mapImages.template;
+      template.verticalCenter = "middle";
+      template.horizontalCenter = "middle";
+      template.propertyFields.latitude = "lat";
+      template.propertyFields.longitude = "long";
+      template.tooltipText = "{name}:\n[bold]{stores} stores[/]";
+
+      var circle = template.createChild(am4core.Circle);
+      circle.radius = 10;
+      circle.fillOpacity = 0.7;
+      circle.verticalCenter = "middle";
+      circle.horizontalCenter = "middle";
+      circle.nonScaling = true;
+
+      var label = template.createChild(am4core.Label);
+      label.text = "{stores}";
+      label.fill = am4core.color("#fff");
+      label.verticalCenter = "middle";
+      label.horizontalCenter = "middle";
+      label.nonScaling = true;
+
+      var heat = series.heatRules.push({
+        target: circle,
+        property: "radius",
+        min: 10,
+        max: 30
+      });
+
+      // Set up drill-down
+      series.mapImages.template.events.on("hit", function(ev) {
+
+        // Determine what we've clicked on
+        var data = ev.target.dataItem.dataContext;
+
+        // No id? Individual store - nothing to drill down to further
+        if (!data.target) {
+          return;
+        }
+
+        // Create actual series if it hasn't been yet created
+        if (!regionalSeries[data.target].series) {
+          regionalSeries[data.target].series = createSeries("count");
+          regionalSeries[data.target].series.data = data.markerData;
+        }
+
+        // Hide current series
+        if (currentSeries) {
+          currentSeries.hide();
+        }
+
+        // Control zoom
+        if (data.type == "state") {
+          var statePolygon = polygonSeries.getPolygonById("US-" + data.state);
+          chart.zoomToMapObject(statePolygon);
+        }
+        else if (data.type == "city") {
+          chart.zoomToGeoPoint({
+            latitude: data.lat,
+            longitude: data.long
+          }, 64, true);
+        }
+        zoomOut.show();
+
+        // Show new targert series
+        currentSeries = regionalSeries[data.target].series;
+        currentSeries.show();
+      });
+
+      return series;
+    }
+
+    var regionalSeries = {};
+    var currentSeries;
+
+    function setupStores(data) {
+
+      // Init country-level series
+      regionalSeries.US = {
+        markerData: [],
+        series: createSeries("stores")
+      };
+
+      // Set current series
+      currentSeries = regionalSeries.US.series;
+
+      // Process data
+      am4core.array.each(data.query_results, function(store) {
+
+        // Get store data
+        var store = {
+          state: store.MAIL_ST_PROV_C,
+          long: am4core.type.toNumber(store.LNGTD_I),
+          lat: am4core.type.toNumber(store.LATTD_I),
+          location: store.co_loc_n,
+          city: store.mail_city_n,
+          count: am4core.type.toNumber(store.count)
+        };
+
+        // Process state-level data
+        if (regionalSeries[store.state] == undefined) {
+          var statePolygon = polygonSeries.getPolygonById("US-" + store.state);
+          if (statePolygon) {
+
+            // Add state data
+            regionalSeries[store.state] = {
+              target: store.state,
+              type: "state",
+              name: statePolygon.dataItem.dataContext.name,
+              count: store.count,
+              stores: 1,
+              lat: statePolygon.visualLatitude,
+              long: statePolygon.visualLongitude,
+              state: store.state,
+              markerData: []
+            };
+            regionalSeries.US.markerData.push(regionalSeries[store.state]);
+
+          }
+          else {
+            // State not found
+            return;
+          }
+        }
+        else {
+          regionalSeries[store.state].stores++;
+          regionalSeries[store.state].count += store.count;
+        }
+
+        // Process city-level data
+        if (regionalSeries[store.city] == undefined) {
+          regionalSeries[store.city] = {
+            target: store.city,
+            type: "city",
+            name: store.city,
+            count: store.count,
+            stores: 1,
+            lat: store.lat,
+            long: store.long,
+            state: store.state,
+            markerData: []
+          };
+          regionalSeries[store.state].markerData.push(regionalSeries[store.city]);
+        }
+        else {
+          regionalSeries[store.city].stores++;
+          regionalSeries[store.city].count += store.count;
+        }
+
+        // Process individual store
+        regionalSeries[store.city].markerData.push({
+          name: store.location,
+          count: store.count,
+          stores: 1,
+          lat: store.lat,
+          long: store.long,
+          state: store.state
+        });
+
+      });
+
+      regionalSeries.US.series.data = regionalSeries.US.markerData;
+    }
+
+}
 
 }); // end am4core.ready()
 </script>

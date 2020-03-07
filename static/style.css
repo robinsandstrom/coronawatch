@@ -4,7 +4,7 @@
        url('/static/safety.otf') format("truetype");
 }
 
-#chartdiv {
+#chartdiv, .chartdiv {
   width: 100%;
   height: 500px;
 }
@@ -12,4 +12,10 @@
 html, body {
     max-width: 100%;
     overflow-x: hidden;
+}
+
+
+.row-flex {
+  display: flex;
+  flex-wrap: wrap;
 }
