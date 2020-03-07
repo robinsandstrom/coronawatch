@@ -35,4 +35,4 @@ class CoronaCase(models.Model):
 
     def __str__(self):
 
-        return str(date) + ' ' + str(region) + ' ' + str(text) + ' ' + str(infected)
+        return str(self.date) + ' ' + str(self.region) + ' ' + str(self.text) + ' ' + str(self.infected)
