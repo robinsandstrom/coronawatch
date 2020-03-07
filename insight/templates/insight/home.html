@@ -34,9 +34,9 @@
         <a class="navbar-brand mr-auto py-0 my-0" href="#" style="font-family: biohazard;">Coronawatch.se</a>
         <h6 class="text-white text-uppercase">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>Idag 11:51</strong></h4>
     </nav>
-    <div class="row mx-lg-1">
-        <div class="col-sm-12 col-lg-3 pr-0">
-            <div class="card h-100 border-dark ml-lg-2 mr-lg-0 my-2 z-depth-0">
+    <div class="row mx-lg-0">
+        <div class="col-sm-12 col-lg-2 pr-0">
+            <div class="card grey darken-4 h-100 border-dark mx-sm-0 my-2 z-depth-0">
                 <div class="card-header text-white special-color-dark text-center">
                     Totalt antal fall
                 </div>
@@ -47,7 +47,7 @@
                     <h6 class="text-muted">(senaste 24h)</h6>
                 </div>
 
-                <div class="card-header text-white special-color-dark text-center">
+                <div class="card-header mt-3 text-white special-color-dark text-center">
                     Fall per region
                 </div>
                 <div class="card-body text-danger special-color">
@@ -88,92 +88,32 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-lg-6 px-2" >
+        <div class="col-sm-12 col-lg-7 px-2" >
             <div class="card border-dark mx-lg-0 my-2 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Utveckling
                 </div>
                 <div class="card-body text-center text-danger special-color">
                     <div id="chartdiv"></div>
+                    <p class="text-muted">Källa: ECDC, European Centre for Disease Prevention and Control</p>
                 </div>
             </div>
         </div>
         <div class="col-sm-12 col-lg-3 pl-0" >
             <div class="card border-dark mr-lg-1 my-2 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
-                    Utveckling
+                    Senaste nytt
                 </div>
                 <div class="card-body special-color">
-                    <table class="table table-borderless table-sm">
-                        <thead>
-                            <tr>
-                                <th class="text-white">Datum</th>
-                                <th class="text-white">Prognos</th>
-                                <th class="text-white">Utfall</th>
-                            </tr>
-                        </thead>
+                    <table class="table table-sm text-white">
                         <tbody>
+                            {% for case in cases %}
                             <tr>
-                                <td class="text-white">6e Mars</td>
-                                <td class="text-danger">72</td>
-                                <td class="text-warning">94</td>
+                                <td>{{ case.infected }}</td>
+                                <td>{{ case.location }}</td>
+                                <td>{{ case.date|date:"D d M Y" }}</td>
                             </tr>
-                            <tr>
-                                <td class="text-white">7e Mars</td>
-                                <td class="text-danger">137</td>
-                                <td class="text-warning">137</td>
-                            </tr>
-                            <tr>
-                                <td class="text-white">8e Mars</td>
-                                <td class="text-danger">200</td>
-                                <td class="text-muted">-</td>
-                            </tr>
-                            <tr>
-                                <td class="text-white">9e Mars</td>
-                                <td class="text-danger">291</td>
-                                <td class="text-muted">-</td>
-                            </tr>
-                            <tr>
-                                <td class="text-white">10e Mars</td>
-                                <td class="text-danger">425</td>
-                                <td class="text-muted">-</td>
-                            </tr>
-                            <tr>
-                                <td class="text-white">11e Mars</td>
-                                <td class="text-danger">620</td>
-                                <td class="text-muted">-</td>
-                            </tr>
-                            <tr>
-                                <td class="text-white">12e Mars</td>
-                                <td class="text-danger">904</td>
-                                <td class="text-muted">-</td>
-                            </tr>
-                            <tr>
-                                <td class="text-white">13e Mars</td>
-                                <td class="text-danger">1320</td>
-                                <td class="text-muted">-</td>
-                            </tr>
-                            <tr>
-                                <td class="text-white">14e Mars</td>
-                                <td class="text-danger">1924</td>
-                                <td class="text-muted">-</td>
-                            </tr>
-                            <tr>
-                                <td class="text-white">15e Mars</td>
-                                <td class="text-danger">2807</td>
-                                <td class="text-muted">-</td>
-                            </tr>
-                            <tr>
-                                <td class="text-white">16e Mars</td>
-                                <td class="text-danger">4094</td>
-                                <td class="text-muted">-</td>
-                            </tr>
-                            <tr>
-                                <td class="text-white">17e Mars</td>
-                                <td class="text-danger">5000+</td>
-                                <td class="text-muted">-</td>
-                            </tr>
-
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -181,12 +121,63 @@
         </div>
 
         <div class="col-lg-12 col-sm-12">
-            <div class="card border-dark mx-lg-2 my-3 z-depth-0 h-100">
+            <div class="card border-dark mx-lg-0 my-3 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Nya fall per dag
                 </div>
                 <div class="card-body text-center text-danger special-color">
                     <div id="bar_chart"></div>
+                    <table class="table table-borderless table-sm">
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="text-white">Datum</th>
+                                <td class="text-white">6e Mars</td>
+                                <td class="text-white">7e Mars</td>
+                                <td class="text-white">8e Mars</td>
+                                <td class="text-white">9e Mars</td>
+                                <td class="text-white">10e Mars</td>
+                                <td class="text-white">11e Mars</td>
+                                <td class="text-white">12e Mars</td>
+                                <td class="text-white">13e Mars</td>
+                                <td class="text-white">14e Mars</td>
+                                <td class="text-white">15e Mars</td>
+                                <td class="text-white">16e Mars</td>
+                                <td class="text-white">17e Mars</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-white">Prognos</th>
+                                <td class="text-danger">72</td>
+                                <td class="text-danger">137</td>
+                                <td class="text-danger">200</td>
+                                <td class="text-danger">291</td>
+                                <td class="text-danger">425</td>
+                                <td class="text-danger">620</td>
+                                <td class="text-danger">904</td>
+                                <td class="text-danger">1320</td>
+                                <td class="text-danger">1924</td>
+                                <td class="text-danger">2807</td>
+                                <td class="text-danger">4094</td>
+                                <td class="text-danger">5000+</td>
+                            </tr>
+                            <tr style="font-size: 20px;">
+                                <th scope="row" class="text-white">Utfall</th>
+                                <td class="text-warning">94</td>
+                                <td class="text-warning">137</td>
+                                <td class="text-muted">-</td>
+                                <td class="text-muted">-</td>
+                                <td class="text-muted">-</td>
+                                <td class="text-muted">-</td>
+                                <td class="text-muted">-</td>
+                                <td class="text-muted">-</td>
+                                <td class="text-muted">-</td>
+                                <td class="text-muted">-</td>
+                                <td class="text-muted">-</td>
+                                <td class="text-muted">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-muted">Prognosen bygger på en kurva anpassad på en exponeniell funktion anpassat på utvecklingen i andra länder som fått
+                        ett utbrott.</p>
                 </div>
             </div>
         </div>
@@ -225,42 +216,80 @@ am4core.ready(function() {
                 8: 'Sverige',
         }
 
-        for (var i = 1; i < 11; i++) {
+        for (var i = 1; i < 9; i++) {
           createSeries("value" + i, land[i], data[i], i);
         }
 
+        createPrognosis("value" + i, land[8], data[8], 8);
+
         // Create series
-        function createSeries(s, name, data_row, i) {
+        function createSeries(s, name, data_row, j) {
             var series = chart.series.push(new am4charts.LineSeries());
             series.dataFields.valueY = "value" + s;
             series.dataFields.dateX = "date";
             series.name = name;
 
-            if(i==9){
-                series.strokeDasharray = "5,4";
-                series.name = 'Lägre 95%';
-            }
-
-            if(i==10){
-                series.strokeDasharray = "5,4";
-                series.name = 'Högre 95%';
-            }
-
             for (var i = 0; i < data_row.length; i++) {
               value = data_row[i];
-              var dataItem = {date: new Date(2020, 2, i+1), value: value };
+
+              var seriesdate = new Date(2020, 2, (i-3) +1)
+              var today = new Date();
+              var dataItem = {date: seriesdate, value: value };
               dataItem["value" + s] = value;
+
                   if(value != 0){
-                      data.push(dataItem);
-                }
+
+                      if(j == 8){
+                          if(seriesdate <= today){
+                              console.log(j, seriesdate, today, seriesdate<today);
+                              data.push(dataItem);
+                          }
+                      }else if(j != 8){
+
+                          data.push(dataItem);
+
+                      }
+
+                  }
+
             }
 
             series.data = data;
             return series;
         }
 
+        function createPrognosis(s, name, data_row, j){
+            var series = chart.series.push(new am4charts.LineSeries());
+            series.dataFields.valueY = "value" + s;
+            series.dataFields.dateX = "date";
+            series.name = name;
+
+            if(j==8){
+                series.strokeDasharray = "5,4";
+                series.name = 'Prognos för sverige';
+            }
+
+            for (var i = 0; i < data_row.length; i++) {
+              value = data_row[i];
+              var seriesdate = new Date(2020, 2, (i-3) +1)
+              var today = new Date();
+              var dataItem = {date: seriesdate, value: value };
+              dataItem["value" + s] = value;
+
+                  if(value != 0){
+                      if(j == 8){
+                          if(seriesdate >= today){
+                              data.push(dataItem);
+                          }
+                      }
+                  }
+            }
+            series.data = data;
+            return series;
+        }
+
         chart.legend = new am4charts.Legend();
-        chart.legend.position = "right";
+        chart.legend.position = "bottom";
         chart.legend.scrollable = true;
 
         chart.cursor = new am4charts.XYCursor();
@@ -269,6 +298,7 @@ am4core.ready(function() {
         var scrollbarX = new am4core.Scrollbar();
         scrollbarX.marginBottom = 20;
         chart.scrollbarX = scrollbarX;
+        chart.mouseWheelBehavior = "none";
 
     }
 
@@ -317,5 +347,17 @@ function createMapChart(data){
 }); // end am4core.ready()
 </script>
 
+<style media="screen">
+    #chartdiv, .chartdiv {
+      width: 100%;
+      height: 500px;
+    }
+
+    html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+        font-family: Avenir-Light !important;
+    }
+</style>
 
 </html>

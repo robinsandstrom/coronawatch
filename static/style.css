@@ -4,18 +4,20 @@
        url('/static/safety.otf') format("truetype");
 }
 
-#chartdiv, .chartdiv {
-  width: 100%;
-  height: 500px;
+@font-face {
+  font-family: Avenir-Light;
+  src: local('safety'),
+       url('/static/Avenir-Light.otf') format("truetype");
 }
 
-html, body {
-    max-width: 100%;
-    overflow-x: hidden;
+@font-face {
+  font-family: Avenir-Regular;
+  src: local('safety'),
+       url('/static/Avenir-Regular.otf') format("truetype");
 }
 
-
-.row-flex {
-  display: flex;
-  flex-wrap: wrap;
+@font-face {
+  font-family: Avenir-Bold;
+  src: local('safety'),
+       url('/static/Avenir-Bold.otf') format("truetype");
 }
