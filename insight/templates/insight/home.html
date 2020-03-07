@@ -96,7 +96,7 @@
                     Prognos
                 </div>
                 <div class="card-body text-center text-danger special-color">
-                    <table class="table table-borderless">
+                    <table class="table table-borderless" id="prognosis_table">
                         <tbody>
                             <tr>
                                 <th scope="row" class="text-white">Datum</th>
@@ -441,7 +441,31 @@ function realMapChart(data){
       hs.properties.fill = am4core.color("#3c5bdc");
 
 }
+var w = parseInt(window.innerWidth);
+if (w < 500){
+    transpose(1);
+}
 
+function transpose(id){
+
+    $("#prognosis_table").each(function() {
+        var $this = $(this);
+        var newrows = [];
+        $this.find("tr").each(function(){
+            var i = 0;
+            $(this).find("td").each(function(){
+                i++;
+                if(newrows[i] === undefined) { newrows[i] = $("<tr></tr>"); }
+                newrows[i].append($(this));
+            });
+        });
+        $this.find("tr").remove();
+        $.each(newrows, function(){
+            $this.append(this);
+        });
+    });
+
+}
 
 function createMapChart(data){
     var chart = am4core.create("bar_chart", am4charts.XYChart);
