@@ -7,7 +7,7 @@ from insight.models import CoronaCase
 def index(request):
     template = 'insight/home.html'
     data = load_csv()
-    cases = CoronaCase.objects.all().order_by('date')
+    cases = CoronaCase.objects.all().order_by('-date')
     ordered_regional_data, regional_data = populate_regional_data(cases)
 
     total = 0

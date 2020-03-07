@@ -90,7 +90,7 @@
         </div>
 
         <div class="col-sm-12 col-lg-8 pr-0">
-            <div class="card grey darken-4 h-100 border-dark mx-sm-0 my-3 z-depth-0">
+            <div class="card grey darken-4 border-dark mx-sm-0 my-3 z-depth-0">
 
                 <div class="card-header text-white special-color-dark text-center">
                     Prognos
@@ -183,6 +183,7 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                    <p class="text-muted">Källa: Expressen</p>
                 </div>
             </div>
 
@@ -377,10 +378,12 @@ function realMapChart(data){
       // Set heatmap values for each state
       polygonSeries.data = [
           {% for region, infection in regional_data.items %}
+            {% if infection.value > 0 %}
             {
               id: {{ region }},
               value: {{ infection.value }}
             },
+            {% endif %}
         {% endfor %}
       ];
 
