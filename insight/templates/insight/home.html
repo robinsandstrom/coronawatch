@@ -35,8 +35,8 @@
         <a class="navbar-brand mr-auto py-0 my-0" href="#" style="font-family: biohazard;">Coronawatch.se</a>
         <h6 class="text-white text-uppercase">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>Idag 11:51</strong></h4>
     </nav>
-    <div class="row mx-lg-0">
-        <div class="col-sm-12 col-lg-2 pr-0">
+    <div class="row mx-lg-1 mx-sm-5">
+        <div class="col-sm-12 col-lg-2 px-sm-2 mt-sm-4">
             <div class="card grey darken-4 h-100 border-dark mx-sm-0 my-2 z-depth-0">
                 <div class="card-header text-white special-color-dark text-center">
                     Totalt antal fall
@@ -51,7 +51,7 @@
                 <div class="card-header text-white special-color-dark text-center">
                     Fall per region
                 </div>
-                <div class="card-body p-1 text-danger special-color">
+                <div class="card-body p-lg-1 px-sm-5 text-danger special-color">
                     <table class="table table-sm table-borderless">
                         {% for region, infected in ordered_regional_data.items %}
                             {% if infected.value > 0 %}
@@ -65,7 +65,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-lg-7 px-2" >
+        <div class="col-sm-12 col-lg-7 px-sm-2 mt-sm-4" >
             <div class="card border-dark mx-lg-0 my-2 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Utveckling
@@ -76,7 +76,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-lg-3 pl-0" >
+        <div class="col-sm-12 col-lg-3 px-sm-2 mt-sm-4" >
             <div class="card border-dark mr-lg-2 my-2 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Geografisk smittspridning
@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-lg-8 pr-0">
+        <div class="col-sm-12 col-lg-8 px-sm-2 mt-sm-4">
             <div class="card grey darken-4 border-dark mx-sm-0 my-3 z-depth-0">
 
                 <div class="card-header text-white special-color-dark text-center">
@@ -159,7 +159,7 @@
             </div>
         </div>
 
-        <div class="col-lg-4 col-sm-12 pl-0">
+        <div class="col-lg-4 col-sm-12 px-sm-2 mt-sm-4">
             <div class="card border-dark ml-lg-2 mr-lg-1 my-3 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Senaste smittor
