@@ -41,7 +41,7 @@
                     Totalt antal fall
                 </div>
                 <div class="card-body text-center text-danger special-color">
-                    <h1>140</h1>
+                    <h1>161</h1>
                     <hr>
                     <h2 class="text-white">+45</h2>
                     <h6 class="text-muted">(senaste 24h)</h6>
@@ -54,7 +54,7 @@
                     <table class="table table-sm table-borderless">
                         <tr>
                             <td class="text-white text-uppercase">Stockholm:</td>
-                            <td style="text-align: right !important;" class="text-danger"><strong>81</strong></td>
+                            <td style="text-align: right !important;" class="text-danger"><strong>101</strong></td>
                         </tr>
                         <tr>
                             <td class="text-white text-uppercase">Västra Götaland:</td>
@@ -295,13 +295,19 @@ am4core.ready(function() {
         chart.mouseWheelBehavior = "none";
         chart.chartContainer.wheelable = false;
         chart.panEventsEnabled = false;
-        chart.zoomable = false;
-        chart.pan = false;
-        chart.chartContainer.ChartCursor.zoomable = false;
-        chart.chartContainer.ChartCursor.zoomable = false;
+        chart.chartContainer.pan = false;
+        //chart.chartContainer.ChartCursor.zoomable = false;
         chart.tapToActivate = true;
         chart.tapTimeout = 5000;
         chart.dragGrip.disabled = false;
+        let scrollbarX = new am4core.Scrollbar();
+        scrollbarX.marginBottom = 20;
+        chart.scrollbarX = scrollbarX;
+        scrollbarX.interactionsEnabled = false;
+        chart.scrollbarX.disabled = true;
+        chart.scrollbarX.startGrip.disabled = true;
+        chart.scrollbarX.endGrip.disabled = true;
+
     }
 
 
@@ -346,7 +352,6 @@ function createMapChart(data){
     chart.legend.scrollable = false;
     chart.mouseWheelBehavior = "none";
     chart.chartContainer.wheelable = false;
-
     }
 }); // end am4core.ready()
 </script>
