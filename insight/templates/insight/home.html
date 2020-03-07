@@ -229,6 +229,7 @@ am4core.ready(function() {
             series.dataFields.dateX = "date";
             series.name = name;
 
+
             for (var i = 0; i < data_row.length; i++) {
               value = data_row[i];
 
@@ -290,15 +291,9 @@ am4core.ready(function() {
 
         chart.legend = new am4charts.Legend();
         chart.legend.position = "bottom";
-        chart.legend.scrollable = true;
-
-        chart.cursor = new am4charts.XYCursor();
-        chart.cursor.xAxis = dateAxis;
-
-        var scrollbarX = new am4core.Scrollbar();
-        scrollbarX.marginBottom = 20;
-        chart.scrollbarX = scrollbarX;
+        chart.legend.scrollable = false;
         chart.mouseWheelBehavior = "none";
+        chart.chartContainer.wheelable = false;
 
     }
 
@@ -333,15 +328,17 @@ function createMapChart(data){
 
     series.data = chart_data;
 
-
-
-
     series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Nya smittade";
     series.columns.template.fillOpacity = .85;
 
     var columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
     columnTemplate.strokeOpacity = 1;
+    
+    chart.legend.position = "bottom";
+    chart.legend.scrollable = false;
+    chart.mouseWheelBehavior = "none";
+    chart.chartContainer.wheelable = false;
 
     }
 }); // end am4core.ready()
