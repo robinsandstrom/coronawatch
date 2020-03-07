@@ -27,8 +27,12 @@ region_codes = {
 }
 
 class CoronaCase(models.Model):
-    
+
     date = models.DateTimeField(blank=True, null=True)
     region = models.CharField(max_length=255, blank=True, null=True)
     text = models.CharField(max_length=255, blank=True, null=True)
     infected = models.IntegerField(default=0)
+
+    def __str__(self):
+
+        return str(date) + ' ' + str(region) + ' ' + str(text) + ' ' + str(infected)
