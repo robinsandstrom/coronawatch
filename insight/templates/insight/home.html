@@ -41,7 +41,7 @@
                     Totalt antal fall
                 </div>
                 <div class="card-body text-center text-danger special-color">
-                    <h1>137</h1>
+                    <h1>140</h1>
                     <hr>
                     <h2 class="text-white">+45</h2>
                     <h6 class="text-muted">(senaste 24h)</h6>
@@ -62,7 +62,7 @@
                         </tr>
                         <tr>
                             <td class="text-white text-uppercase">Skåne:</td>
-                            <td style="text-align: right !important;" class="text-danger"><strong>14</strong></td>
+                            <td style="text-align: right !important;" class="text-danger"><strong>17</strong></td>
                         </tr>
                         <tr>
                             <td class="text-white text-uppercase">Värmland:</td>
@@ -181,7 +181,7 @@
         </div>
 
         <div class="col-lg-12 col-sm-12">
-            <div class="card border-dark ml-lg-2 my-3 z-depth-0 h-100">
+            <div class="card border-dark mx-lg-2 my-3 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Nya fall per dag
                 </div>
@@ -225,33 +225,26 @@ am4core.ready(function() {
                 8: 'Sverige',
         }
 
-        for (var i = 1; i < 9; i++) {
-          createSeries("value" + i, land[i], data[i]);
+        for (var i = 1; i < 11; i++) {
+          createSeries("value" + i, land[i], data[i], i);
         }
 
         // Create series
-        function createSeries(s, name, data_row) {
+        function createSeries(s, name, data_row, i) {
             var series = chart.series.push(new am4charts.LineSeries());
             series.dataFields.valueY = "value" + s;
             series.dataFields.dateX = "date";
             series.name = name;
 
-            var segment = series.segments.template;
-            segment.interactionsEnabled = true;
+            if(i==9){
+                series.strokeDasharray = "5,4";
+                series.name = 'Lägre 95%';
+            }
 
-            var hoverState = segment.states.create("hover");
-            hoverState.properties.strokeWidth = 3;
-
-            var dimmed = segment.states.create("dimmed");
-            dimmed.properties.stroke = am4core.color("#dadada");
-
-            segment.events.on("over", function(event) {
-              processOver(event.target.parent.parent.parent);
-            });
-
-            segment.events.on("out", function(event) {
-              processOut(event.target.parent.parent.parent);
-            });
+            if(i==10){
+                series.strokeDasharray = "5,4";
+                series.name = 'Högre 95%';
+            }
 
             for (var i = 0; i < data_row.length; i++) {
               value = data_row[i];
@@ -269,39 +262,14 @@ am4core.ready(function() {
         chart.legend = new am4charts.Legend();
         chart.legend.position = "right";
         chart.legend.scrollable = true;
-        chart.legend.itemContainers.template.events.on("over", function(event) {
-          processOver(event.target.dataItem.dataContext);
-        })
 
-        chart.legend.itemContainers.template.events.on("out", function(event) {
-          processOut(event.target.dataItem.dataContext);
-        })
+        chart.cursor = new am4charts.XYCursor();
+        chart.cursor.xAxis = dateAxis;
 
-        function processOver(hoveredSeries) {
-          hoveredSeries.toFront();
+        var scrollbarX = new am4core.Scrollbar();
+        scrollbarX.marginBottom = 20;
+        chart.scrollbarX = scrollbarX;
 
-          hoveredSeries.segments.each(function(segment) {
-            segment.setState("hover");
-          })
-
-          chart.series.each(function(series) {
-            if (series != hoveredSeries) {
-              series.segments.each(function(segment) {
-                segment.setState("dimmed");
-              })
-              series.bulletsContainer.setState("dimmed");
-            }
-          });
-        }
-
-        function processOut(hoveredSeries) {
-          chart.series.each(function(series) {
-            series.segments.each(function(segment) {
-              segment.setState("default");
-            })
-            series.bulletsContainer.setState("default");
-          });
-        }
     }
 
 
