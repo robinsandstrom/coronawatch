@@ -71,8 +71,8 @@
                     Utveckling
                 </div>
                 <div class="card-body text-center text-danger special-color">
-                    <div id="chartdiv"></div>
-                    <p class="text-muted">Källa: ECDC, European Centre for Disease Prevention and Control</p>
+                    <div id="chartdiv" class="chartdiv"></div>
+                    <p class="text-muted">Källa: ECDC, European Centre for Disease Prevention and Control. Övriga länders data är justerad för att ligga i fas med Sveriges utbrott.</p>
                 </div>
             </div>
         </div>
@@ -90,13 +90,13 @@
         </div>
 
         <div class="col-sm-12 col-lg-8 px-sm-2 mt-sm-4">
-            <div class="card grey darken-4 border-dark mx-sm-0 my-3 z-depth-0">
+            <div class="card h-100 grey darken-4 border-dark mx-sm-0 my-3 z-depth-0">
 
                 <div class="card-header text-white special-color-dark text-center">
                     Prognos
                 </div>
                 <div class="card-body text-center text-danger special-color">
-                    <table class="table table-borderless table-sm">
+                    <table class="table table-borderless">
                         <tbody>
                             <tr>
                                 <th scope="row" class="text-white">Datum</th>
@@ -147,19 +147,26 @@
                     </table>
                     <p class="text-muted">Prognosen bygger på en kurva anpassad på en exponeniell funktion anpassat på utvecklingen i andra länder som fått
                         ett utbrott.</p>
-                </div>
-
-                <div class="card-header mt-2 text-white special-color-dark text-center">
-                    Antal nya fall per dag
-                </div>
-                <div class="card-body text-center text-danger special-color">
-                    <div id="bar_chart" class="chartdiv"></div>
-
+                    </div>
                 </div>
             </div>
+
+            <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4">
+                <div class="card h-100 grey darken-4 border-dark mx-sm-0 my-3 z-depth-0">
+
+                    <div class="card-header text-white special-color-dark text-center">
+                        Antal nya fall per dag
+                    </div>
+                    <div class="card-body text-center text-danger special-color">
+                        <div id="bar_chart" class="chartdiv"></div>
+
+                    </div>
+                </div>
         </div>
 
-        <div class="col-lg-4 col-sm-12 px-sm-2 mt-sm-4">
+
+
+        <div class="col-lg-12 col-sm-12 px-sm-2 mt-sm-4">
             <div class="card border-dark ml-lg-2 mr-lg-1 my-3 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Senaste smittor
@@ -236,6 +243,7 @@ am4core.ready(function() {
         // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.max = 1500;
 
         var land = {
                 1: 'Kina',
@@ -261,6 +269,9 @@ am4core.ready(function() {
             series.dataFields.dateX = "date";
             series.name = name;
 
+            if(j==8){
+                series.strokeWidth = 4;
+            }
 
             for (var i = 0; i < data_row.length; i++) {
               value = data_row[i];
@@ -311,7 +322,7 @@ am4core.ready(function() {
 
                   if(value != 0){
                       if(j == 8){
-                          if(seriesdate > today){
+                          if(seriesdate >= today){
                               data.push(dataItem);
                           }
                       }
@@ -339,7 +350,22 @@ am4core.ready(function() {
         chart.scrollbarX.disabled = true;
         chart.scrollbarX.startGrip.disabled = true;
         chart.scrollbarX.endGrip.disabled = true;
-
+        chart.responsive.enabled = true;
+        chart.responsive.rules.push({
+            relevant: function(target) {
+              if (target.pixelWidth <= 400) {
+                  console.log('hi');
+                  chart.legend.labels.template.disabled = true;
+                return true;
+              }
+              return false;
+          },
+          state: function(target, stateId) {
+            // Code that creates a new SpriteState object to be
+            // applied to target if Rule is "relevant"
+            return;
+          }
+        });
     }
 
 function realMapChart(data){
@@ -425,7 +451,7 @@ function createMapChart(data){
     for (var i = 0; i < data.length; i++) {
       value = data[i];
       var today = new Date();
-      var seriesdate = new Date(2020, 2, i+1);
+      var seriesdate = new Date(2020, 2, i-3+1);
 
       if(seriesdate<today){
           var dataItem = {date: seriesdate,  value: value};

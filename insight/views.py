@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 from insight.backend import load_csv, populate_regional_data
 from insight.models import CoronaCase
+from datetime import datetime
 
 def index(request):
     template = 'insight/home.html'
@@ -15,11 +16,14 @@ def index(request):
     for case in cases:
         total+=case.infected
 
+    date = datetime.today()
+    prognosis = data[8]
 
     return render(request, template, context={
                                             'data': data,
                                             'cases': cases,
                                             'regional_data': regional_data,
                                             'ordered_regional_data': ordered_regional_data,
-                                            'total': total
+                                            'total': total,
+                                            'prognosis': prognosis
                                             })
