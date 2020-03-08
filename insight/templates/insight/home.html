@@ -33,7 +33,7 @@
     <nav class="navbar navbar-dark special-color z-depth-0 text-left">
         <img style="height: 2.5rem;" src="{% static 'logob.svg' %}" class="pr-4">
         <a class="navbar-brand mr-auto py-0 my-0" href="#" style="font-family: biohazard;">Coronawatch.se</a>
-        <h6 class="text-white text-uppercase">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>Idag 11:51</strong></h4>
+        <h6 class="text-white text-uppercase">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-5">
         <div class="col-sm-12 col-lg-2 px-sm-2 mt-sm-4">
@@ -44,7 +44,7 @@
                 <div class="card-body text-center text-warning special-color">
                     <h1>{{ total }}</h1>
                     <hr>
-                    <h2 class="text-white">+45</h2>
+                    <h2 class="text-white">+{{ new_cases }}</h2>
                     <h6 class="text-muted">(senaste 24h)</h6>
                 </div>
 
@@ -132,7 +132,7 @@
                                 <th scope="row" class="text-white">Utfall</th>
                                 <td class="text-warning">94</td>
                                 <td class="text-warning">137</td>
-                                <td class="text-muted">-</td>
+                                <td class="text-muted">190</td>
                                 <td class="text-muted">-</td>
                                 <td class="text-muted">-</td>
                                 <td class="text-muted">-</td>
