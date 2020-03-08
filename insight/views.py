@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 def index(request):
     template = 'insight/home.html'
-    data = load_csv()
+    data, swe_and_avg = load_csv()
     cases = CoronaCase.objects.all().order_by('-date')
     ordered_regional_data, regional_data = populate_regional_data(cases)
 
@@ -24,13 +24,17 @@ def index(request):
     new_cases = cases.filter(date__gte=date_from)
 
     total_new = 0
+
     for case in new_cases:
         total_new+=case.infected
 
     last_updated = cases.last().date
 
+    print(swe_and_avg)
+
     return render(request, template, context={
                                             'data': data,
+                                            'swe_and_avg': swe_and_avg,
                                             'cases': cases,
                                             'regional_data': regional_data,
                                             'ordered_regional_data': ordered_regional_data,

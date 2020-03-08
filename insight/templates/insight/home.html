@@ -230,14 +230,14 @@ am4core.ready(function() {
     am4core.useTheme(am4themes_dark);
     // Themes end
     var data = {{ data|safe }}
-    var colors = ['#ffcc80', '#ffb74d', '#ff9800', '#fb8c00', '#ef6c00', '#fbc02d', '#ff8f00', '#ffeb3b'];
+    var swe_and_avg = {{ swe_and_avg }}
 
-    createLineChart(data);
-    createMapChart(data[8]);
-    realMapChart();
+    var colors = ['#4285F4', '#2BBBAD', '#aa66cc', '#fb8c00', '#ef6c00', '#fbc02d', '#ff8f00', '#ffeb3b'];
 
-    function createLineChart(data){
+    createLineChart(swe_and_avg);
+    function createLineChart(swe_and_avg){
 
+        console.log(swe_and_avg);
         // Create chart instance
         var chart = am4core.create("chartdiv", am4charts.XYChart);
 
@@ -247,21 +247,13 @@ am4core.ready(function() {
         valueAxis.max = 500;
 
         var land = {
-                1: 'Kina',
-                2: 'Iran',
-                3: 'Italien',
-                4: 'Sydkorea',
-                5: 'Frankrike',
-                6: 'Tyskland',
-                7: 'Spanien',
-                8: 'Sverige',
+                1: 'Snittutveckling',
+                2: 'Sverige',
         }
 
-        for (var i = 1; i < 9; i++) {
+        for (var i = 1; i <= 2; i++) {
           createSeries("value" + i, land[i], data[i], i);
         }
-
-        createPrognosis("value" + i, land[8], data[8], 8);
 
         // Create series
         function createSeries(s, name, data_row, j) {
@@ -271,14 +263,14 @@ am4core.ready(function() {
             series.name = name;
             series.tensionX = 0.85;
             series.stroke = am4core.color(colors[j]); // red
+            series.strokeWidth = 2;
 
-            if(j==8){
-                series.strokeWidth = 4;
-                series.stroke = am4core.color("#b2dfdb"); // red
-            }else{
-                series.strokeWidth = 0.5;
 
-            }
+            series.tooltipText = "{value}"
+
+            series.tooltip.pointerOrientation = "vertical";
+
+            //series.strokeDasharray = "5,4";
 
             for (var i = 0; i < data_row.length; i++) {
               value = data_row[i];
@@ -289,58 +281,17 @@ am4core.ready(function() {
               dataItem["value" + s] = value;
 
                   if(value != 0){
-
-                      if(j == 8){
-                          if(seriesdate <= today){
-                              console.log(j, seriesdate, today, seriesdate<today);
-                              data.push(dataItem);
-                          }
-                      }else if(j != 8){
-
-                          data.push(dataItem);
-
-                      }
-
+                     data.push(dataItem);
                   }
 
             }
 
             series.data = data;
+            chart.cursor = new am4charts.XYCursor();
+            chart.cursor.snapToSeries = series;
             return series;
         }
 
-        function createPrognosis(s, name, data_row, j){
-            var series = chart.series.push(new am4charts.LineSeries());
-            series.dataFields.valueY = "value" + s;
-            series.dataFields.dateX = "date";
-            series.name = name;
-            series.tensionX = 0.9;
-
-            if(j==8){
-                series.strokeWidth = 2;
-                series.strokeDasharray = "5,4";
-                series.name = 'Prognos för sverige';
-                series.stroke = am4core.color("#b2dfdb"); // red
-            }
-
-            for (var i = 0; i < data_row.length; i++) {
-              value = data_row[i];
-              var seriesdate = new Date(2020, 2, (i-3) +1)
-              var today = new Date();
-              var dataItem = {date: seriesdate, value: value };
-              dataItem["value" + s] = value;
-
-                  if(value != 0){
-                      if(j == 8){
-                          if(seriesdate >= today){
-                              data.push(dataItem);
-                          }
-                      }
-                  }
-            }
-            series.data = data;
-            return series;
-        }
 
         chart.legend = new am4charts.Legend();
         chart.legend.position = "bottom";
@@ -361,22 +312,10 @@ am4core.ready(function() {
         chart.scrollbarX.startGrip.disabled = true;
         chart.scrollbarX.endGrip.disabled = true;
         chart.responsive.enabled = true;
-        chart.responsive.rules.push({
-            relevant: function(target) {
-              if (target.pixelWidth <= 400) {
-                  console.log('hi');
-                  chart.legend.labels.template.disabled = true;
-                return true;
-              }
-              return false;
-          },
-          state: function(target, stateId) {
-            // Code that creates a new SpriteState object to be
-            // applied to target if Rule is "relevant"
-            return;
-          }
-        });
     }
+
+    createMapChart(data[8]);
+    realMapChart();
 
 function realMapChart(data){
     var chart = am4core.create("mapchart", am4maps.MapChart);

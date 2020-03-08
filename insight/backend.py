@@ -12,7 +12,25 @@ def load_csv():
             for cell in row:
                 data_row.append(float(cell))
             data.append(data_row)
-    return data
+
+    avg_row = get_avg_row(data)
+    swe_and_avg = [data[8], avg_row]
+    return data, swe_and_avg
+
+def get_avg_row(data):
+    print(data)
+    avgarr = []
+    for j in range(1, len(data[0])):
+        avg = 0
+        den = 0
+        for i in range(1, 8):
+            if data[i][j] > 0:
+                avg+= data[i][j]
+                den+=1
+        avg = avg/den
+        avgarr.append(int(avg))
+    return avgarr
+
 
 def populate_regional_data(cases):
     regional_data = {}
