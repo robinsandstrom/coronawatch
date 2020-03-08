@@ -244,11 +244,11 @@ am4core.ready(function() {
         // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        valueAxis.max = 500;
+        valueAxis.max = 5000;
 
         var land = {
                 1: 'Snittutveckling',
-                2: 'Sverige',
+                2: 'Sverigeprognos',
         }
 
         for (var i = 1; i <= 2; i++) {
@@ -370,7 +370,7 @@ function realMapChart(data){
       heatLegend.width = am4core.percent(20);
       heatLegend.marginRight = am4core.percent(4);
       heatLegend.minValue = 0;
-      heatLegend.maxValue = 40;
+      //heatLegend.maxValue = {{ regional_data.Stockholm.value }};
 
       // Set up custom heat map legend labels using axis ranges
       var minRange = heatLegend.valueAxis.axisRanges.create();
@@ -421,16 +421,16 @@ function createMapChart(data){
 
     var chart_data = [];
 
-    for (var i = 0; i < data.length; i++) {
-      value = data[i];
-      var today = new Date();
-      var seriesdate = new Date(2020, 2, i-3+1);
+    {% for key,value in agg_by_dates.items %}
+        value = parseInt({{value}})
+        var today = new Date();
+        var seriesdate = Date.parse('{{key}}');
 
-      if(seriesdate<today){
-          var dataItem = {date: seriesdate,  value: value};
-          chart_data.push(dataItem);
-      }
-    }
+        if(seriesdate<today){
+            var dataItem = {date: seriesdate,  value: value};
+            chart_data.push(dataItem);
+        }
+    {% endfor %}
 
     // Create axes
     var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
