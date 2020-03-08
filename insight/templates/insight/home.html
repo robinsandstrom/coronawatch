@@ -7,35 +7,31 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0 minimal-ui"/>
     <meta name="description" content=""/>
     <meta name="author" content=""/>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.0/css/mdb.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.0/js/mdb.min.js"></script>
     <script src="https://www.amcharts.com/lib/4/core.js"></script>
     <script src="https://www.amcharts.com/lib/4/charts.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
     <script src="https://www.amcharts.com/lib/4/maps.js"></script>
     <script src="https://www.amcharts.com/lib/4/geodata/usaLow.js"></script>
-
     {% load static %}
     <script rel="{% static 'swe.js' %}"></script>
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-grid.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
 
 </head>
 
+
 <body class="grey darken-4">
         <!-- As a link -->
-    <nav class="navbar navbar-dark special-color z-depth-0 text-left">
+    <nav class="navbar py-0 navbar-dark special-color z-depth-0 text-left">
         <img style="height: 2.5rem;" src="{% static 'logob.svg' %}" class="pr-4">
         <a class="navbar-brand mr-auto py-0 my-0" href="#" style="font-family: biohazard;">Coronawatch.se</a>
-        <h6 class="text-white text-uppercase">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
+        <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
     </nav>
-    <div class="row mx-lg-1 mx-sm-5">
+    <div class="row mx-lg-1 mx-sm-2">
         <div class="col-sm-12 col-lg-2 px-sm-2 mt-sm-4">
             <div class="card grey darken-4 h-100 border-dark mx-sm-0 my-2 z-depth-0">
                 <div class="card-header text-white special-color-dark text-center">
@@ -167,7 +163,7 @@
 
 
         <div class="col-lg-12 col-sm-12 px-sm-2 mt-sm-4">
-            <div class="card border-dark mr-lg-2 my-3 z-depth-0 h-100">
+            <div class="card border-dark mx-lg-0 my-3 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Senaste smittor
                 </div>
@@ -175,9 +171,9 @@
                     <table class="table table-sm text-left text-white">
                         <thead>
                             <tr>
-                                <th>Smittade</th>
-                                <th>Rubrik</th>
-                                <th>Datum</th>
+                                <th style="border: none;">Smittade</th>
+                                <th style="border: none;">Rubrik</th>
+                                <th style="border: none;">Datum</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -235,6 +231,9 @@ am4core.ready(function() {
     var colors = ['#4285F4', '#2BBBAD', '#aa66cc', '#fb8c00', '#ef6c00', '#fbc02d', '#ff8f00', '#ffeb3b'];
 
     createLineChart(swe_and_avg);
+    createMapChart(data[8]);
+    realMapChart();
+
     function createLineChart(swe_and_avg){
 
         console.log(swe_and_avg);
@@ -304,6 +303,8 @@ am4core.ready(function() {
         chart.tapToActivate = true;
         chart.tapTimeout = 5000;
         chart.dragGrip.disabled = false;
+
+
         let scrollbarX = new am4core.Scrollbar();
         scrollbarX.marginBottom = 20;
         chart.scrollbarX = scrollbarX;
@@ -311,157 +312,173 @@ am4core.ready(function() {
         chart.scrollbarX.disabled = true;
         chart.scrollbarX.startGrip.disabled = true;
         chart.scrollbarX.endGrip.disabled = true;
-        chart.responsive.enabled = true;
+        chart.seriesContainer.draggable = false;
+        chart.seriesContainer.resizable = false;
+        chart.mouseWheelBehavior = "none";
     }
 
-    createMapChart(data[8]);
-    realMapChart();
 
-function realMapChart(data){
-    var chart = am4core.create("mapchart", am4maps.MapChart);
+    function realMapChart(data){
+        var chart = am4core.create("mapchart", am4maps.MapChart);
 
-    // Set map definition
-    chart.geodata = swe_geo;
+        // Set map definition
+        chart.geodata = swe_geo;
 
-    chart.geodataSource.events.on("parseended", function(ev) {
-        var data = [];
-        for(var i = 0; i < ev.target.data.features.length; i++) {
-          data.push({
-            id: ev.target.data.features[i].id,
-            value: Math.round( Math.random() * 10000 )
+        chart.geodataSource.events.on("parseended", function(ev) {
+            var data = [];
+            for(var i = 0; i < ev.target.data.features.length; i++) {
+              data.push({
+                id: ev.target.data.features[i].id,
+                value: Math.round( Math.random() * 10000 )
+              })
+            }
+            polygonSeries.data = data;
           })
-        }
-        polygonSeries.data = data;
-      })
 
-      // Set projection
-      chart.projection = new am4maps.projections.Mercator();
+          // Set projection
+          chart.projection = new am4maps.projections.Mercator();
 
-      // Create map polygon series
-      var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+          // Create map polygon series
+          var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
 
-      polygonSeries.heatRules.push({
-        property: "fill",
-        target: polygonSeries.mapPolygons.template,
-        min: am4core.color("#ffecb3"),
-        max: am4core.color("#bf360c"),
-      });
+          polygonSeries.heatRules.push({
+            property: "fill",
+            target: polygonSeries.mapPolygons.template,
+            min: am4core.color("#ffecb3"),
+            max: am4core.color("#bf360c"),
+          });
 
-      // Make map load polygon data (state shapes and names) from GeoJSON
-      polygonSeries.useGeodata = true;
+          // Make map load polygon data (state shapes and names) from GeoJSON
+          polygonSeries.useGeodata = true;
 
-      // Set heatmap values for each state
-      polygonSeries.data = [
-          {% for region, infection in regional_data.items %}
-            {% if infection.value > 0 %}
-            {
-              id: {{ region }},
-              value: {{ infection.value }}
-            },
-            {% endif %}
-        {% endfor %}
-      ];
+          // Set heatmap values for each state
+          polygonSeries.data = [
+              {% for region, infection in regional_data.items %}
+                {% if infection.value > 0 %}
+                {
+                  id: {{ region }},
+                  value: {{ infection.value }}
+                },
+                {% endif %}
+            {% endfor %}
+          ];
 
-      // Set up heat legend
-      let heatLegend = chart.createChild(am4maps.HeatLegend);
-      heatLegend.series = polygonSeries;
-      heatLegend.align = "right";
-      heatLegend.valign = "bottom";
-      heatLegend.width = am4core.percent(20);
-      heatLegend.marginRight = am4core.percent(4);
-      heatLegend.minValue = 0;
-      //heatLegend.maxValue = {{ regional_data.Stockholm.value }};
+          // Set up heat legend
+          let heatLegend = chart.createChild(am4maps.HeatLegend);
+          heatLegend.series = polygonSeries;
+          heatLegend.align = "right";
+          heatLegend.valign = "bottom";
+          heatLegend.width = am4core.percent(20);
+          heatLegend.marginRight = am4core.percent(4);
+          heatLegend.minValue = 0;
+          //heatLegend.maxValue = {{ regional_data.Stockholm.value }};
 
-      // Set up custom heat map legend labels using axis ranges
-      var minRange = heatLegend.valueAxis.axisRanges.create();
-      minRange.value = heatLegend.minValue;
-      var maxRange = heatLegend.valueAxis.axisRanges.create();
-      maxRange.value = heatLegend.maxValue;
+          // Set up custom heat map legend labels using axis ranges
+          var minRange = heatLegend.valueAxis.axisRanges.create();
+          minRange.value = heatLegend.minValue;
+          var maxRange = heatLegend.valueAxis.axisRanges.create();
+          maxRange.value = heatLegend.maxValue;
 
 
-      // Configure series tooltip
-      var polygonTemplate = polygonSeries.mapPolygons.template;
-      polygonTemplate.tooltipText = "{NAME_1}: {value}";
-      polygonTemplate.nonScalingStroke = true;
-      polygonTemplate.strokeWidth = 0.5;
+          // Configure series tooltip
+          var polygonTemplate = polygonSeries.mapPolygons.template;
+          polygonTemplate.tooltipText = "{NAME_1}: {value}";
+          polygonTemplate.nonScalingStroke = true;
+          polygonTemplate.strokeWidth = 0.5;
 
-      // Create hover state and set alternative fill color
-      var hs = polygonTemplate.states.create("hover");
-      hs.properties.fill = am4core.color("#3c5bdc");
+          // Create hover state and set alternative fill color
+          var hs = polygonTemplate.states.create("hover");
+          hs.properties.fill = am4core.color("#3c5bdc");
 
-}
-var w = parseInt(window.innerWidth);
-if (w < 500){
-    transpose(1);
-}
+          let scrollbarX = new am4core.Scrollbar();
+          scrollbarX.marginBottom = 20;
+          chart.scrollbarX = scrollbarX;
+          scrollbarX.interactionsEnabled = false;
+          chart.scrollbarX.disabled = true;
+          chart.scrollbarX.startGrip.disabled = true;
+          chart.scrollbarX.endGrip.disabled = true;
+          chart.seriesContainer.draggable = false;
+          chart.seriesContainer.resizable = false;
+          chart.mouseWheelBehavior = "none";
+    }
+    var w = parseInt(window.innerWidth);
+    if (w < 500){
+        transpose(1);
+    }
 
-function transpose(id){
+    function transpose(id){
 
-    $("#prognosis_table").each(function() {
-        var $this = $(this);
-        var newrows = [];
-        $this.find("tr").each(function(){
-            var i = 0;
-            $(this).find("td").each(function(){
-                i++;
-                if(newrows[i] === undefined) { newrows[i] = $("<tr></tr>"); }
-                newrows[i].append($(this));
+        $("#prognosis_table").each(function() {
+            var $this = $(this);
+            var newrows = [];
+            $this.find("tr").each(function(){
+                var i = 0;
+                $(this).find("td").each(function(){
+                    i++;
+                    if(newrows[i] === undefined) { newrows[i] = $("<tr></tr>"); }
+                    newrows[i].append($(this));
+                });
+            });
+            $this.find("tr").remove();
+            $.each(newrows, function(){
+                $this.append(this);
             });
         });
-        $this.find("tr").remove();
-        $.each(newrows, function(){
-            $this.append(this);
-        });
-    });
-
-}
-
-function createMapChart(data){
-    var chart = am4core.create("bar_chart", am4charts.XYChart);
-
-    var chart_data = [];
-
-    {% for key,value in agg_by_dates.items %}
-        value = parseInt({{value}})
-        var today = new Date();
-        var seriesdate = Date.parse('{{key}}');
-
-        if(seriesdate<today){
-            var dataItem = {date: seriesdate,  value: value};
-            chart_data.push(dataItem);
-        }
-    {% endfor %}
-
-    // Create axes
-    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-
-    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-
-    // Create series
-    var series = chart.series.push(new am4charts.ColumnSeries());
-
-    series.dataFields.valueY = "value" ;
-    series.dataFields.dateX = "date";
-    series.name = name;
-    //series.stroke = am4core.color('#e65100');
-    //series.f= am4core.color("#ffecb3");
-
-    series.data = chart_data;
-
-    series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Nya smittade";
-    series.columns.template.fillOpacity = .85;
-
-    var columnTemplate = series.columns.template;
-    columnTemplate.strokeWidth = 2;
-    columnTemplate.strokeOpacity = 1;
-
-    //chart.legend.position = "bottom";
-    //chart.legend.scrollable = false;
-    //chart.mouseWheelBehavior = "none";
-    //chart.chartContainer.wheelable = false;
 
     }
-}); // end am4core.ready()
+
+    function createMapChart(data){
+        var chart = am4core.create("bar_chart", am4charts.XYChart);
+
+        var chart_data = [];
+
+        {% for key,value in agg_by_dates.items %}
+            value = parseInt({{value}})
+            var today = new Date();
+            var seriesdate = Date.parse('{{key}}');
+
+            if(seriesdate<today){
+                var dataItem = {date: seriesdate,  value: value};
+                chart_data.push(dataItem);
+            }
+        {% endfor %}
+
+        // Create axes
+        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+        // Create series
+        var series = chart.series.push(new am4charts.ColumnSeries());
+
+        series.dataFields.valueY = "value" ;
+        series.dataFields.dateX = "date";
+        series.name = name;
+        //series.stroke = am4core.color('#e65100');
+        //series.f= am4core.color("#ffecb3");
+
+        series.data = chart_data;
+
+        series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Nya smittade";
+        series.columns.template.fillOpacity = .85;
+
+        var columnTemplate = series.columns.template;
+        columnTemplate.strokeWidth = 2;
+        columnTemplate.strokeOpacity = 1;
+
+        let scrollbarX = new am4core.Scrollbar();
+        scrollbarX.marginBottom = 20;
+        chart.scrollbarX = scrollbarX;
+        scrollbarX.interactionsEnabled = false;
+        chart.scrollbarX.disabled = true;
+        chart.scrollbarX.startGrip.disabled = true;
+        chart.scrollbarX.endGrip.disabled = true;
+        chart.seriesContainer.draggable = false;
+        chart.seriesContainer.resizable = false;
+        chart.mouseWheelBehavior = "none";
+        chart.responsive.enabled = true;
+        }
+    }); // end am4core.ready()
 </script>
 
 <style media="screen">

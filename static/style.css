@@ -21,3 +21,12 @@
   src: local('safety'),
        url('/static/Avenir-Bold.otf') format("truetype");
 }
+
+body {
+    overflow: auto;
+}
+
+.row {
+  overflow: auto;
+  height: 100%;
+}

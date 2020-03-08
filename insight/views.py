@@ -33,7 +33,7 @@ def index(request):
 
     agg_by_dates = OrderedDict()
     for case in cases.filter(date__gte=(date_from-timedelta(days=31))).order_by('date'):
-        if str(case.date) in agg_by_dates:
+        if str(case.date.date()) in agg_by_dates:
             agg_by_dates[str(case.date.date())]+=case.infected
         else:
             agg_by_dates[str(case.date.date())] = case.infected
