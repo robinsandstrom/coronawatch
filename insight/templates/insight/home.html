@@ -132,7 +132,7 @@
                                 <th scope="row" class="text-white">Utfall</th>
                                 <td class="text-warning">94</td>
                                 <td class="text-warning">137</td>
-                                <td class="text-muted">190</td>
+                                <td class="text-warning">190</td>
                                 <td class="text-muted">-</td>
                                 <td class="text-muted">-</td>
                                 <td class="text-muted">-</td>
@@ -230,6 +230,7 @@ am4core.ready(function() {
     am4core.useTheme(am4themes_dark);
     // Themes end
     var data = {{ data|safe }}
+    var colors = ['#ffcc80', '#ffb74d', '#ff9800', '#fb8c00', '#ef6c00', '#fbc02d', '#ff8f00', '#ffeb3b'];
 
     createLineChart(data);
     createMapChart(data[8]);
@@ -243,7 +244,7 @@ am4core.ready(function() {
         // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        valueAxis.max = 1500;
+        valueAxis.max = 500;
 
         var land = {
                 1: 'Kina',
@@ -268,9 +269,15 @@ am4core.ready(function() {
             series.dataFields.valueY = "value" + s;
             series.dataFields.dateX = "date";
             series.name = name;
+            series.tensionX = 0.85;
+            series.stroke = am4core.color(colors[j]); // red
 
             if(j==8){
                 series.strokeWidth = 4;
+                series.stroke = am4core.color("#b2dfdb"); // red
+            }else{
+                series.strokeWidth = 0.5;
+
             }
 
             for (var i = 0; i < data_row.length; i++) {
@@ -307,10 +314,13 @@ am4core.ready(function() {
             series.dataFields.valueY = "value" + s;
             series.dataFields.dateX = "date";
             series.name = name;
+            series.tensionX = 0.9;
 
             if(j==8){
+                series.strokeWidth = 2;
                 series.strokeDasharray = "5,4";
                 series.name = 'Prognos för sverige';
+                series.stroke = am4core.color("#b2dfdb"); // red
             }
 
             for (var i = 0; i < data_row.length; i++) {
@@ -394,8 +404,8 @@ function realMapChart(data){
       polygonSeries.heatRules.push({
         property: "fill",
         target: polygonSeries.mapPolygons.template,
-        min: chart.colors.getIndex(1).brighten(1),
-        max: chart.colors.getIndex(1).brighten(-0.3)
+        min: am4core.color("#ffecb3"),
+        max: am4core.color("#bf360c"),
       });
 
       // Make map load polygon data (state shapes and names) from GeoJSON
@@ -421,7 +431,7 @@ function realMapChart(data){
       heatLegend.width = am4core.percent(20);
       heatLegend.marginRight = am4core.percent(4);
       heatLegend.minValue = 0;
-      heatLegend.maxValue = 40000000;
+      heatLegend.maxValue = 40;
 
       // Set up custom heat map legend labels using axis ranges
       var minRange = heatLegend.valueAxis.axisRanges.create();
@@ -494,6 +504,8 @@ function createMapChart(data){
     series.dataFields.valueY = "value" ;
     series.dataFields.dateX = "date";
     series.name = name;
+    //series.stroke = am4core.color('#e65100');
+    //series.f= am4core.color("#ffecb3");
 
     series.data = chart_data;
 
