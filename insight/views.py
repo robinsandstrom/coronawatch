@@ -16,7 +16,10 @@ def index(request):
     prognosis = data[9]
     new_cases = get_new_cases(cases)
     total_new = get_total(new_cases)
-    last_updated = cases.first().date
+    try:
+        last_updated = cases.first().date
+    except:
+        last_updated = datetime.now()
     agg_by_dates = aggregate_by_dates(cases)
 
 
