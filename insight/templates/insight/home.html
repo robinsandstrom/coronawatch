@@ -44,10 +44,10 @@
                     <h6 class="text-muted">(senaste 24h)</h6>
                 </div>
 
-                <div class="card-header text-white special-color-dark text-center">
+                <div class="card-header mt-sm-2 text-white special-color-dark text-center">
                     Fall per region
                 </div>
-                <div class="card-body p-lg-1 px-sm-5 text-danger special-color">
+                <div class="card-body px-sm-2 px-lg-1 text-danger special-color">
                     <table class="table table-sm table-borderless">
                         {% for region, infected in ordered_regional_data.items %}
                             {% if infected.value > 0 %}
@@ -161,8 +161,10 @@
         </div>
 
 
+        <div class="col-lg-2">
 
-        <div class="col-lg-12 col-sm-12 px-sm-2 mt-sm-4">
+        </div>
+        <div class="col-lg-8 col-sm-12 px-sm-2 mt-sm-4">
             <div class="card border-dark mx-lg-0 my-3 z-depth-0 h-100">
                 <div class="card-header text-white special-color-dark text-center">
                     Senaste smittor
