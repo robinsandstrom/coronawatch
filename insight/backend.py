@@ -2,6 +2,7 @@ import csv
 
 from insight.models import region_codes
 from collections import OrderedDict
+from datetime import datetime, timedelta
 
 def load_csv():
     data = []
@@ -18,7 +19,6 @@ def load_csv():
     return data, swe_and_avg
 
 def get_avg_row(data):
-    print(data)
     avgarr = []
     for j in range(1, len(data[0])):
         avg = 0
@@ -27,10 +27,21 @@ def get_avg_row(data):
             if data[i][j] > 0:
                 avg+= data[i][j]
                 den+=1
-        avg = avg/den
+        if den>0:
+            avg = avg/den
         avgarr.append(int(avg))
     return avgarr
 
+def aggregate_by_dates(cases):
+    date_from = datetime.now()
+    agg_by_dates = OrderedDict()
+    for case in cases.filter(date__gte=(date_from-timedelta(days=31))).order_by('date'):
+        if str(case.date) in agg_by_dates:
+            agg_by_dates[str(case.date)]+=case.infected
+        else:
+            agg_by_dates[str(case.date)] = case.infected
+
+    return agg_by_dates
 
 def populate_regional_data(cases):
     regional_data = {}
@@ -52,3 +63,16 @@ def populate_regional_data(cases):
         regional_data[j]['value'] += case.infected
 
     return OrderedDict(sorted(regional_data.items(), key = lambda t: t[1]['value'], reverse=True)), regional_data
+
+def get_total(cases):
+    total = 0
+
+    for case in cases:
+        total+=case.infected
+
+    return total
+
+def get_new_cases(cases):
+    date_from = datetime.now() - timedelta(days=1)
+    new_cases = cases.filter(date__gte=date_from)
+    return new_cases

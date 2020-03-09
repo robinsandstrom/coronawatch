@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from insight.backend import load_csv, populate_regional_data
+from insight.backend import load_csv, populate_regional_data, get_new_cases, get_total, aggregate_by_dates
 from insight.models import CoronaCase
 from datetime import datetime, timedelta
 from collections import OrderedDict
@@ -10,33 +10,15 @@ def index(request):
     template = 'insight/home.html'
     data, swe_and_avg = load_csv()
     cases = CoronaCase.objects.all().order_by('-date')
+    print(swe_and_avg)
     ordered_regional_data, regional_data = populate_regional_data(cases)
-
-    total = 0
-
-    for case in cases:
-        total+=case.infected
-
-    date = datetime.today()
-    prognosis = data[8]
-
-    date_from = datetime.now() - timedelta(days=1)
-
-    new_cases = cases.filter(date__gte=date_from)
-
-    total_new = 0
-
-    for case in new_cases:
-        total_new+=case.infected
-
+    total = get_total(cases)
+    prognosis = data[9]
+    new_cases = get_new_cases(cases)
+    total_new = get_total(new_cases)
     last_updated = cases.first().date
+    agg_by_dates = aggregate_by_dates(cases)
 
-    agg_by_dates = OrderedDict()
-    for case in cases.filter(date__gte=(date_from-timedelta(days=31))).order_by('date'):
-        if str(case.date.date()) in agg_by_dates:
-            agg_by_dates[str(case.date.date())]+=case.infected
-        else:
-            agg_by_dates[str(case.date.date())] = case.infected
 
     return render(request, template, context={
                                             'data': data,

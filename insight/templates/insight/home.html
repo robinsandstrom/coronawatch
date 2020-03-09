@@ -192,7 +192,7 @@
                             <tr>
                                 <td>{{ case.infected }}</td>
                                 <td>{{ case.text }}</td>
-                                <td>{{ case.date|date:"Y-m-d" }}</td>
+                                <td style="white-space: nowrap;">{{ case.date|date:"Y-m-d" }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -238,35 +238,38 @@ am4core.ready(function() {
     // Themes end
     var data = {{ data|safe }}
     var swe_and_avg = {{ swe_and_avg }}
+    var prognosis = {{ prognosis }}
 
-    var colors = ['#4285F4', '#2BBBAD', '#aa66cc', '#fb8c00', '#ef6c00', '#fbc02d', '#ff8f00', '#ffeb3b'];
+    var colors = ['#4285F4', '#2BBBAD', '#2BBBAD', '#fb8c00', '#ef6c00', '#fbc02d', '#ff8f00', '#ffeb3b'];
 
-    createLineChart(swe_and_avg);
+    createLineChart(swe_and_avg, prognosis);
     createMapChart(data[8]);
     realMapChart();
 
-    function createLineChart(swe_and_avg){
+    function createLineChart(swe_and_avg, prognosis){
 
-        console.log(swe_and_avg);
         // Create chart instance
         var chart = am4core.create("chartdiv", am4charts.XYChart);
 
         // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        valueAxis.max = 5000;
-
+        valueAxis.max = 500;
+        console.log(prognosis)
         var land = {
-                1: 'Snittutveckling',
-                2: 'Sverigeprognos',
+                1: 'Snitt för andra länder',
+                2: 'Utveckling',
+                3: 'Prognos'
         }
 
-        for (var i = 1; i <= 2; i++) {
-          createSeries("value" + i, land[i], data[i], i);
-        }
+        createSeries("value" + 2, land[1], swe_and_avg[1], 0, 5);
+
+        createSeries("value" + 1, land[2], swe_and_avg[0], 1, 5);
+
+        createSeries("value" + 3, land[3], prognosis, 2, 5);
 
         // Create series
-        function createSeries(s, name, data_row, j) {
+        function createSeries(s, name, data_row, j, offset) {
             var series = chart.series.push(new am4charts.LineSeries());
             series.dataFields.valueY = "value" + s;
             series.dataFields.dateX = "date";
@@ -280,12 +283,13 @@ am4core.ready(function() {
 
             series.tooltip.pointerOrientation = "vertical";
 
-            //series.strokeDasharray = "5,4";
+            if(j == 2){
+                series.strokeDasharray = "5,4";
+            }
 
             for (var i = 0; i < data_row.length; i++) {
               value = data_row[i];
-
-              var seriesdate = new Date(2020, 2, (i-3) +1)
+              var seriesdate = new Date(2020, 2, (i-offset) +1)
               var today = new Date();
               var dataItem = {date: seriesdate, value: value };
               dataItem["value" + s] = value;
