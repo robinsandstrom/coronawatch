@@ -8,6 +8,15 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.0/css/mdb.min.css" rel="stylesheet">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-160071660-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-160071660-1');
+    </script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://www.amcharts.com/lib/4/core.js"></script>
     <script src="https://www.amcharts.com/lib/4/charts.js"></script>
@@ -183,7 +192,7 @@
                             <tr>
                                 <td>{{ case.infected }}</td>
                                 <td>{{ case.text }}</td>
-                                <td>{{ case.date|date:"D d M Y" }}</td>
+                                <td>{{ case.date|date:"Y-m-d" }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
