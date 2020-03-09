@@ -73,6 +73,6 @@ def get_total(cases):
     return total
 
 def get_new_cases(cases):
-    date_from = datetime.now() - timedelta(days=1)
+    date_from = datetime.now()
     new_cases = cases.filter(date__gte=date_from)
     return new_cases

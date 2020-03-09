@@ -35,3 +35,8 @@ def index(request):
                                             'last_updated': last_updated,
                                             'agg_by_dates': agg_by_dates
                                             })
+
+def about(request):
+    template = 'insight/about.html'
+    return render(request, template, context={
+                                            })

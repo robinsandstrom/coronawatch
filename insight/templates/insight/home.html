@@ -49,61 +49,43 @@
         <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
-        <div class="col-sm-12 col-lg-2 px-sm-2 mt-sm-4">
-            <div class="card grey darken-4 h-100 border-dark mx-sm-0 my-2 z-depth-0">
+
+        <div class="col-sm-12 offset-lg-2 col-lg-4 px-sm-2 mt-sm-4">
+            <div class="card h-100 grey darken-4  border-dark mx-sm-0 my-2 z-depth-0">
                 <div class="card-header text-white special-color-dark text-center">
                     Totalt antal fall
                 </div>
                 <div class="card-body text-center text-warning special-color">
                     <h1 style="font-size: 6rem;" class="my-0 py-0">{{ total }}</h1>
-                    <hr>
-                    <h2 class="text-white">+{{ new_cases }}</h2>
-                    <h6 class="text-muted">(senaste 24h)</h6>
-                </div>
-
-                <div class="card-header mt-sm-2 text-white special-color-dark text-center">
-                    Fall per region
-                </div>
-                <div class="card-body px-sm-2 px-lg-1 text-danger special-color">
-                    <table class="table table-sm table-borderless">
-                        {% for region, infected in ordered_regional_data.items %}
-                            {% if infected.value > 0 %}
-                            <tr>
-                                <td class="text-white text-uppercase"> {{ infected.region }}</td>
-                                <td style="text-align: right !important;" class="text-danger"><strong>{{ infected.value }}</strong></td>
-                            </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-lg-7 px-sm-2 mt-sm-4" >
-            <div class="card border-dark mx-lg-0 my-2 z-depth-0 h-100">
+
+        <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4">
+            <div class="card h-100 grey darken-4  border-dark mx-sm-0 my-2 z-depth-0">
+                <div class="card-header text-white special-color-dark text-center">
+                    Ökning idag
+                </div>
+                <div class="card-body text-center text-warning special-color">
+                    <h1 class="text-white my-0 py-0" style="font-size: 6rem;">+{{ new_cases }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4" >
+            <div class="card border-dark mx-lg-0 my-2 z-depth-0 ">
                 <div class="card-header text-white special-color-dark text-center">
                     Utveckling
                 </div>
                 <div class="card-body text-center text-danger special-color">
                     <div id="chartdiv" class="chartdiv"></div>
-                    <p class="text-muted">Källa: ECDC, European Centre for Disease Prevention and Control. Övriga länders data är justerad för att ligga i fas med Sveriges utbrott.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-lg-3 px-sm-2 mt-sm-4" >
-            <div class="card border-dark mr-lg-2 my-2 z-depth-0 h-100">
-                <div class="card-header text-white special-color-dark text-center">
-                    Geografisk smittspridning
-                </div>
-                <div class="card-body special-color">
-                    <div id="mapchart" class="chartdiv">
-
-                    </div>
+                    <p class="text-muted">Källa: ECDC, European Centre for Disease Prevention and Control. </p>
                 </div>
             </div>
         </div>
 
-        <div class="col-sm-12 col-lg-8 px-sm-2 mt-sm-4 mt-lg-2">
-            <div class="card h-100 grey darken-4 border-dark mx-sm-0 my-3 z-depth-0">
+        <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4 mt-lg-2">
+            <div class="card  grey darken-4 border-dark mx-sm-0 my-3 z-depth-0">
 
                 <div class="card-header text-white special-color-dark text-center">
                     Prognos
@@ -112,77 +94,111 @@
                     <table class="table table-borderless" id="prognosis_table">
                         <tbody>
                             <tr>
-                                <th scope="row" class="text-white">Datum</th>
-                                <td class="text-white">6e Mars</td>
-                                <td class="text-white">7e Mars</td>
-                                <td class="text-white">8e Mars</td>
-                                <td class="text-white">9e Mars</td>
-                                <td class="text-white">10e Mars</td>
-                                <td class="text-white">11e Mars</td>
-                                <td class="text-white">12e Mars</td>
-                                <td class="text-white">13e Mars</td>
-                                <td class="text-white">14e Mars</td>
-                                <td class="text-white">15e Mars</td>
-                                <td class="text-white">16e Mars</td>
-                                <td class="text-white">17e Mars</td>
+                                <td style="font-size: 1rem;" scope="row" class="text-white">Datum</th>
+                                <td style="font-size: 1rem;" class="text-white">6/3</td>
+                                <td style="font-size: 1rem;" class="text-white">7/3</td>
+                                <td style="font-size: 1rem;" class="text-white">8/3</td>
+                                <td style="font-size: 1rem;" class="text-white">9/3</td>
+                                <td style="font-size: 1rem;" class="text-white">10/3</td>
+                                <td style="font-size: 1rem;" class="text-white">11/3</td>
+                                <td style="font-size: 1rem;" class="text-white">12/3</td>
+                                <td style="font-size: 1rem;" class="text-white">13/3</td>
+                                <td style="font-size: 1rem;" class="text-white">14/3</td>
+                                <td style="font-size: 1rem;" class="text-white">15/3</td>
+                                <td style="font-size: 1rem;" class="text-white">16/3</td>
+                                <td style="font-size: 1rem;" class="text-white">17/3</td>
                             </tr>
                             <tr>
-                                <th scope="row" class="text-white">Prognos</th>
-                                <td class="text-danger">72</td>
-                                <td class="text-danger">137</td>
-                                <td class="text-danger">200</td>
-                                <td class="text-danger">291</td>
-                                <td class="text-danger">425</td>
-                                <td class="text-danger">620</td>
-                                <td class="text-danger">904</td>
-                                <td class="text-danger">1320</td>
-                                <td class="text-danger">1924</td>
-                                <td class="text-danger">2807</td>
-                                <td class="text-danger">4094</td>
-                                <td class="text-danger">5000+</td>
+                                <td style="font-size: 1rem;" scope="row" class="text-white">Prognos</th>
+                                <td style="font-size: 1.125rem;" class="text-danger">72</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">137</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">202</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">272</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">367</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">495</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">668</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">901</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">1216</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">1640</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">2213</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">2985+</td>
                             </tr>
                             <tr style="font-size: 20px;">
-                                <th scope="row" class="text-white">Utfall</th>
-                                <td class="text-warning">94</td>
-                                <td class="text-warning">137</td>
-                                <td class="text-warning">190</td>
-                                <td class="text-muted">-</td>
-                                <td class="text-muted">-</td>
-                                <td class="text-muted">-</td>
-                                <td class="text-muted">-</td>
-                                <td class="text-muted">-</td>
-                                <td class="text-muted">-</td>
-                                <td class="text-muted">-</td>
-                                <td class="text-muted">-</td>
-                                <td class="text-muted">-</td>
+                                <td style="font-size: 1rem;" scope="row" class="text-white">Utfall</th>
+                                <td style="font-size: 1.125rem;" class="text-warning">94</td>
+                                <td style="font-size: 1.125rem;" class="text-warning">137</td>
+                                <td style="font-size: 1.125rem;" class="text-warning">190</td>
+                                <td style="font-size: 1.125rem;" class="text-warning">261</td>
+                                <td style="font-size: 1.125rem;" class="text-muted">-</td>
+                                <td style="font-size: 1.125rem;" class="text-muted">-</td>
+                                <td style="font-size: 1.125rem;" class="text-muted">-</td>
+                                <td style="font-size: 1.125rem;" class="text-muted">-</td>
+                                <td style="font-size: 1.125rem;" class="text-muted">-</td>
+                                <td style="font-size: 1.125rem;" class="text-muted">-</td>
+                                <td style="font-size: 1.125rem;" class="text-muted">-</td>
+                                <td style="font-size: 1.125rem;" class="text-muted">-</td>
                             </tr>
                         </tbody>
                     </table>
-                    <p class="text-muted">Prognosen bygger på en kurva anpassad på en exponeniell funktion anpassat på utvecklingen i andra länder som fått
-                        ett utbrott.</p>
+                    <p class="text-muted">Prognosen är baserad på utvecklingen i andra länder. <a href="/about">Läs mer</a></p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4 mt-lg-2">
-                <div class="card h-100 grey darken-4 border-dark mr-lg-2 mx-sm-0 my-3 z-depth-0">
+        <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4 mt-lg-2">
+            <div class="card  grey darken-4 border-dark mr-lg-2 mx-sm-0 my-3 z-depth-0">
 
                     <div class="card-header text-white special-color-dark text-center">
                         Antal nya fall per dag
                     </div>
                     <div class="card-body text-center text-danger special-color">
-                        <div id="bar_chart" class="chartdiv"></div>
+                        <div id="bar_chart" class="chartdiv" style="height: 30vh;"></div>
 
                     </div>
                 </div>
         </div>
 
 
+
+        <div class="col-sm-12 offset-lg-2 col-lg-4 px-sm-2 mt-sm-4" >
+            <div class="card h-100 border-dark mr-lg-2 my-2 z-depth-0 ">
+                <div class="card-header text-white special-color-dark text-center">
+                    Geografisk smittspridning
+                </div>
+                <div class="card-body special-color">
+                    <div id="mapchart" class="chartdiv" style="height: 80vh;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4">
+            <div class="card h-100 border-dark mr-lg-2 my-2 z-depth-0 ">
+
+                <div class="card-header text-white special-color-dark text-center">
+                    Fall per region
+                </div>
+                <div class="card-body px-sm-2 px-lg-1 text-danger special-color">
+                    <table class="table table-sm table-borderless">
+                        {% for region, infected in ordered_regional_data.items %}
+                            {% if infected.value > 0 %}
+                            <tr>
+                                <td style="font-size: 1.125rem;" class="text-white text-uppercase" style="font-size: 1.0rem;"> {{ infected.region }}</td>
+                                <td style="font-size: 1.125rem;" style="text-align: right !important; font-size: 1.125rem;" class="text-danger"><strong>{{ infected.value }}</strong></td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <div class="col-lg-2">
 
         </div>
-        <div class="col-lg-8 col-sm-12 px-sm-2 mt-sm-4">
-            <div class="card border-dark mx-lg-0 my-3 z-depth-0 h-100">
+        <div class="col-lg-8 offset-lg-2 col-sm-12 px-sm-2 mt-sm-4">
+            <div class="card border-dark mx-lg-0 my-3 z-depth-0 ">
                 <div class="card-header text-white special-color-dark text-center">
                     Senaste smittor
                 </div>
@@ -200,7 +216,7 @@
                             <tr>
                                 <td>{{ case.infected }}</td>
                                 <td>{{ case.text }}</td>
-                                <td style="white-space: nowrap;">{{ case.date|date:"Y-m-d" }}</td>
+                                <td style="font-size: 1.125rem; white-space: nowrap;">{{ case.date|date:"Y-m-d" }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -262,7 +278,8 @@ am4core.ready(function() {
         // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        valueAxis.max = 500;
+        //valueAxis.max = 500;
+        //dateAxis.max = new Date(2019, 2, 2);
         console.log(prognosis)
         var land = {
                 1: 'Snitt för andra länder',
@@ -302,7 +319,7 @@ am4core.ready(function() {
               var dataItem = {date: seriesdate, value: value };
               dataItem["value" + s] = value;
 
-                  if(value != 0){
+                  if(value != 0 && i < 20){
                      data.push(dataItem);
                   }
 
@@ -505,9 +522,18 @@ am4core.ready(function() {
 </script>
 
 <style media="screen">
-    #chartdiv, .chartdiv {
-      width: 100%;
-      height: 500px;
+
+
+    .chartdiv {
+         width: 100%;
+         height: 40vh;
+    }
+
+    @media (max-width: 600px) {
+        .chartdiv {
+          width: 100%;
+          height: 85vh;
+        }
     }
 
     html, body {
