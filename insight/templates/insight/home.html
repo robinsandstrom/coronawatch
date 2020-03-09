@@ -32,6 +32,11 @@
     <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <title>Coronawatch: {{ total }} (+ {{new_cases}} nya fall)</title>
+
+    <meta property="og:title" content="Coronawatch.se" />
+    <meta property="og:type" content="Senaste prognos" />
+    <meta property="og:url" content="https://www.coronawatch.se/" />
+    <meta property="og:image" content="{% static 'graph.png' %}" />
 </head>
 
 
@@ -49,7 +54,7 @@
                     Totalt antal fall
                 </div>
                 <div class="card-body text-center text-warning special-color">
-                    <h1>{{ total }}</h1>
+                    <h1 style="font-size: 6rem;" class="my-0 py-0">{{ total }}</h1>
                     <hr>
                     <h2 class="text-white">+{{ new_cases }}</h2>
                     <h6 class="text-muted">(senaste 24h)</h6>
