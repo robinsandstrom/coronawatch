@@ -19,26 +19,31 @@ class NewsParser:
         ps = div.findAll ('p', limit=None)
 
         CoronaCase.objects.all().delete()
-        total = 0
+        
         for p in ps:
-            try:
-                news_string = p.text
-            
-                infected = self.parse_news_string(news_string)
-                text = self.get_text(news_string)
-                region = self.search_region(text)
-                date = self.get_date(news_string)
-                corona_dict = {
-                    'date' : date,
-                    'region': region,
-                    'text': text,
-                    'infected': infected
-                }
-                coronacase = CoronaCase.objects.create(**corona_dict)
-                total+=infected
-                #print(corona_dict)
-            except:
-                print(news_string)
+            news_string = p.text
+            if news_string.count(')') > 1:
+                news = news_string.split(')', 1)
+                news_1 = news[0] + ')'
+                news_2 = news[1]
+                self.parse_case(news_1)
+                self.parse_case(news_2)
+            else:
+                self.parse_case(news_string)
+
+
+    def parse_case(self, news_string):
+        infected = self.parse_news_string(news_string)
+        text = self.get_text(news_string)
+        region = self.search_region(text)
+        date = self.get_date(news_string)
+        corona_dict = {
+            'date' : date,
+            'region': region,
+            'text': text,
+            'infected': infected
+        }
+        coronacase = CoronaCase.objects.create(**corona_dict)
 
     def get_date(self, news_string):
         date = news_string.split('(')[1]
