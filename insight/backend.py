@@ -10,12 +10,15 @@ def load_csv():
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
         for row in spamreader:
             data_row = []
+            j = 0
             for cell in row:
-                data_row.append(float(cell))
+                if j > 0:
+                    data_row.append(float(cell))
+                j+=1
             data.append(data_row)
 
     avg_row = get_avg_row(data)
-    swe_and_avg = [data[8], avg_row]
+    swe_and_avg = [data[9], avg_row]
     return data, swe_and_avg
 
 def get_avg_row(data):

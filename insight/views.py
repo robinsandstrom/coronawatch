@@ -9,15 +9,15 @@ from collections import OrderedDict
 def index(request):
     template = 'insight/home.html'
     data, swe_and_avg = load_csv()
-    cases = CoronaCase.objects.all().order_by('-date')
-    print(swe_and_avg)
+    cases = CoronaCase.objects.all().order_by('-time_created')
     ordered_regional_data, regional_data = populate_regional_data(cases)
     total = get_total(cases)
-    prognosis = data[9]
+    prognosis = data[10]
     new_cases = get_new_cases(cases)
     total_new = get_total(new_cases)
+
     try:
-        last_updated = cases.first().date
+        last_updated = cases.first().time_created+timedelta(hours=1)
     except:
         last_updated = datetime.now()
     agg_by_dates = aggregate_by_dates(cases)

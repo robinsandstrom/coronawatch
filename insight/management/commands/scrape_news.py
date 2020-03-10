@@ -8,42 +8,62 @@ from insight.models import CoronaCase, region_codes, city_codes
 
 class NewsParser:
     def __init__(self):
+        self.failed = False
         pass
 
     def run(self):
 
         client = requests.session()
-        page = requests.get("https://www.expressen.se/nyheter/skolor-stanger-efter-bekraftade-coronafall/")
+        page = requests.get("https://www.expressen.se/nyheter/regeringens-krispaket-mer-pengar-till-varden1/")
         soup = bs4.BeautifulSoup(page.content, 'html.parser')
         div = soup.find("div", {'class': 'factbox__content'})
         ps = div.findAll ('p', limit=None)
 
-        CoronaCase.objects.all().delete()
-        
+        assets = CoronaCase.objects.update(backup=True)
+        total = 0
+
         for p in ps:
+            if self.failed==True:
+                break
+
             news_string = p.text
             if news_string.count(')') > 1:
                 news = news_string.split(')', 1)
                 news_1 = news[0] + ')'
                 news_2 = news[1]
-                self.parse_case(news_1)
-                self.parse_case(news_2)
+                total+=self.parse_case(news_1, total)
+                total+=self.parse_case(news_2, total)
+
             else:
-                self.parse_case(news_string)
+                total+=self.parse_case(news_string, total)
+
+        if self.failed == True:
+            print('failed')
+            CoronaCase.objects.filter(backup=False).delete()
+        else:
+            CoronaCase.objects.filter(backup=True).delete()
 
 
-    def parse_case(self, news_string):
-        infected = self.parse_news_string(news_string)
-        text = self.get_text(news_string)
-        region = self.search_region(text)
-        date = self.get_date(news_string)
-        corona_dict = {
-            'date' : date,
-            'region': region,
-            'text': text,
-            'infected': infected
-        }
-        coronacase = CoronaCase.objects.create(**corona_dict)
+    def parse_case(self, news_string, total):
+        try:
+            infected = self.parse_news_string(news_string, total)
+            text = self.get_text(news_string)
+            region = self.search_region(text)
+            date = self.get_date(news_string)
+            corona_dict = {
+                'date' : date,
+                'region': region,
+                'text': text,
+                'infected': infected,
+                'backup': False
+            }
+            coronacase = CoronaCase.objects.create(**corona_dict)
+            return infected
+        except Exception as e:
+            print (e, news_string)
+            if '*' not in news_string:
+                self.failed = True
+            return 0
 
     def get_date(self, news_string):
         date = news_string.split('(')[1]
@@ -77,20 +97,25 @@ class NewsParser:
         text = text.split('(', 1)[0]
         return text
 
-    def parse_news_string(self, news_string):
+    def parse_news_string(self, news_string, total):
         infected_case = news_string.split(' ', 1)[0]
-        no_of_infected = self.parse_infected(infected_case)
+        no_of_infected = self.parse_infected(infected_case) - total
+
         return no_of_infected
 
     def parse_infected(self, infected_case):
+
         if '-' in infected_case:
             tuple = infected_case.split('-')
             big = re.sub('[^0-9]','', tuple[1])
             small = re.sub('[^0-9]','', tuple[0])
+            no = big
             amount = int(big)-int(small)+1
         else:
+            no = re.sub('[^0-9]','', infected_case)
             amount = 1
-        return int(amount)
+
+        return int(no)
 
 
 class Command(BaseCommand):

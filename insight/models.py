@@ -326,6 +326,8 @@ class CoronaCase(models.Model):
     region = models.CharField(max_length=255, blank=True, null=True)
     text = models.CharField(max_length=255, blank=True, null=True)
     infected = models.IntegerField(default=0)
+    time_created = models.DateTimeField(auto_now=True)
+    backup = models.BooleanField(default=True)
 
     def __str__(self):
 
