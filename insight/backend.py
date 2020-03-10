@@ -63,7 +63,11 @@ def populate_regional_data(cases):
         j = str(case.region)
         if len(j) == 1:
             j = '0' + j
-        regional_data[j]['value'] += case.infected
+        if j in regional_data:
+            regional_data[j]['value'] += case.infected
+        else:
+            regional_data[j] = { 'region': region_codes[j], 'value': 0 }
+            regional_data[j]['value'] = case.infected
 
     return OrderedDict(sorted(regional_data.items(), key = lambda t: t[1]['value'], reverse=True)), regional_data
 

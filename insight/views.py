@@ -20,6 +20,7 @@ def index(request):
         last_updated = cases.first().time_created+timedelta(hours=1)
     except:
         last_updated = datetime.now()
+        
     agg_by_dates = aggregate_by_dates(cases)
 
 

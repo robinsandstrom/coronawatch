@@ -37,6 +37,8 @@ class NewsParser:
             else:
                 total+=self.parse_case(news_string, total)
 
+        #self.parse_case('350-352: Tre personer i region okänd har testat positivt. (10/3)', total)
+
         if self.failed == True:
             print('failed')
             CoronaCase.objects.filter(backup=False).delete()
@@ -90,7 +92,7 @@ class NewsParser:
             if city_name.lower() in text:
                 return city_key[0:2]
 
-        return None
+        return '99'
 
     def get_text(self, news_string):
         text = news_string.split(' ', 1)[1]
