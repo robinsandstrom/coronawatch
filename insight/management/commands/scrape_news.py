@@ -14,11 +14,10 @@ class NewsParser:
     def run(self):
 
         client = requests.session()
-        page = requests.get("https://www.expressen.se/nyheter/regeringens-krispaket-mer-pengar-till-varden1/")
+        page = requests.get("https://www.expressen.se/nyheter/sa-planerar-de-att-stoppa-coronaviruset/")
         soup = bs4.BeautifulSoup(page.content, 'html.parser')
         div = soup.find("div", {'class': 'factbox__content'})
         ps = div.findAll ('p', limit=None)
-
         assets = CoronaCase.objects.update(backup=True)
         total = 0
 
@@ -63,7 +62,8 @@ class NewsParser:
             return infected
         except Exception as e:
             print (e, news_string)
-            if '*' not in news_string:
+            print('Sammanlagt' in news_string)
+            if 'Sammanlagt' not in news_string:
                 self.failed = True
             return 0
 
