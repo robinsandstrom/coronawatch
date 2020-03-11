@@ -5,6 +5,7 @@ from insight.backend import load_csv, populate_regional_data, get_new_cases, get
 from insight.models import CoronaCase
 from datetime import datetime, timedelta
 from collections import OrderedDict
+from insight.management.commands.new_parser import NewsParser
 
 def index(request):
     template = 'insight/home.html'
@@ -41,3 +42,8 @@ def about(request):
     template = 'insight/about.html'
     return render(request, template, context={
                                             })
+def update(request):
+    template = 'insight/about.html'
+    np = NewsParser()
+    np.run()
+    return HttpResponse('updated')

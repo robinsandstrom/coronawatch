@@ -29,7 +29,7 @@ class NewsParser:
             if 'Sammanlagt' not in text and 'Uppdaterad' not in text:
 
                 region = self.search_region(text)
-                current_value = int(text.split(' ')[0])
+                current_value = int(re.sub('[^0-9]','', text.split(' ')[0]))
                 previous_value = regional_data[region]['value']
 
                 if current_value != previous_value:
