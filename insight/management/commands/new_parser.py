@@ -4,7 +4,7 @@ import bs4
 import requests
 import re
 
-from insight.models import CoronaCase, region_codes, city_codes
+from insight.models import CoronaCase, region_codes, city_codes, ScrapeSite
 from insight.backend import populate_regional_data
 
 from pprint import pprint
@@ -17,46 +17,51 @@ class NewsParser:
     def run(self):
 
         client = requests.session()
-        page = requests.get("https://www.expressen.se/nyheter/sa-planerar-de-att-stoppa-coronaviruset/")
-        page2 = "https://www.svt.se/datajournalistik/har-sprider-sig-coronaviruset/"
-        soup = bs4.BeautifulSoup(page.content, 'html.parser')
-        div = soup.find("div", {'class': 'factbox__content'})
-        ps = div.findAll ('p', limit=None)
-        cases = CoronaCase.objects.all()
-        ordered_regional_data, regional_data = populate_regional_data(cases)
+        sites = ScrapeSite.objects.filter(name='expressen')
+        for site in sites:
+            url = site.url
+            page = requests.get(url)
+            page2 = "https://www.svt.se/datajournalistik/har-sprider-sig-coronaviruset/"
+            soup = bs4.BeautifulSoup(page.content, 'html.parser')
+            div = soup.find("div", {'class': 'factbox__content'})
+            ps = div.findAll ('p', limit=None)
+            cases = CoronaCase.objects.all()
+            ordered_regional_data, regional_data = populate_regional_data(cases)
 
-        for p in ps:
-            text = p.text
-            if 'Sammanlagt' not in text and 'Uppdaterad' not in text:
-
-                region = self.search_region(text)
-                current_value = int(re.sub('[^0-9]','', text.split(' ')[0]))
-                previous_value = regional_data[region]['value']
-
-                if current_value != previous_value:
-
-                    infected = current_value - previous_value
-                    region = region
-                    date = datetime.now().date()
-
-                    if infected == 1:
-                        ny = 'nytt'
+            for p in ps:
+                text = p.text
+                if 'Sammanlagt' not in text and 'Uppdaterad' not in text:
+                    try:
+                        region = self.search_region(text)
+                        current_value = int(re.sub('[^0-9]','', text.split(' ')[0]))
+                        previous_value = regional_data[region]['value']
+                    except:
+                        pass
                     else:
-                        ny = 'nya'
+                        if current_value != previous_value:
 
-                    text = str(infected) + ' ' + ny + ' fall i ' + region_codes[region]
+                            infected = current_value - previous_value
+                            region = region
+                            date = datetime.now().date()
 
-                    if infected > 0:
+                            if infected == 1:
+                                ny = 'nytt'
+                            else:
+                                ny = 'nya'
 
-                        corona_dict = {
-                            'date' : date,
-                            'region': region,
-                            'text': text,
-                            'infected': infected,
-                            'backup': False
-                        }
+                            text = str(infected) + ' ' + ny + ' fall i ' + region_codes[region]
 
-                        CoronaCase.objects.create(**corona_dict)
+                            if infected > 0:
+
+                                corona_dict = {
+                                    'date' : date,
+                                    'region': region,
+                                    'text': text,
+                                    'infected': infected,
+                                    'backup': False
+                                }
+
+                                CoronaCase.objects.create(**corona_dict)
 
 
     def search_region(self, text):
