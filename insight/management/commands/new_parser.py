@@ -3,6 +3,7 @@ from datetime import datetime
 import bs4
 import requests
 import re
+import json
 
 from insight.models import CoronaCase, region_codes, city_codes, ScrapeSite
 from insight.backend import populate_regional_data
@@ -16,54 +17,88 @@ class NewsParser:
 
     def run(self):
 
+        url = 'https://www.svt.se/special/articledata/2322/sverige.json'
+        r = requests.get(url)
+        dict = r.json()['data']
+
+        cases = CoronaCase.objects.all()
+        ordered_regional_data, regional_data = populate_regional_data(cases)
+
+        for region_dict in dict:
+            region_code = region_dict['kod']
+            current_value = region_dict['antal']
+            previous_value = regional_data[region_code]['value']
+
+            if current_value != previous_value:
+                infected = current_value - previous_value
+                self.add_new_case(infected, region_code)
+
+
+
         client = requests.session()
         sites = ScrapeSite.objects.filter(name='expressen')
         for site in sites:
-            url = site.url
-            page = requests.get(url)
 
-            soup = bs4.BeautifulSoup(page.content, 'html.parser')
-            div = soup.find("div", {'class': 'factbox__content'})
-            ps = div.findAll ('p', limit=None)
             cases = CoronaCase.objects.all()
-
             ordered_regional_data, regional_data = populate_regional_data(cases)
+
+            ps = self.get_expressen_paragraphs(site)
 
             for p in ps:
                 text = p.text
-                if 'Sammanlagt' not in text and 'Uppdaterad' not in text:
-                    try:
-                        region = self.search_region(text)
-                        current_value = int(re.sub('[^0-9]','', text.split(' ')[0]))
-                        previous_value = regional_data[region]['value']
-                    except:
-                        pass
-                    else:
-                        if current_value != previous_value:
 
-                            infected = current_value - previous_value
-                            region = region
-                            date = datetime.now().date()
+                if 'Sammanlagt' in text or 'Uppdaterad' in text:
+                    return
 
-                            if infected == 1:
-                                ny = 'nytt'
-                            else:
-                                ny = 'nya'
+                try:
+                    region = self.search_region(text)
+                    current_value = int(re.sub('[^0-9]','', text.split(' ')[0]))
+                    previous_value = regional_data[region]['value']
+                except:
+                    pass
 
-                            text = str(infected) + ' ' + ny + ' fall i ' + region_codes[region]
+                else:
 
-                            if infected > 0:
+                    if current_value != previous_value:
 
-                                corona_dict = {
-                                    'date' : date,
-                                    'region': region,
-                                    'text': text,
-                                    'infected': infected,
-                                    'backup': False
-                                }
+                        infected = current_value - previous_value
 
-                                CoronaCase.objects.create(**corona_dict)
+                        self.add_new_case(infected, region)
 
+
+
+
+    def add_new_case(self, infected, region):
+        date = datetime.now().date()
+
+        if infected == 1:
+            ny = 'nytt'
+        else:
+            ny = 'nya'
+
+        text = str(infected) + ' ' + ny + ' fall i ' + region_codes[region]
+
+        if infected > 0:
+
+            corona_dict = {
+                'date' : date,
+                'region': region,
+                'text': text,
+                'infected': infected,
+                'backup': False
+            }
+
+            CoronaCase.objects.create(**corona_dict)
+
+    def get_expressen_paragraphs(self, site):
+        url = site.url
+        page = requests.get(url)
+
+        soup = bs4.BeautifulSoup(page.content, 'html.parser')
+        div = soup.find("div", {'class': 'factbox__content'})
+        ps = div.findAll ('p', limit=None)
+
+        return ps
 
     def search_region(self, text):
         text = text.lower()
