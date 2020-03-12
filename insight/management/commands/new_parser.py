@@ -43,12 +43,12 @@ class NewsParser:
             ordered_regional_data, regional_data = populate_regional_data(cases)
 
             ps = self.get_expressen_paragraphs(site)
-
             for p in ps:
-                text = p.text
 
+                text = p.text
+                print(text)
                 if 'Sammanlagt' in text or 'Uppdaterad' in text:
-                    return
+                    continue
 
                 try:
                     region = self.search_region(text)
@@ -97,7 +97,6 @@ class NewsParser:
         soup = bs4.BeautifulSoup(page.content, 'html.parser')
         div = soup.find("div", {'class': 'factbox__content'})
         ps = div.findAll ('p', limit=None)
-
         return ps
 
     def search_region(self, text):
