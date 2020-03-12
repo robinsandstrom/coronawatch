@@ -48,6 +48,10 @@ def aggregate_by_dates(cases):
 
 def populate_regional_data(cases):
     regional_data = {}
+    regional_data['00'] = {
+            'region': region_codes['00'],
+            'value': 0
+        }
     for i in range(1, 26):
         j = str(i)
         if len(j) == 1:

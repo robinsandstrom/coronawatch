@@ -24,7 +24,7 @@ region_codes = {
     '23':'Jämtland',
     '24':'Västerbotten',
     '25':'Norrbotten',
-    '99': 'Okänd region'
+    '00': 'Okänd region'
 }
 
 city_codes = {
