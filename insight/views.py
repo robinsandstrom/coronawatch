@@ -47,3 +47,10 @@ def update(request):
     np = NewsParser()
     np.run()
     return HttpResponse('updated')
+
+def iframe_test(request):
+    template = 'insight/iframe_test.html'
+    cases = CoronaCase.objects.all().order_by('-time_created')
+    agg_by_dates = aggregate_by_dates(cases)
+
+    return render(request, template, context={})

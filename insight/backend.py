@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 def load_csv():
     data = []
-    with open('insight/total.csv', newline='') as csvfile:
+    with open('total.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
         for row in spamreader:
             data_row = []

@@ -337,3 +337,7 @@ class CoronaCase(models.Model):
 class ScrapeSite(models.Model):
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
+
+class Prognosis(models.Model):
+    file = models.FileField()
+    offset = models.IntegerField(default=0)

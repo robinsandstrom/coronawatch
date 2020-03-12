@@ -16,7 +16,8 @@ class NewsParser:
         pass
 
     def run(self):
-
+        #url_aftonhoran = https://tethys.aftonbladet.se/configurationdata/coronadata
+        #url_fhm = https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/aktuellt-epidemiologiskt-lage/
         url = 'https://www.svt.se/special/articledata/2322/sverige.json'
         r = requests.get(url)
         dict = r.json()['data']
