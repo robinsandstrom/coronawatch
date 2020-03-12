@@ -18,6 +18,7 @@ class NewsParser:
 
         client = requests.session()
         page = requests.get("https://www.expressen.se/nyheter/sa-planerar-de-att-stoppa-coronaviruset/")
+        page2 = "https://www.svt.se/datajournalistik/har-sprider-sig-coronaviruset/"
         soup = bs4.BeautifulSoup(page.content, 'html.parser')
         div = soup.find("div", {'class': 'factbox__content'})
         ps = div.findAll ('p', limit=None)
