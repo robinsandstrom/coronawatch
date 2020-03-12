@@ -21,11 +21,12 @@ class NewsParser:
         for site in sites:
             url = site.url
             page = requests.get(url)
-            page2 = "https://www.svt.se/datajournalistik/har-sprider-sig-coronaviruset/"
+
             soup = bs4.BeautifulSoup(page.content, 'html.parser')
             div = soup.find("div", {'class': 'factbox__content'})
             ps = div.findAll ('p', limit=None)
             cases = CoronaCase.objects.all()
+
             ordered_regional_data, regional_data = populate_regional_data(cases)
 
             for p in ps:
