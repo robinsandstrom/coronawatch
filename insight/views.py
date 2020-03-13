@@ -18,7 +18,7 @@ def index(request):
     total_new = get_total(new_cases)
 
     try:
-        last_updated = cases.first().time_created+timedelta(hours=1)
+        last_updated = cases.first().time_created
     except:
         last_updated = datetime.now()
 
