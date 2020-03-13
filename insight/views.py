@@ -6,6 +6,8 @@ from insight.models import CoronaCase
 from datetime import datetime, timedelta
 from collections import OrderedDict
 from insight.management.commands.new_parser import NewsParser
+from django.views.decorators.clickjacking import xframe_options_exempt
+
 
 def index(request):
     template = 'insight/home.html'
@@ -48,6 +50,7 @@ def update(request):
     np.run()
     return HttpResponse('updated')
 
+@xframe_options_exempt
 def iframe_test(request):
     template = 'insight/iframe_test.html'
     data, swe_and_avg = load_csv()
@@ -79,6 +82,7 @@ def iframe_test(request):
                                             'agg_by_dates': agg_by_dates
                                             })
 
+@xframe_options_exempt
 def iframe_test_light(request):
     template = 'insight/iframe_test_light.html'
     data, swe_and_avg = load_csv()
