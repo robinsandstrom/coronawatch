@@ -43,13 +43,13 @@
 </head>
 
 
-<body class="grey lighten-5">
+<body class="orange lighten-5">
 
     <div class="row mx-lg-1 mx-sm-2">
 
         <div class="col-sm-12 offset-lg-0 col-lg-6 px-sm-2 mt-sm-4">
-            <div class="card grey lighten-5 h-100 grey lighten-5  border-dark mx-sm-0 my-2 z-depth-0">
-                <div class="card-header text-white mdb-color darken-1 text-center">
+            <div class="card orange lighten-5 h-100 border-dark mx-sm-0 my-2 z-depth-0">
+                <div class="card-header text-white unique-color darken-1 text-center">
                     Totalt antal fall
                 </div>
                 <div class="card-body text-center  ">
@@ -59,8 +59,8 @@
         </div>
 
         <div class="col-sm-12 col-lg-6 px-sm-2 mt-sm-4">
-            <div class="card grey lighten-5 h-100 grey lighten-5  border-dark mx-sm-0 my-2 z-depth-0">
-                <div class="card-header text-white mdb-color darken-1 text-center">
+            <div class="card orange lighten-5 h-100 border-dark mx-sm-0 my-2 z-depth-0">
+                <div class="card-header text-white unique-color darken-1 text-center">
                     Ökning idag
                 </div>
                 <div class="card-body text-center  ">
@@ -70,8 +70,8 @@
         </div>
 
         <div class="col-sm-12 offset-lg-0 col-lg-6 px-sm-2 mt-sm-4" >
-            <div class="card grey lighten-5 h-100 border-dark my-2 z-depth-0 ">
-                <div class="card-header text-white mdb-color darken-1 text-center">
+            <div class="card orange lighten-5 h-100 border-dark my-2 z-depth-0 ">
+                <div class="card-header text-white unique-color darken-1 text-center">
                     Geografisk smittspridning
                 </div>
                 <div class="card-body ">
@@ -83,9 +83,9 @@
         </div>
 
         <div class="col-sm-12 col-lg-6 px-sm-2 mt-sm-4">
-            <div class="card grey lighten-5 h-100 border-dark mr-lg-2 my-2 z-depth-0 ">
+            <div class="card orange lighten-5 h-100 border-dark mr-lg-2 my-2 z-depth-0 ">
 
-                <div class="card-header text-white mdb-color darken-1 text-center">
+                <div class="card-header text-white unique-color darken-1 text-center">
                     Fall per region
                 </div>
                 <div class="card-body px-sm-2 px-lg-1">
@@ -137,6 +137,7 @@ var swe_geo = {"type":"FeatureCollection", "features": [
 <script>
 am4core.ready(function() {
 
+
     // Themes begin
     am4core.useTheme(am4themes_kelly);
     // Themes end
@@ -175,8 +176,8 @@ am4core.ready(function() {
           polygonSeries.heatRules.push({
             property: "fill",
             target: polygonSeries.mapPolygons.template,
-            min: am4core.color("#ffecb3"),
-            max: am4core.color("#3b465e"),
+            max: am4core.color("#1C2331"),
+            min: am4core.color("#CC2634"),
           });
 
           // Make map load polygon data (state shapes and names) from GeoJSON
@@ -241,13 +242,13 @@ am4core.ready(function() {
 
     .chartdiv {
          width: 100%;
-         height: 40vh;
+         height: 100%;
     }
 
     @media (max-width: 600px) {
         .chartdiv {
           width: 100%;
-          height: 85vh;
+          height: 100%;
         }
     }
 
