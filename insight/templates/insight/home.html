@@ -92,7 +92,7 @@
                 <div class="card-header text-white special-color-dark text-center">
                     Prognos
                 </div>
-                <div class="card-body text-center text-danger special-color">
+                <div class="card-body table-responsive text-center text-danger special-color">
                     <table class="table table-borderless" id="prognosis_table">
                         <tbody>
                             <tr>
@@ -189,8 +189,8 @@
                         {% for region, infected in ordered_regional_data.items %}
                             {% if infected.value > 0 %}
                             <tr>
-                                <td style="font-size: 1.125rem;" class="text-white text-uppercase" style="font-size: 1.0rem;"> {{ infected.region }}</td>
-                                <td style="font-size: 1.125rem;" style="text-align: right !important; font-size: 1.125rem;" class="text-danger"><strong>{{ infected.value }}</strong></td>
+                                <td class="text-uppercase text-white" style="font-size: 1.0rem; line-height: 0.625rem;"> {{ infected.region }}</td>
+                                <td style="text-align: right !important; font-size: 1.125rem; line-height: 0.625rem;" class="text-danger"><strong>{{ infected.value }}</strong></td>
                             </tr>
                             {% endif %}
                         {% endfor %}

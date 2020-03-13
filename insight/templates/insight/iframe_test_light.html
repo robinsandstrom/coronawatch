@@ -23,7 +23,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://www.amcharts.com/lib/4/core.js"></script>
     <script src="https://www.amcharts.com/lib/4/charts.js"></script>
-    <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/kelly.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
     <script src="https://www.amcharts.com/lib/4/maps.js"></script>
     <script src="https://www.amcharts.com/lib/4/geodata/usaLow.js"></script>
@@ -43,38 +43,38 @@
 </head>
 
 
-<body class="grey darken-4">
+<body class="grey lighten-5">
 
     <div class="row mx-lg-1 mx-sm-2">
 
-        <div class="col-sm-12 offset-lg-2 col-lg-4 px-sm-2 mt-sm-4">
-            <div class="card h-100 grey darken-4  border-dark mx-sm-0 my-2 z-depth-0">
-                <div class="card-header text-white special-color-dark text-center">
+        <div class="col-sm-12 offset-lg-0 col-lg-6 px-sm-2 mt-sm-4">
+            <div class="card grey lighten-5 h-100 grey lighten-5  border-dark mx-sm-0 my-2 z-depth-0">
+                <div class="card-header text-white mdb-color darken-1 text-center">
                     Totalt antal fall
                 </div>
-                <div class="card-body text-center text-warning special-color">
+                <div class="card-body text-center  ">
                     <h1 style="font-size: 6rem;" class="my-0 py-0">{{ total }}</h1>
                 </div>
             </div>
         </div>
 
-        <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4">
-            <div class="card h-100 grey darken-4  border-dark mx-sm-0 my-2 z-depth-0">
-                <div class="card-header text-white special-color-dark text-center">
+        <div class="col-sm-12 col-lg-6 px-sm-2 mt-sm-4">
+            <div class="card grey lighten-5 h-100 grey lighten-5  border-dark mx-sm-0 my-2 z-depth-0">
+                <div class="card-header text-white mdb-color darken-1 text-center">
                     Ökning idag
                 </div>
-                <div class="card-body text-center text-warning special-color">
-                    <h1 class="text-white my-0 py-0" style="font-size: 6rem;">+{{ new_cases }}</h1>
+                <div class="card-body text-center  ">
+                    <h1 class="text-danger my-0 py-0" style="font-size: 6rem;">+{{ new_cases }}</h1>
                 </div>
             </div>
         </div>
 
-        <div class="col-sm-12 offset-lg-2 col-lg-4 px-sm-2 mt-sm-4" >
-            <div class="card h-100 border-dark my-2 z-depth-0 ">
-                <div class="card-header text-white special-color-dark text-center">
+        <div class="col-sm-12 offset-lg-0 col-lg-6 px-sm-2 mt-sm-4" >
+            <div class="card grey lighten-5 h-100 border-dark my-2 z-depth-0 ">
+                <div class="card-header text-white mdb-color darken-1 text-center">
                     Geografisk smittspridning
                 </div>
-                <div class="card-body special-color">
+                <div class="card-body ">
                     <div id="mapchart" class="chartdiv" style="height: 80vh;">
 
                     </div>
@@ -82,18 +82,18 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4">
-            <div class="card h-100 border-dark mr-lg-2 my-2 z-depth-0 ">
+        <div class="col-sm-12 col-lg-6 px-sm-2 mt-sm-4">
+            <div class="card grey lighten-5 h-100 border-dark mr-lg-2 my-2 z-depth-0 ">
 
-                <div class="card-header text-white special-color-dark text-center">
+                <div class="card-header text-white mdb-color darken-1 text-center">
                     Fall per region
                 </div>
-                <div class="card-body px-sm-2 px-lg-1 text-danger special-color">
+                <div class="card-body px-sm-2 px-lg-1">
                     <table class="table table-sm table-borderless">
                         {% for region, infected in ordered_regional_data.items %}
                             {% if infected.value > 0 %}
                             <tr>
-                                <td class="text-uppercase text-white" style="font-size: 1.0rem; line-height: 0.625rem;"> {{ infected.region }}</td>
+                                <td class="text-uppercase text-black" style="font-size: 1.0rem; line-height: 0.625rem;"> {{ infected.region }}</td>
                                 <td style="text-align: right !important; font-size: 1.125rem; line-height: 0.625rem;" class="text-danger"><strong>{{ infected.value }}</strong></td>
                             </tr>
                             {% endif %}
@@ -138,7 +138,7 @@ var swe_geo = {"type":"FeatureCollection", "features": [
 am4core.ready(function() {
 
     // Themes begin
-    am4core.useTheme(am4themes_dark);
+    am4core.useTheme(am4themes_kelly);
     // Themes end
     var data = {{ data|safe }}
     var swe_and_avg = {{ swe_and_avg }}
@@ -176,7 +176,7 @@ am4core.ready(function() {
             property: "fill",
             target: polygonSeries.mapPolygons.template,
             min: am4core.color("#ffecb3"),
-            max: am4core.color("#bf360c"),
+            max: am4core.color("#3b465e"),
           });
 
           // Make map load polygon data (state shapes and names) from GeoJSON

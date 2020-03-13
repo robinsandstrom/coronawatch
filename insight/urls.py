@@ -13,6 +13,7 @@ urlpatterns = [
     path('about', views.about, name='about'),
     path('update', views.update, name='update'),
     path('iframe_test', views.iframe_test, name='iframe_test'),
+    path('iframe_test_light', views.iframe_test_light, name='iframe_test_light'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap')
 ]
