@@ -48,7 +48,7 @@
     <nav class="navbar py-0 navbar-dark special-color z-depth-0 text-left">
         <img style="height: 2.5rem;" src="{% static 'logob.svg' %}" class="pr-4">
         <a class="navbar-brand mr-auto py-0 my-0" href="#" style="font-family: biohazard;">Coronawatch.se</a>
-        <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
+        <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated|localtime }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
 
