@@ -15,10 +15,25 @@ class NewsParser:
         pass
 
     def run(self):
-        #self.parse_svt()
-        #self.parse_expressen()
-        self.parse_aftonbladet()
-        #self.parse_fhm()
+        try:
+            self.parse_svt()
+        except:
+            print('Failed SVT')
+
+        try:
+            self.parse_expressen()
+        except:
+            print('Failed Expressen')
+
+        try:
+            self.parse_aftonbladet()
+        except:
+            print('Failed Aftonbladet')
+
+        try:
+            self.parse_fhm()
+        except:
+            print('Failed FHM')
 
     def parse_svt(self):
 
