@@ -25,7 +25,7 @@ def verbose_date(tdate):
     if tdate.date() == date.today():
         return "Idag {:d}:{:02d}".format(tdate.hour, tdate.minute)
 
-    #elif tdate.date() == date.today() - timedelta(days = 1):
-    #    return "Igår {:d}:{:02d}".format(tdate.hour, tdate.minute)
+    elif tdate.date() == date.today() - timedelta(days = 1):
+        return "Igår {:d}:{:02d}".format(tdate.hour, tdate.minute)
 
     return "{:d} {} {:d}:{:02d}".format(tdate.day, month_dict[tdate.month], tdate.hour, tdate.minute)
