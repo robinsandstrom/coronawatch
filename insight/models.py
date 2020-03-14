@@ -328,10 +328,10 @@ class CountryTracker(models.Model):
     new_infected = models.IntegerField(default=0)
     total_deaths = models.IntegerField(default=0)
     new_deaths = models.IntegerField(default=0)
-    
+
 
     def __str__(self):
-        return str(self.country)
+        return str(self.country) + ' ' + str(self.date)
 
 class CoronaCase(models.Model):
 
@@ -352,6 +352,9 @@ class ScrapeSite(models.Model):
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
     verbose_url = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.name)
 
 class Prognosis(models.Model):
     file = models.FileField()

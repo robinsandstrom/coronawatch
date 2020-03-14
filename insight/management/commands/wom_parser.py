@@ -11,28 +11,40 @@ from pprint import pprint
 
 class WomParser:
     def __init__(self):
+        self.watch_list = list(CountryTracker.objects.all().distinct().values_list('country', flat=True))
+
         pass
 
     def run(self):
-        page = requests.get('https://www.worldometers.info/coronavirus/')
+        tbody = self.get_tables()
 
+        self.parse_countries(tbody[0])
+        self.parse_total(tbody[1])
+
+    def get_tables(self):
+
+        page = requests.get('https://www.worldometers.info/coronavirus/')
         soup = bs4.BeautifulSoup(page.content, 'html.parser')
         table = soup.find("table", {'id': 'main_table_countries'})
         tbody = table.findAll("tbody")
+        return tbody
 
-        t_countries = tbody[0]
+    def parse_countries(self, t_countries):
+
         trs = t_countries.findAll('tr', limit=None)
+        #0 Country name #1 Total cases #2 New #3 Deaths #4 New deaths
+        for tr in trs:
+            tr
 
-        t_total = tbody[1]
+    def parse_total(self, t_total):
 
         tds = t_total.find('tr').findAll('td')
-
         total_cases = int(re.sub('[^0-9]','', tds[1].text))
         new_cases = int(re.sub('[^0-9]','', tds[2].text))
+        deaths = int(re.sub('[^0-9]','', tds[3].text))
         new_deaths = int(re.sub('[^0-9]','', tds[4].text))
-        deaths = int(re.sub('[^0-9]','', tds[7].text))
-        print(total_cases, new_cases, new_deaths, deaths)
-        
+        print(total_cases, new_cases, deaths, new_deaths)
+
 class Command(BaseCommand):
     #A command which takes a from_date as an input and then tries to put in all Intrabank rates into DB from that date
 
