@@ -74,16 +74,3 @@ def populate_regional_data(cases):
             regional_data[j]['value'] = case.infected
 
     return OrderedDict(sorted(regional_data.items(), key = lambda t: t[1]['value'], reverse=True)), regional_data
-
-def get_total(cases):
-    total = 0
-
-    for case in cases:
-        total+=case.infected
-
-    return total
-
-def get_new_cases(cases):
-    date_from = datetime.now()
-    new_cases = cases.filter(date__gte=date_from)
-    return new_cases

@@ -81,20 +81,24 @@
         <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated|localtime }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
+        {% for article in articles %}
         <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4 mt-lg-2">
             <div class="card list-group-item-warning border-dark mx-sm-0 my-3 z-depth-0">
                 <div class="card-body table-responsive list-group-item-warning py-0" style="background-color: #fcf4d9">
                     <img style="height: 2rem; display:inline-block;" src="{% static 'warning.svg' %}" class="pr-1 pt-2 mb-1">
-                    <h3 class="mb-1" style="display: inline-block;">ITALIEN IDAG</h3>
+                    <h3 class="mb-1" style="display: inline-block; text-transform: uppercase;">{{ article.title }}</h3>
                     <p class="mt-0">
-                        3,497 nya fall och 175 nya dödsfall i Italien, inkluderar dödsfallet av en 47-årig akutsjukvårdare i Bergamo.
-                        Totalt antal fall i landet överstiger nu 20,000. Gårdagens ökning: 2,547 nya fall och 250 dödsfall.
-                        <a href="https://pbs.twimg.com/media/ETFd5EKXQAABGVm?format=jpg&name=medium">[1]</a>
-                        <a href="https://www.tgcom24.mediaset.it/cronaca/lombardia/coronavirus-morto-un-operatore-del-118-di-bergamo-aveva-47-anni_16155346-202002a.shtml">[2]</a>
+                        {{ article.text }}
+
+                        {% for source in article.source_set.all %}
+                            <a href="{{source.url}}">[{{forloop.counter}}]</a>
+                        {% endfor %}
+
                     </p>
                 </div>
             </div>
         </div>
+        {% endfor %}
 
         <div class="col-sm-12">
             <h1 class="text-white text-center">Sverige</h1>
@@ -127,15 +131,16 @@
                 <div class="card-body text-center text-warning special-color">
                     <div class="row">
                         <div class="col-md-6">
+                            {% load l10n %}
                             <h1 style="font-size: 2rem;" class="text-muted my-1 py-0">Totalt</h1>
-                            <h1 style="font-size: 4rem;" class="my-0 py-0">155 812</h1>
-                            <h5 class="text-white my-0 py-0 text-danger" style="font-size: 1.5rem;">5814 Döda</h5>
+                            <h1 style="font-size: 4rem;" class="my-0 py-0">{{ global.total_cases }}</h1>
+                            <h5 class="text-white my-0 py-0 text-danger" style="font-size: 1.5rem;">{{ global.total_deaths }} Döda</h5>
                         </div>
                         <div class="col-md-6">
 
                             <h1 style="font-size: 2rem;" class="text-muted my-1 py-0">Nya fall</h1>
-                            <h1 style="font-size: 4rem;" class="text-white my-0 py-0">+10 341</h1>
-                            <h5 class="text-white my-0 py-0 text-danger" style="font-size: 1.5rem;">+398 dödsfall</h5>
+                            <h1 style="font-size: 4rem;" class="text-white my-0 py-0">+{{ global.new_cases }}</h1>
+                            <h5 class="text-white my-0 py-0 text-danger" style="font-size: 1.5rem;">+{{ global.new_deaths }} dödsfall</h5>
                         </div>
                     </div>
 
@@ -152,20 +157,20 @@
                         <div class="col-lg-4 my-sm-4 my-lg-0 col-sm-12 text-center p-0">
                             <img style="height: 2rem; display:inline-block;" src="{% static 'denmark.svg' %}" class="pr-1 mt-2 mb-1 m-0">
                             <h4 class="small text-uppercase mt-0 my-1 text-muted">Danmark</h4>
-                            <h1 class="font-weight-bold mt-0 mb-0 text-warning" style="font-size: 3.5rem;">827</h1>
-                            <h4 class="mt-0 mb-2">(+23)</h4>
+                            <h1 class="font-weight-bold mt-0 mb-0 text-warning" style="font-size: 3.5rem;">{{ denmark.total_cases }}</h1>
+                            <h4 class="mt-0 mb-2">(+{{ denmark.new_cases }})</h4>
                         </div>
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center border-left border-right">
                             <img style="height: 2rem; display:inline-block;" src="{% static 'italy.svg' %}" class="pr-1 mt-2 mb-1 m-0">
                             <h4 class="small text-uppercase mt-0 my-1 text-muted">Italien</h4>
-                            <h1 class="font-weight-bold mt-0 mb-0 text-warning" style="font-size: 3.5rem;">21 157</h1>
-                            <h4 class="mt-0 mb-2">(+3 497)</h4>
+                            <h1 class="font-weight-bold mt-0 mb-0 text-warning" style="font-size: 3.5rem;">{{ italy.total_cases }}</h1>
+                            <h4 class="mt-0 mb-2">(+{{ italy.new_cases }})</h4>
                         </div>
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
                             <img style="height: 2rem; display:inline-block;" src="{% static 'norge.svg' %}" class="pr-1 mt-2 mb-1 m-0">
                             <h4 class="small text-uppercase mt-0 my-1 text-muted">Norge</h4>
-                            <h1 class="font-weight-bold mt-0 mb-0 text-warning" style="font-size: 3.5rem;">1 056</h1>
-                            <h4 class="mt-0 mb-2">(+60)</h4>
+                            <h1 class="font-weight-bold mt-0 mb-0 text-warning" style="font-size: 3.5rem;">{{ norway.total_cases }}</h1>
+                            <h4 class="mt-0 mb-2">(+{{ norway.new_cases }})</h4>
                         </div>
                     </div>
                 </div>

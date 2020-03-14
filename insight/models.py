@@ -321,11 +321,26 @@ city_codes = {
     '2584':'Kiruna',
 }
 
+class Article(models.Model):
+    title = models.CharField(max_length=25)
+    text = models.CharField(max_length=500)
+    active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.title)
+
+class Source(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    url = models.CharField(max_length=255)
+
+    def __str__(self):
+        return str(self.article) + ' ' + str(self.url)
+
 class CountryTracker(models.Model):
     date = models.DateField(blank=True, null=True)
     country = models.CharField(max_length=255, blank=True, null=True)
-    total_infected = models.IntegerField(default=0)
-    new_infected = models.IntegerField(default=0)
+    total_cases = models.IntegerField(default=0)
+    new_cases = models.IntegerField(default=0)
     total_deaths = models.IntegerField(default=0)
     new_deaths = models.IntegerField(default=0)
 
