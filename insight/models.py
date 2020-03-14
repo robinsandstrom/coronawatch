@@ -330,6 +330,7 @@ class CoronaCase(models.Model):
     time_created = models.DateTimeField(auto_now=True)
     backup = models.BooleanField(default=True)
     case_type = models.CharField(max_length=255, default='confirmed')
+    source = models.ForeignKey('insight.ScrapeSite', blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
 
@@ -338,6 +339,7 @@ class CoronaCase(models.Model):
 class ScrapeSite(models.Model):
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
+    verbose_url = models.CharField(max_length=255, blank=True, null=True)
 
 class Prognosis(models.Model):
     file = models.FileField()

@@ -60,7 +60,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 offset-lg-2 col-lg-4 px-sm-2 mt-sm-4">
+        <div class="col-sm-12">
+            <h1 class="text-white text-center my-1">Sverige</h1>
+        </div>
+        <div class="col-sm-12 offset-lg-2 col-lg-4 px-sm-2 mt-sm-2">
             <div class="card h-100 grey darken-4  border-dark mx-sm-0 my-2 z-depth-0">
                 <div class="card-header text-white special-color-dark text-center">
                     Totalt antal fall
@@ -72,7 +75,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4">
+        <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-2">
             <div class="card h-100 grey darken-4  border-dark mx-sm-0 my-2 z-depth-0">
                 <div class="card-header text-white special-color-dark text-center">
                     Ökning idag
@@ -223,6 +226,7 @@
                                 <th style="border: none;">Smittade</th>
                                 <th style="border: none;">Rubrik</th>
                                 <th style="border: none;">Datum</th>
+                                <th class="text-center" style="border: none;">Källa</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -231,6 +235,11 @@
                                 <td style="white-space: nowrap; padding-right: 0px;">{{ case.infected }}</td>
                                 <td>{{ case.text }}</td>
                                 <td style="white-space: nowrap;">{{ case.time_created|localtime }}</td>
+                                {% if case.source %}
+                                <td class="text-center"><a style="color: #fcf4d9;" class="text-center" href="{{ case.source.verbose_url }}">{{ case.source.name }}</a></td>
+                                {% else %}
+                                <td></td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         </tbody>

@@ -12,64 +12,108 @@ from pprint import pprint
 
 class NewsParser:
     def __init__(self):
-        self.failed = False
         pass
 
     def run(self):
         #url_aftonhoran = https://tethys.aftonbladet.se/configurationdata/coronadata
         #url_fhm = https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/aktuellt-epidemiologiskt-lage/
-        url = 'https://www.svt.se/special/articledata/2322/sverige.json'
-        r = requests.get(url)
-        dict = r.json()['data']
+        self.parse_svt()
+        self.parse_expressen()
+        #self.parse_aftonbladet()
+        self.parse_fhm()
+
+    def parse_svt(self):
+
+        site = ScrapeSite.objects.get(name='SVT')
+        r = requests.get(site.url)
+        summary = r.json()['data']
+        self.add_cases_from_summary(summary, site)
+
+    def parse_expressen(self):
+
+        site = ScrapeSite.objects.get(name='Expressen')
+        ps = self.get_expressen_paragraphs(site)
+        summary = self.expressen_to_summary(ps)
+        self.add_cases_from_summary(summary, site)
+
+    def parse_aftonbladet(self):
+        site = ScrapeSite.objects.get(name='Aftonbladet')
+        r = requests.get(site.url)
+        list_of_cases = r.json()['workSheets']['sverige']['rows']
+        summary = self.aftonhoran_to_summary(list_of_cases)
+
+    def parse_fhm(self):
+        site = ScrapeSite.objects.get(name='Folkhälsomyndigheten')
+        trs = self.get_fhm_tds(site)
+        summary = self.fhm_to_summary(trs)
+        self.add_cases_from_summary(summary, site)
+
+    def aftonhoran_to_summary(self, list_of_cases):
+
+        for l in list_of_cases:
+            print(l)
+
+    def fhm_to_summary(self, trs):
+        parsed_data = []
+        for tr in trs:
+            tds = tr.findAll('td')
+            try:
+                region = self.search_region(tds[0].text)
+                value = int(tds[1].text)
+            except:
+                pass
+            else:
+                region_dict = {'kod': region, 'antal': value, 'namn': region_codes[region]}
+                parsed_data.append(region_dict)
+
+        return parsed_data
+
+    def get_fhm_tds(self, site):
+        url = site.url
+        page = requests.get(url)
+
+        soup = bs4.BeautifulSoup(page.content, 'html.parser')
+        div = soup.find("div", {'id': 'content-primary'})
+        table = div.findAll("table")[0]
+        tbody = table.find("tbody")
+        trs = tbody.findAll('tr', limit=None)
+        return trs[:-1]
+
+    def expressen_to_summary(self, ps):
+        parsed_data = []
+        for p in ps:
+
+            text = p.text
+
+            if 'Sammanlagt' in text or 'Uppdaterad' in text or len(text)<5:
+                continue
+            try:
+                region = self.search_region(text)
+            except:
+                pass
+            else:
+                value = int(re.sub('[^0-9]','', text.split(' ')[0]))
+                region_dict = {'kod': region, 'antal': value, 'namn': region_codes[region]}
+                parsed_data.append(region_dict)
+
+        return parsed_data
+
+    def add_cases_from_summary(self, summary, site):
 
         cases = CoronaCase.objects.all()
-        ordered_regional_data, regional_data = populate_regional_data(cases)
+        ord, regional_data = populate_regional_data(cases)
 
-        for region_dict in dict:
+        for region_dict in summary:
+
             region_code = region_dict['kod']
             current_value = region_dict['antal']
             previous_value = regional_data[region_code]['value']
 
             if current_value != previous_value:
                 infected = current_value - previous_value
-                self.add_new_case(infected, region_code)
+                self.add_new_case(infected, region_code, site)
 
-
-
-        client = requests.session()
-        sites = ScrapeSite.objects.filter(name='expressen')
-        for site in sites:
-
-            cases = CoronaCase.objects.all()
-            ordered_regional_data, regional_data = populate_regional_data(cases)
-
-            ps = self.get_expressen_paragraphs(site)
-            for p in ps:
-
-                text = p.text
-                print(text)
-                if 'Sammanlagt' in text or 'Uppdaterad' in text:
-                    continue
-
-                try:
-                    region = self.search_region(text)
-                    current_value = int(re.sub('[^0-9]','', text.split(' ')[0]))
-                    previous_value = regional_data[region]['value']
-                except:
-                    pass
-
-                else:
-
-                    if current_value != previous_value:
-
-                        infected = current_value - previous_value
-
-                        self.add_new_case(infected, region)
-
-
-
-
-    def add_new_case(self, infected, region):
+    def add_new_case(self, infected, region, source=None):
         date = datetime.now().date()
 
         if infected == 1:
@@ -86,7 +130,9 @@ class NewsParser:
                 'region': region,
                 'text': text,
                 'infected': infected,
-                'backup': False
+                'backup': False,
+                'case_type': 'confirmed',
+                'source': source
             }
 
             CoronaCase.objects.create(**corona_dict)
@@ -113,7 +159,7 @@ class NewsParser:
             if city_name.lower() in text:
                 return city_key[0:2]
 
-        return '99'
+        return '00'
 
 class Command(BaseCommand):
     #A command which takes a from_date as an input and then tries to put in all Intrabank rates into DB from that date
