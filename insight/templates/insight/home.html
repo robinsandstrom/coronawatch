@@ -25,6 +25,7 @@
     <script src="https://www.amcharts.com/lib/4/core.js"></script>
     <script src="https://www.amcharts.com/lib/4/charts.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/material.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
     <script src="https://www.amcharts.com/lib/4/maps.js"></script>
     <script src="https://www.amcharts.com/lib/4/geodata/usaLow.js"></script>
@@ -41,6 +42,34 @@
     <meta property="og:type" content="Senaste prognos" />
     <meta property="og:url" content="https://www.coronawatch.se/" />
     <meta property="og:image" content="static/graph2.png" />
+    <style media="screen">
+
+
+        .chartdiv {
+             width: 100%;
+             height: 40vh;
+        }
+
+        @media (max-width: 600px) {
+            .chartdiv {
+              width: 100%;
+              height: 85vh;
+            }
+            .border-left{
+                border-left:none !important;
+            }
+            .border-right{
+                border-right:none !important;
+            }
+        }
+
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+            font-family: Avenir-Light !important;
+        }
+
+    </style>
 </head>
 
 
@@ -55,57 +84,109 @@
         <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4 mt-lg-2">
             <div class="card list-group-item-warning border-dark mx-sm-0 my-3 z-depth-0">
                 <div class="card-body table-responsive list-group-item-warning py-0" style="background-color: #fcf4d9">
-                    <p>Sedan fredag den 13e mars är det beslutat att samtliga regioner ska sluta testa coronafall utanför riskgrupper för att
-                        prioritera resurser. Prognosen bygger på data från innan beslutet togs.
+                    <img style="height: 2rem; display:inline-block;" src="{% static 'warning.svg' %}" class="pr-1 pt-2 mb-1">
+                    <h3 class="mb-1" style="display: inline-block;">ITALIEN IDAG</h3>
+                    <p class="mt-0">
+                        3,497 nya fall och 175 nya dödsfall i Italien, inkluderar dödsfallet av en 47-årig akutsjukvårdare i Bergamo.
+                        Totalt antal fall i landet överstiger nu 20,000. Gårdagens ökning: 2,547 nya fall och 250 dödsfall.
+                        <a href="https://pbs.twimg.com/media/ETFd5EKXQAABGVm?format=jpg&name=medium">[1]</a>
+                        <a href="https://www.tgcom24.mediaset.it/cronaca/lombardia/coronavirus-morto-un-operatore-del-118-di-bergamo-aveva-47-anni_16155346-202002a.shtml">[2]</a>
                     </p>
                 </div>
             </div>
         </div>
+
         <div class="col-sm-12">
-            <h1 class="text-white text-center my-1">Sverige</h1>
+            <h1 class="text-white text-center">Sverige</h1>
         </div>
-        <div class="col-sm-12 offset-lg-2 col-lg-4 px-sm-2 mt-sm-2">
+        <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-2">
             <div class="card h-100 grey darken-4  border-dark mx-sm-0 my-2 z-depth-0">
-                <div class="card-header text-white special-color-dark text-center">
-                    Totalt antal fall
-                </div>
                 <div class="card-body text-center text-warning special-color">
-                    <h1 style="font-size: 6rem;" class="my-0 py-0">{{ total }}</h1>
-                    <h5 style="font-size: 1.5rem;" class="my-0 py-0 text-danger">{{ total_deaths }} döda</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h1 style="font-size: 2rem;" class="text-muted my-1 py-0">Totalt</h1>
+                            <h1 style="font-size: 6rem;" class="my-0 py-0">{{ total }}</h1>
+                            <h5 class="text-white my-0 py-0 text-danger" style="font-size: 1.5rem;">{{ total_deaths }} döda</h5>
+                        </div>
+                        <div class="col-md-6">
+
+                            <h1 style="font-size: 2rem;" class="text-muted my-1 py-0">Nya fall</h1>
+                            <h1 style="font-size: 6rem;" class="text-white my-0 py-0">+{{ new_cases }}</h1>
+                            <h5 class="text-white my-0 py-0 text-danger" style="font-size: 1.5rem;">+{{ total_new_deaths }} dödsfall</h5>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-2">
+        <div class="col-sm-12">
+            <h1 class="text-white text-center">Globalt</h1>
+        </div>
+        <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-2">
             <div class="card h-100 grey darken-4  border-dark mx-sm-0 my-2 z-depth-0">
-                <div class="card-header text-white special-color-dark text-center">
-                    Ökning idag
-                </div>
                 <div class="card-body text-center text-warning special-color">
-                    <h1 class="text-white my-0 py-0" style="font-size: 6rem;">+{{ new_cases }}</h1>
-                    <h5 class="text-white my-0 py-0 text-danger" style="font-size: 1.5rem;">+{{ total_new_deaths }} dödsfall</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h1 style="font-size: 2rem;" class="text-muted my-1 py-0">Totalt</h1>
+                            <h1 style="font-size: 4rem;" class="my-0 py-0">155 812</h1>
+                            <h5 class="text-white my-0 py-0 text-danger" style="font-size: 1.5rem;">5924 Döda</h5>
+                        </div>
+                        <div class="col-md-6">
+
+                            <h1 style="font-size: 2rem;" class="text-muted my-1 py-0">Nya fall</h1>
+                            <h1 style="font-size: 4rem;" class="text-white my-0 py-0">+10 341</h1>
+                            <h5 class="text-white my-0 py-0 text-danger" style="font-size: 1.5rem;">+398 dödsfall</h5>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-
-
+        <div class="col-sm-12">
+            <h1 class="text-white text-center">Andra länder</h1>
+        </div>
         <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4" >
             <div class="card border-dark mx-lg-0 my-2 z-depth-0 ">
-                <div class="card-header text-white special-color-dark text-center">
-                    Utveckling
+                <div class="card-body text-white special-color p-lg-5">
+                    <div class="row my-5">
+                        <div class="col-lg-4 my-sm-4 my-lg-0 col-sm-12 text-center p-0">
+                            <img style="height: 2rem; display:inline-block;" src="{% static 'denmark.svg' %}" class="pr-1 mt-2 mb-1 m-0">
+                            <h4 class="small text-uppercase mt-0 my-1 text-muted">Danmark</h4>
+                            <h1 class="font-weight-bold mt-0 mb-0 text-warning" style="font-size: 3.5rem;">827</h1>
+                            <h4 class="mt-0 mb-2">(+23)</h4>
+                        </div>
+                        <div class="col-lg-4 my-sm-4 col-sm-12 text-center border-left border-right">
+                            <img style="height: 2rem; display:inline-block;" src="{% static 'italy.svg' %}" class="pr-1 mt-2 mb-1 m-0">
+                            <h4 class="small text-uppercase mt-0 my-1 text-muted">Italien</h4>
+                            <h1 class="font-weight-bold mt-0 mb-0 text-warning" style="font-size: 3.5rem;">21 157</h1>
+                            <h4 class="mt-0 mb-2">(+3 497)</h4>
+                        </div>
+                        <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
+                            <img style="height: 2rem; display:inline-block;" src="{% static 'norge.svg' %}" class="pr-1 mt-2 mb-1 m-0">
+                            <h4 class="small text-uppercase mt-0 my-1 text-muted">Norge</h4>
+                            <h1 class="font-weight-bold mt-0 mb-0 text-warning" style="font-size: 3.5rem;">1 056</h1>
+                            <h4 class="mt-0 mb-2">(+60)</h4>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <h1 class="text-white text-center">Utveckling</h1>
+        </div>
+        <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4" >
+            <div class="card border-dark mx-lg-0 my-2 z-depth-0 ">
                 <div class="card-body text-center text-danger special-color">
                     <div id="chartdiv" class="chartdiv"></div>
                     <p class="text-muted">Källa: ECDC, European Centre for Disease Prevention and Control. </p>
                 </div>
             </div>
         </div>
-
+        <div class="col-sm-12">
+            <h1 class="text-white text-center">Prognos</h1>
+        </div>
         <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4 mt-lg-2">
             <div class="card  grey darken-4 border-dark mx-sm-0 my-3 z-depth-0">
-                <div class="card-header text-white special-color-dark text-center">
-                    Prognos
-                </div>
                 <div class="card-body table-responsive text-center text-danger special-color">
                     <table class="table table-borderless" id="prognosis_table">
                         <tbody>
@@ -164,12 +245,12 @@
                 </div>
             </div>
 
+        <div class="col-sm-12">
+            <h1 class="text-white text-center">Antal nya fall per dag</h1>
+        </div>
         <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4 mt-lg-2">
             <div class="card  grey darken-4 border-dark mr-lg-2 mx-sm-0 my-3 z-depth-0">
 
-                    <div class="card-header text-white special-color-dark text-center">
-                        Antal nya fall per dag
-                    </div>
                     <div class="card-body text-center text-danger special-color">
                         <div id="bar_chart" class="chartdiv" style="height: 30vh;"></div>
 
@@ -178,12 +259,11 @@
         </div>
 
 
-
+        <div class="col-sm-12">
+            <h1 class="text-white text-center">Geografisk smittspridning</h1>
+        </div>
         <div class="col-sm-12 offset-lg-2 col-lg-4 px-sm-2 mt-sm-4" >
             <div class="card h-100 border-dark mr-lg-2 my-2 z-depth-0 ">
-                <div class="card-header text-white special-color-dark text-center">
-                    Geografisk smittspridning
-                </div>
                 <div class="card-body special-color">
                     <div id="mapchart" class="chartdiv" style="height: 80vh;">
 
@@ -194,10 +274,6 @@
 
         <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4">
             <div class="card h-100 border-dark mr-lg-2 my-2 z-depth-0 ">
-
-                <div class="card-header text-white special-color-dark text-center">
-                    Fall per region
-                </div>
                 <div class="card-body px-sm-2 px-lg-1 text-danger special-color">
                     <table class="table table-sm table-borderless">
                         {% for region, infected in ordered_regional_data.items %}
@@ -216,12 +292,13 @@
         <div class="col-lg-2">
 
         </div>
+        <div class="col-sm-12">
+            <h1 class="text-white text-center">Senaste smittor</h1>
+
+        </div>
         <div class="col-lg-8 offset-lg-2 col-sm-12 px-sm-2 mt-sm-4">
             <div class="card border-dark mx-lg-0 my-3 z-depth-0 ">
-                <div class="card-header text-white special-color-dark text-center">
-                    Senaste smittor
-                </div>
-                <div class="card-body text-center text-danger special-color">
+                <div class="card-body table-responsive text-center text-danger special-color">
                     <table class="table table-sm text-left text-white">
                         <thead>
                             <tr>
@@ -248,6 +325,14 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <div class="col-lg-8 offset-lg-2 col-sm-12 px-s-2 mt-sm-4">
+        <div class="card border-dark mx-lg-1 my-3 z-depth-0 ">
+            <div class="card-body text-center text-white special-color">
+                Kontakt: <a href="mailto:kontakt@coronawatch.se">kontakt@coronawatch.se</a>
+            </div>
         </div>
     </div>
 
@@ -543,27 +628,5 @@ am4core.ready(function() {
         }
     }); // end am4core.ready()
 </script>
-
-<style media="screen">
-
-
-    .chartdiv {
-         width: 100%;
-         height: 40vh;
-    }
-
-    @media (max-width: 600px) {
-        .chartdiv {
-          width: 100%;
-          height: 85vh;
-        }
-    }
-
-    html, body {
-        max-width: 100%;
-        overflow-x: hidden;
-        font-family: Avenir-Light !important;
-    }
-</style>
 
 </html>

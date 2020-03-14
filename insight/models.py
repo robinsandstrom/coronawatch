@@ -321,6 +321,18 @@ city_codes = {
     '2584':'Kiruna',
 }
 
+class CountryTracker(models.Model):
+    date = models.DateField(blank=True, null=True)
+    country = models.CharField(max_length=255, blank=True, null=True)
+    total_infected = models.IntegerField(default=0)
+    new_infected = models.IntegerField(default=0)
+    total_deaths = models.IntegerField(default=0)
+    new_deaths = models.IntegerField(default=0)
+    
+
+    def __str__(self):
+        return str(self.country)
+
 class CoronaCase(models.Model):
 
     date = models.DateField(blank=True, null=True)

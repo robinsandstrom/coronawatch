@@ -49,17 +49,17 @@
         <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
-
+        <div class="col-sm-12">
+            <h1 class="text-white text-center">Om coronawatch.se</h1>
+        </div>
         <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4">
             <div class="card h-100 grey darken-4 border-dark mx-sm-0 my-2 z-depth-0">
-                <div class="card-header text-white special-color-dark  text-white">
-                    Om coronawatch.se
-                </div>
                 <div class="card-body special-color text-white">
                     <h1>Var hämtar vi datan?</h1>
-                    <p>Datan för prognosen hämtas från ECDC, European Centre for Disease Prevention and Control.
+                    <p>Datan för prognosen hämtas från ECDC, European Centre for Disease Prevention and Control
                         <br>
-                        Data på smitta i Sverige hämtas från etablerade medier som SVT, DN, Expressen, Omni, VK, SvD, Folkhälsomyndigheten.
+                        Data på smitta i Sverige hämtas från etablerade medier som SVT, DN, Expressen, Omni, SvD, Aftonbladet, Folkhälsomyndigheten. Internationell
+                        data för andra länder hämtas från worldometers.com.
                     </p>
                     <hr>
 
@@ -67,12 +67,12 @@
                     <p>Prognosen görs numera genom att lösa en differentialekvation i tre dimensioner och består av tre dimensioner. <br>
                         S = suspectible, antalet mottagliga för smitta. I = infective, antalet som smittar, N = befolkningsstorlek.
                         <br>
-                        S' = -a*B(N)*S <br>
-                        I' = a*B(N)*S - y*I <br>
-                        N' = (1-f)*I <br>
                         <br>
-                        Differentialekvationen kan lösas numeriskt för att se var utbrottet ebbar ut. Idag (13/3) kan vi se att Sydkoreas utbrott
-                        håller på att ebba ut i 15,000 fall med sin nuvarande strategi. Italien i sin tur går mot 30 miljoner fall om inte utbrottet snart börjar bromsas.
+                        S' = -B(N) * S * I<br>
+                        I' = B(N) * S * I - a*I<br>
+                        N' = -(1-f) * a * I <br>
+                        <br>
+                        Differentialekvationen kan lösas numeriskt för att se var utbrottet ebbar ut. För mer information kontakta oss på vår mailadress.
                     </p>
                     <hr>
 
@@ -80,10 +80,14 @@
                     <p>Datan uppdateras flera gången dagligen och algoritmen skrapar andra nyhetssidor en gång var 10e minut. Datan läses in automatiskt
                         och granskas manuellt några gånger om dagen.
                     </p>
+                    <div class="text-center my-4">
+                        <a href="mailto:kontakt@coronawatch.se">kontakt@coronawatch.se</a>
+                    </div>
                 </div>
 
-            </diV>
+            </dib>
         </div>
+
     </div>
 
 </body>

@@ -11,6 +11,7 @@ from insight.backend import populate_regional_data
 from pprint import pprint
 
 class NewsParser:
+    
     def __init__(self):
         pass
 

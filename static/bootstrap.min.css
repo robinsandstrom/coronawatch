@@ -28,6 +28,10 @@ body {
   background-color: #fcf4d9;
 }
 
+.paper-color {
+    background-color: #fcf4d9;
+}
+
 .card {
   position: relative;
   display: -webkit-box;
@@ -2016,4 +2020,24 @@ h6, .h6 {
 
 .text-center {
   text-align: center !important;
+}
+
+.border {
+  border: 1px solid #dee2e6 !important;
+}
+
+.border-top {
+  border-top: 1px solid #dee2e6 !important;
+}
+
+.border-right {
+  border-right: 1px solid #dee2e6 !important;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
+.border-left {
+  border-left: 1px solid #dee2e6 !important;
 }
