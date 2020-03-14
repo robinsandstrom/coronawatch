@@ -64,21 +64,24 @@
                     <hr>
 
                     <h1>Hur görs prognosen?</h1>
-                    <p>Prognosen görs genom att anpassa en exponentiell kurva mot mätpunkter från andra länder som haft pandemiska utbrott.
-                        Kurvorna justeras för att datumen för utbrotten inte skett samtidigt. Därefter anpassar vi sveriges nuvarande utveckling
-                        mot kurvan som bäst passar de andra ländernas.
+                    <p>Prognosen görs numera genom att lösa en differentialekvation i tre dimensioner och består av tre dimensioner. <br>
+                        S = suspectible, antalet mottagliga för smitta. I = infective, antalet som smittar, N = befolkningsstorlek.
+                        <br>
+                        S' = -a*B(N)*S <br>
+                        I' = a*B(N)*S - y*I <br>
+                        N' = (1-f)*I <br>
+                        <br>
+                        Differentialekvationen kan lösas numeriskt för att se var utbrottet ebbar ut. Idag (13/3) kan vi se att Sydkoreas utbrott
+                        håller på att ebba ut i 15,000 fall med sin nuvarande strategi. Italien i sin tur går mot 30 miljoner fall om inte utbrottet snart börjar bromsas.
                     </p>
                     <hr>
 
                     <h1>Hur ofta uppdateras datan?</h1>
-                    <p>Datan uppdateras flera gången dagligen och vi försöker att uppdatera sidan minst en gång i timmen på dagarna. Datan läses in automatiskt
-                        och granskas manuellt.
+                    <p>Datan uppdateras flera gången dagligen och algoritmen skrapar andra nyhetssidor en gång var 10e minut. Datan läses in automatiskt
+                        och granskas manuellt några gånger om dagen.
                     </p>
                 </div>
 
-                <div class="card-body">
-                    <iframe src="https://www.coronawatch.se/iframe_test_light" width="1000" height=""></iframe>
-                </div>
             </diV>
         </div>
     </div>

@@ -51,7 +51,6 @@
         <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated|localtime }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
-
         <div class="col-sm-12 offset-lg-2 col-lg-4 px-sm-2 mt-sm-4">
             <div class="card h-100 grey darken-4  border-dark mx-sm-0 my-2 z-depth-0">
                 <div class="card-header text-white special-color-dark text-center">
@@ -59,6 +58,7 @@
                 </div>
                 <div class="card-body text-center text-warning special-color">
                     <h1 style="font-size: 6rem;" class="my-0 py-0">{{ total }}</h1>
+                    <h5 style="font-size: 1.5rem;" class="my-0 py-0 text-danger">{{ total_deaths }} döda</h5>
                 </div>
             </div>
         </div>
@@ -70,6 +70,7 @@
                 </div>
                 <div class="card-body text-center text-warning special-color">
                     <h1 class="text-white my-0 py-0" style="font-size: 6rem;">+{{ new_cases }}</h1>
+                    <h5 class="text-white my-0 py-0 text-danger" style="font-size: 1.5rem;">+{{ total_new_deaths }} dödsfall</h5>
                 </div>
             </div>
         </div>
@@ -87,8 +88,17 @@
         </div>
 
         <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4 mt-lg-2">
-            <div class="card  grey darken-4 border-dark mx-sm-0 my-3 z-depth-0">
+            <div class="card list-group-item-warning border-dark mx-sm-0 my-3 z-depth-0">
+                <div class="card-body table-responsive list-group-item-warning py-0" style="background-color: #fcf4d9">
+                    <p>Sedan fredag den 13e mars är det beslutat att regionerna ska sluta testar coronafall utanför riskgrupper för att
+                        prioritera resurser. Prognosen bygger på data från innan beslutet togs.
+                    </p>
+                </div>
+            </div>
+        </div>
 
+        <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4 mt-lg-2">
+            <div class="card  grey darken-4 border-dark mx-sm-0 my-3 z-depth-0">
                 <div class="card-header text-white special-color-dark text-center">
                     Prognos
                 </div>
@@ -119,13 +129,13 @@
                                 <td style="font-size: 1.125rem;" class="text-danger">480</td>
                                 <td style="font-size: 1.125rem;" class="text-danger">674</td>
                                 <td style="font-size: 1.125rem;" class="text-danger">908</td>
-                                <td style="font-size: 1.125rem;" class="text-danger">1224</td>
-                                <td style="font-size: 1.125rem;" class="text-danger">1650</td>
-                                <td style="font-size: 1.125rem;" class="text-danger">2223</td>
-                                <td style="font-size: 1.125rem;" class="text-danger">2997</td>
-                                <td style="font-size: 1.125rem;" class="text-danger">4039</td>
-                                <td style="font-size: 1.125rem;" class="text-danger">5443</td>
-                                <td style="font-size: 1.125rem;" class="text-danger">7336+</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">1248</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">1681</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">2266</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">3053</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">4114</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">5544</td>
+                                <td style="font-size: 1.125rem;" class="text-danger">7472+</td>
                             </tr>
                             <tr style="font-size: 20px;">
                                 <td style="font-size: 1rem;" scope="row" class="text-white">Utfall</th>
@@ -134,7 +144,7 @@
                                 <td style="font-size: 1.125rem;" class="text-warning">356</td>
                                 <td style="font-size: 1.125rem;" class="text-warning">500</td>
                                 <td style="font-size: 1.125rem;" class="text-warning">687</td>
-                                <td style="font-size: 1.125rem;" class="text-muted">-</td>
+                                <td style="font-size: 1.125rem;" class="text-warning">829</td>
                                 <td style="font-size: 1.125rem;" class="text-muted">-</td>
                                 <td style="font-size: 1.125rem;" class="text-muted">-</td>
                                 <td style="font-size: 1.125rem;" class="text-muted">-</td>
@@ -219,9 +229,9 @@
                         <tbody>
                             {% for case in cases %}
                             <tr>
-                                <td style="white-space: nowrap; padding-right: 0px;">{{ case.time_created|localtime }}</td>
+                                <td style="white-space: nowrap; padding-right: 0px;">{{ case.infected }}</td>
                                 <td>{{ case.text }}</td>
-                                <td style="white-space: nowrap;">{{ case.date|date:"Y-m-d" }}</td>
+                                <td style="white-space: nowrap;">{{ case.time_created|localtime }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -283,12 +293,12 @@ am4core.ready(function() {
         // Create axes
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        //valueAxis.max = 500;
+        valueAxis.max = 3000;
         //dateAxis.max = new Date(2019, 2, 2);
         console.log(prognosis)
         var land = {
                 1: 'Snitt för andra länder',
-                2: 'Utveckling',
+                2: 'Bekräftade fall',
                 3: 'Prognos'
         }
 
@@ -324,7 +334,7 @@ am4core.ready(function() {
               var dataItem = {date: seriesdate, value: value };
               dataItem["value" + s] = value;
 
-                  if(value != 0 && i < 24){
+                  if(value != 0 && i < 20){
                      data.push(dataItem);
                   }
 

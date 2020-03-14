@@ -329,6 +329,7 @@ class CoronaCase(models.Model):
     infected = models.IntegerField(default=0)
     time_created = models.DateTimeField(auto_now=True)
     backup = models.BooleanField(default=True)
+    case_type = models.CharField(max_length=255, default='confirmed')
 
     def __str__(self):
 

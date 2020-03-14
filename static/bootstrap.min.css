@@ -23,6 +23,11 @@ body {
   vertical-align: middle !important;
 }
 
+.list-group-item-warning {
+  color: #856404;
+  background-color: #fcf4d9;
+}
+
 .card {
   position: relative;
   display: -webkit-box;

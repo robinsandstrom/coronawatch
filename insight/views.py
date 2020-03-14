@@ -12,12 +12,19 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 def index(request):
     template = 'insight/home.html'
     data, swe_and_avg = load_csv()
-    cases = CoronaCase.objects.all().order_by('-time_created')
+    all_cases = CoronaCase.objects.all().order_by('-time_created')[:30]
+    cases = CoronaCase.objects.filter(case_type='confirmed')
     ordered_regional_data, regional_data = populate_regional_data(cases)
     total = get_total(cases)
     prognosis = data[10]
     new_cases = get_new_cases(cases)
     total_new = get_total(new_cases)
+
+
+    death_cases = CoronaCase.objects.filter(case_type='death')
+    total_deaths = get_total(death_cases)
+    new_death_cases = get_new_cases(death_cases)
+    total_new_deaths = get_total(new_death_cases)
 
     try:
         last_updated = cases.first().time_created
@@ -30,12 +37,14 @@ def index(request):
     return render(request, template, context={
                                             'data': data,
                                             'swe_and_avg': swe_and_avg,
-                                            'cases': cases,
+                                            'cases': all_cases,
                                             'regional_data': regional_data,
                                             'ordered_regional_data': ordered_regional_data,
                                             'total': total,
+                                            'total_deaths': total_deaths,
                                             'prognosis': prognosis,
                                             'new_cases': total_new,
+                                            'total_new_deaths': total_new_deaths,
                                             'last_updated': last_updated,
                                             'agg_by_dates': agg_by_dates
                                             })
