@@ -15,18 +15,17 @@ class NewsParser:
         pass
 
     def run(self):
-        #url_aftonhoran = https://tethys.aftonbladet.se/configurationdata/coronadata
-        #url_fhm = https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/aktuellt-epidemiologiskt-lage/
-        self.parse_svt()
-        self.parse_expressen()
-        #self.parse_aftonbladet()
-        self.parse_fhm()
+        #self.parse_svt()
+        #self.parse_expressen()
+        self.parse_aftonbladet()
+        #self.parse_fhm()
 
     def parse_svt(self):
 
         site = ScrapeSite.objects.get(name='SVT')
         r = requests.get(site.url)
         summary = r.json()['data']
+
         self.add_cases_from_summary(summary, site)
 
     def parse_expressen(self):
@@ -34,6 +33,7 @@ class NewsParser:
         site = ScrapeSite.objects.get(name='Expressen')
         ps = self.get_expressen_paragraphs(site)
         summary = self.expressen_to_summary(ps)
+
         self.add_cases_from_summary(summary, site)
 
     def parse_aftonbladet(self):
@@ -42,16 +42,38 @@ class NewsParser:
         list_of_cases = r.json()['workSheets']['sverige']['rows']
         summary = self.aftonhoran_to_summary(list_of_cases)
 
+        self.add_cases_from_summary(summary, site)
+
     def parse_fhm(self):
         site = ScrapeSite.objects.get(name='Folkhälsomyndigheten')
         trs = self.get_fhm_tds(site)
         summary = self.fhm_to_summary(trs)
+
         self.add_cases_from_summary(summary, site)
 
     def aftonhoran_to_summary(self, list_of_cases):
+        regional_summary = {}
 
         for l in list_of_cases:
-            print(l)
+            region_name = l['region']
+            if region_name in regional_summary:
+                regional_summary[region_name]+=1
+            else:
+                regional_summary[region_name]=1
+
+        parsed_list = []
+
+        for region, infected in regional_summary.items():
+
+            region_dict = {
+                        'kod': self.search_region(region),
+                        'namn': region,
+                        'antal': infected,
+            }
+
+            parsed_list.append(region_dict)
+
+        return parsed_list
 
     def fhm_to_summary(self, trs):
         parsed_data = []

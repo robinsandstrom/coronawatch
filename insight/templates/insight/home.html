@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load tz %}
+{% load extras %}
 
 <html>
 
@@ -86,6 +87,7 @@
                 </div>
             </div>
         </div>
+
 
         <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4" >
             <div class="card border-dark mx-lg-0 my-2 z-depth-0 ">
@@ -223,22 +225,20 @@
                     <table class="table table-sm text-left text-white">
                         <thead>
                             <tr>
-                                <th style="border: none;">Smittade</th>
-                                <th style="border: none;">Rubrik</th>
-                                <th style="border: none;">Datum</th>
-                                <th class="text-center" style="border: none;">Källa</th>
+                                <th>Rubrik</th>
+                                <th>Datum</th>
+                                <th class="text-left">Källa</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for case in cases %}
                             <tr>
-                                <td style="white-space: nowrap; padding-right: 0px;">{{ case.infected }}</td>
-                                <td>{{ case.text }}</td>
-                                <td style="white-space: nowrap;">{{ case.time_created|localtime }}</td>
+                                <td style="border:none;">{{ case.text }}</td>
+                                <td style="white-space: nowrap; border:none;">{{ case.time_created|verbose_date }}</td>
                                 {% if case.source %}
-                                <td class="text-center"><a style="color: #fcf4d9;" class="text-center" href="{{ case.source.verbose_url }}">{{ case.source.name }}</a></td>
+                                <td class="text-left" style="white-space: nowrap; border:none;"><a style="color: #fcf4d9;" class="text-center" href="{{ case.source.verbose_url }}">{{ case.source.name }}</a></td>
                                 {% else %}
-                                <td></td>
+                                <td style="white-space: nowrap; border:none;"></td>
                                 {% endif %}
                             </tr>
                             {% endfor %}
