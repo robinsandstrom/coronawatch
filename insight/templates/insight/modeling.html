@@ -69,8 +69,32 @@
                             <td><input type="text" id="theta" class="form-control"></td>
                         </tr>
                         <tr>
-                            <td><label for="p_days">Dagar i framtiden</label></td>
+                            <td><label for="a">a</label></td>
+                            <td><input type="text" id="a" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="f">f</label></td>
+                            <td><input type="text" id="f" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="p_days">P</label></td>
                             <td><input type="text" id="p_days" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="country">Choose a car:</label></td>
+                            <td>
+                                <select id="country">
+                                  <option value="Sweden">Sweden</option>
+                                  <option value="Italy">Italy</option>
+                                  <option value="Denmark">Denmark</option>
+                                  <option value="Norway">Norway</option>
+                                  <option value="South Korea">South Korea</option>
+                                  <option value="Germany">Germany</option>
+                                  <option value="France">France</option>
+                                  <option value="Spain">Spain</option>
+                                  <option value="Netherlands">Netherlands</option>
+                                </select>
+                            </td>
                         </tr>
                     </table>
                     <div class="text-center my-2">
@@ -127,12 +151,18 @@ am4core.ready(function() {
         var alpha = $('#alpha').val();
         var gamma = $('#gamma').val();
         var theta = $('#theta').val();
+        var f = $('#f').val();
+        var a = $('#a').val();
         var p_days = $('#p_days').val();
+        var country = $('#country').val();
         return {
             'alpha': alpha,
+            'a': a,
+            'f': f,
             'gamma': gamma,
             'theta': theta,
-            'p_days': p_days
+            'p_days': p_days,
+            'country' : country,
         }
     }
 
@@ -175,7 +205,7 @@ am4core.ready(function() {
     arrow.direction = "top";
     arrow.width = 12;
     arrow.height = 12;
-
+    
     chart.scrollbarX = new am4core.Scrollbar();
     chart.scrollbarY = new am4core.Scrollbar();
 

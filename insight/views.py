@@ -8,6 +8,7 @@ from collections import OrderedDict
 from insight.management.commands.new_parser import NewsParser
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.db.models import Sum
+from insight.SIR import SIR_model
 import json
 
 def index(request):
@@ -84,71 +85,20 @@ def update(request):
     return HttpResponse('updated')
 
 def get_curve(request):
-    alpha = request.GET.get('alpha', None)
-    gamma = request.GET.get('gamma', None)
-    theta = request.GET.get('theta', None)
+    alpha = float(request.GET.get('alpha', None))
+    gamma = float(request.GET.get('gamma', None))
+    theta = float(request.GET.get('theta', None))
+    f = float(request.GET.get('f', None))
+    a = float(request.GET.get('a', None))
+    P = int(request.GET.get('p_days', None))
+    country = request.GET.get('country', None)
+    print(country)
+    covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-14.xls'
+    population_filename = 'PopulationByCountry.xlsx'
+    sir = SIR_model(covid19_filename, population_filename, country, 500)
+    par = [alpha, theta, gamma]
+    data = (sir.get_curve(par, f, a, P))
 
-    data = [{
-      "ax": 1,
-      "ay": 0.5,
-      "bx": 1,
-      "by": 20
-    }, {
-      "ax": 2,
-      "ay": 1.3,
-      "bx": 2,
-      "by": 4.9
-    }, {
-      "ax": 3,
-      "ay": 2.3,
-      "bx": 3,
-      "by": 5.1
-    }, {
-      "ax": 4,
-      "ay": 2.8,
-      "bx": 4,
-      "by": 5.3
-    }, {
-      "ax": 5,
-      "ay": 3.5,
-      "bx": 5,
-      "by": 6.1
-    }, {
-      "ax": 6,
-      "ay": 5.1,
-      "bx": 6,
-      "by": 8.3
-    }, {
-      "ax": 7,
-      "ay": 6.7,
-      "bx": 7,
-      "by": 10.5
-    }, {
-      "ax": 8,
-      "ay": 8,
-      "bx": 8,
-      "by": 12.3
-    }, {
-      "ax": 9,
-      "ay": 8.9,
-      "bx": 9,
-      "by": 14.5
-    }, {
-      "ax": 10,
-      "ay": 9.7,
-      "bx": 10,
-      "by": 15
-    }, {
-      "ax": 11,
-      "ay": 10.4,
-      "bx": 11,
-      "by": 18.8
-    }, {
-      "ax": 12,
-      "ay": 11.7,
-      "bx": 12,
-      "by": 19
-    }]
     dump = json.dumps(data)
     return HttpResponse(dump, content_type='application/json')
 

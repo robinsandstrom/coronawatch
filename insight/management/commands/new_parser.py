@@ -11,7 +11,7 @@ from insight.backend import populate_regional_data
 from pprint import pprint
 
 class NewsParser:
-    
+
     def __init__(self):
         pass
 
@@ -64,7 +64,7 @@ class NewsParser:
         site = ScrapeSite.objects.get(name='Folkhälsomyndigheten')
         trs = self.get_fhm_tds(site)
         summary = self.fhm_to_summary(trs)
-
+        pprint(summary)
         self.add_cases_from_summary(summary, site)
 
     def aftonhoran_to_summary(self, list_of_cases):
