@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0 minimal-ui"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.0/css/mdb.min.css" rel="stylesheet">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-160071660-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-160071660-1');
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="https://www.amcharts.com/lib/4/maps.js"></script>
+    <script src="https://www.amcharts.com/lib/4/geodata/usaLow.js"></script>
+    {% load static %}
+    <script rel="{% static 'swe.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-grid.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <title>Coronawatch: {{ total }} (+ {{new_cases}} nya fall)</title>
+
+    <meta property="og:title" content="Coronawatch.se" />
+    <meta property="og:description" content="Utvecklingen av CoVid-19 i Sverige"/>
+    <meta property="og:type" content="Senaste prognos" />
+    <meta property="og:url" content="https://www.coronawatch.se/" />
+    <meta property="og:image" content="static/graph2.png" />
+</head>
+
+
+<body style="background-color: #f4f3ef;" >
+        <!-- As a link -->
+    <nav class="navbar py-0 navbar-dark special-color z-depth-0 text-left">
+        <img style="height: 2.5rem;" src="{% static 'logob.svg' %}" class="pr-4">
+        <a class="navbar-brand mr-auto py-0 my-0" href="/" style="font-family: biohazard;">Coronawatch.se</a>
+        <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
+    </nav>
+    <div class="row mx-lg-1 mx-sm-2" style="min-height: 95vh;">
+        <div class="col-sm-12 col-lg-3 my-sm-4">
+            <div class="card mx-sm-0 my-2 z-depth-0">
+                <div class="card-header text-muted list-group-item-warning">
+                    <h1 class="text-blue text-center my-0">Parametrar</h1>
+                </div>
+                <div class="card-body">
+                    <table>
+                        <tr>
+                            <td><label for="alpha">Alpha (>0)</label></td>
+                            <td><input type="text" id="alpha" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="gamma">Gamma (>0)</label></td>
+                            <td><input type="text" id="gamma" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="theta">Theta (>0)</label></td>
+                            <td><input type="text" id="theta" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="p_days">Dagar i framtiden</label></td>
+                            <td><input type="text" id="p_days" class="form-control"></td>
+                        </tr>
+                    </table>
+                    <div class="text-center my-2">
+                        <button class="btn text-center z-depth-0" type="button" name="button" id="calc">Beräkna</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-9 my-sm-4">
+            <div class="card mx-sm-0 my-2 z-depth-0">
+                <div class="card-header text-muted">
+                    <h1 class="text-blue text-center my-0">Modellera eget scenario</h1>
+                </div>
+                <div class="card-body">
+                    <div id="chartdiv" class="chartdiv" style="height: 500px;"></div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript">
+am4core.ready(function() {
+
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Create chart instance
+    var chart = am4core.create("chartdiv", am4charts.XYChart);
+
+    $('#calc').click(function() {
+        loadNewData();
+    });
+
+    function reloadData(params){
+        $.ajax({
+                type: "GET",
+                url: '/api/get_curve',
+                data: params,
+                cache: true,
+                success: fetchSuccess,
+                dataType: 'json',
+            });
+        }
+
+    function fetchSuccess(Data, textStatus, jqXHR){
+        console.log(Data)
+        chart.data = Data;
+    }
+
+    function getParams(){
+        var p = {};
+        var alpha = $('#alpha').val();
+        var gamma = $('#gamma').val();
+        var theta = $('#theta').val();
+        var p_days = $('#p_days').val();
+        return {
+            'alpha': alpha,
+            'gamma': gamma,
+            'theta': theta,
+            'p_days': p_days
+        }
+    }
+
+    function loadNewData() {
+        params = getParams();
+        reloadData(params);
+    }
+
+    // Add data
+    chart.data = [];
+
+    // Create axes
+    var valueAxisX = chart.xAxes.push(new am4charts.ValueAxis());
+    valueAxisX.title.text = 'X Axis';
+
+    // Create value axis
+    var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxisY.title.text = 'Y Axis';
+
+    // Create series
+    var lineSeries = chart.series.push(new am4charts.LineSeries());
+    lineSeries.dataFields.valueY = "ay";
+    lineSeries.dataFields.valueX = "ax";
+    lineSeries.strokeOpacity = 0;
+
+    var lineSeries2 = chart.series.push(new am4charts.LineSeries());
+    lineSeries2.dataFields.valueY = "by";
+    lineSeries2.dataFields.valueX = "bx";
+    lineSeries2.strokeOpacity = 1;
+
+    // Add a bullet
+    var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+
+    // Add a triangle to act as am arrow
+    var arrow = bullet.createChild(am4core.Circle);
+    arrow.horizontalCenter = "middle";
+    arrow.verticalCenter = "middle";
+    arrow.strokeWidth = 0;
+    arrow.fill = chart.colors.getIndex(0);
+    arrow.direction = "top";
+    arrow.width = 12;
+    arrow.height = 12;
+
+    chart.scrollbarX = new am4core.Scrollbar();
+    chart.scrollbarY = new am4core.Scrollbar();
+
+    }); // end am4core.ready()
+</script>

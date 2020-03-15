@@ -11,9 +11,10 @@ sitemaps = {
 urlpatterns = [
     path('', views.index, name='index'),
     path('about', views.about, name='about'),
+    path('api/get_curve', views.get_curve, name='get_curve'),
+    path('modeling', views.modeling, name='modeling'),
     path('update', views.update, name='update'),
     path('iframe_test', views.iframe_test, name='iframe_test'),
-    path('iframe_test_light', views.iframe_test_light, name='iframe_test_light'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap')
 ]

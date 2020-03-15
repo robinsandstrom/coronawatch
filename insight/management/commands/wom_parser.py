@@ -18,17 +18,8 @@ class WomParser:
     def run(self):
         tbody = self.get_tables()
 
-        try:
-            self.parse_countries(tbody[0])
-            print('Updated countries')
-        except:
-            print('Failed to update countries')
-
-        try:
-            self.parse_total(tbody[1])
-            print('Updated total')
-        except:
-            print('Failed to update total')
+        self.parse_countries(tbody[0])
+        self.parse_total(tbody[1])
 
     def get_tables(self):
 
@@ -48,7 +39,8 @@ class WomParser:
             country = tds[0].text.replace(' ', '', 2)
             if country in self.watch_list:
                 tracking_dict = self.get_tracking_dict(tds, country)
-                self.insert_tracking_dict_in_db(tracking_dict)
+                if tracking_dict:
+                    self.insert_tracking_dict_in_db(tracking_dict)
 
     def parse_total(self, t_total):
 
@@ -60,22 +52,36 @@ class WomParser:
 
 
     def get_tracking_dict(self, tds, country):
+
         try:
             total_cases = int(re.sub('[^0-9]','', tds[1].text))
+        except:
+            total_cases = 0
+
+        try:
             new_cases = int(re.sub('[^0-9]','', tds[2].text))
+        except:
+            new_cases = 0
+
+        try:
             deaths = int(re.sub('[^0-9]','', tds[3].text))
+        except:
+            deaths = 0
+
+        try:
             new_deaths = int(re.sub('[^0-9]','', tds[4].text))
         except:
-            return {}
-        else:
-            return {
-                        'total_cases' : total_cases,
-                        'new_cases' : new_cases,
-                        'total_deaths' : deaths,
-                        'new_deaths' : new_deaths,
-                        'country': country,
-                        'date': datetime.now().date()
-                        }
+            new_deaths = 0
+
+        return {
+                    'total_cases' : total_cases,
+                    'new_cases' : new_cases,
+                    'total_deaths' : deaths,
+                    'new_deaths' : new_deaths,
+                    'country': country,
+                    'date': datetime.now().date()
+                    }
+
 
     def insert_tracking_dict_in_db(self, tracking_dict):
         ct = CountryTracker.objects.get_or_create(date=tracking_dict['date'], country=tracking_dict['country'])[0]
