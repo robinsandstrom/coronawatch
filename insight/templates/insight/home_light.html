@@ -123,11 +123,8 @@
         <!-- As a link -->
     <nav class="navbar py-0 navbar-dark special-color z-depth-0 text-left">
         <img src="{% static 'virus_cw.svg' %}" class="pr-4 virus-logo">
-        <a class="navbar-brand py-0 my-1 border-right pr-2" href="/" id="home">coronawatch.se</a>
-
-        <h5 class="text-white inline-block pt-2 my-0" href="/about"><a class="text-warning" href="/about">Om sidan</a></h5>
-        <h6 class="text-white ml-auto pr-1 inline-block">Senast uppdaterad: </h6><h6 class="ml-1 text-white inline-block"><strong>{{ last_updated|localtime }}</strong></h6>
-
+        <a class="navbar-brand mr-auto py-0 my-0" href="#" id="home">coronawatch.se</a>
+        <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated|localtime }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
         {% for article in articles %}

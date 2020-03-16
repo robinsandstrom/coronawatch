@@ -32,50 +32,66 @@
     <meta property="og:type" content="Senaste prognos" />
     <meta property="og:url" content="https://www.coronawatch.se/" />
     <meta property="og:image" content="static/graph2.png" />
-</head>
+<style media="screen">
 
+    .off-white{
+        background-color: #fcf4d9;
+    }
+    .off-white-primary-color{
+        color: #fcf4d9;
+    }
+    .brown-text{
+        color: #856404;
+    }
+
+</style>
+</head>
 
 <body class="grey darken-4">
         <!-- As a link -->
     <nav class="navbar py-0 navbar-dark special-color z-depth-0 text-left">
-        <img style="height: 2.5rem;" src="{% static 'logob.svg' %}" class="pr-4">
-        <a class="navbar-brand mr-auto py-0 my-0" href="/" style="font-family: biohazard;">Coronawatch.se</a>
+        <img style="height: 2.5rem;" src="{% static 'virus_cw.svg' %}" class="pr-4">
+        <a class="navbar-brand mr-auto py-0 my-0" href="/" style="font-family: biohazard;">coronawatch.se</a>
         <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
         <div class="col-sm-12">
-            <h1 class="text-white text-center">Om coronawatch.se</h1>
+            <h1 class="text-white text-center">Om oss</h1>
         </div>
-        <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4">
-            <div class="card h-100 grey darken-4 border-dark mx-sm-0 my-2 z-depth-0">
-                <div class="card-body special-color text-white">
-                    <h1>Var hämtar vi datan?</h1>
-                    <p>Datan för prognosen hämtas från ECDC, European Centre for Disease Prevention and Control
-                        <br>
-                        Data på smitta i Sverige hämtas från etablerade medier som SVT, DN, Expressen, Omni, SvD, Aftonbladet, Folkhälsomyndigheten. Internationell
-                        data för andra länder hämtas från worldometers.com.
-                    </p>
+        <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4 pb-5">
+            <div class="card h-100 special-color border-dark mx-sm-0 my-2 z-depth-0">
+                <div class="card-body pb-4">
+                    <h1 class="text-warning">Vilka ligger bakom Coronawatch.se?</h1>
                     <hr>
-
-                    <h1>Hur görs prognosen?</h1>
-                    <p>Prognosen görs numera genom att lösa en differentialekvation i tre dimensioner och består av tre dimensioner. <br>
-                        S = suspectible, antalet mottagliga för smitta. I = infective, antalet som smittar, N = befolkningsstorlek.
-                        <br>
-                        <br>
-                        S' = -B(N) * S * I<br>
-                        I' = B(N) * S * I - a*I<br>
-                        N' = -(1-f) * a * I <br>
-                        <br>
-                        Differentialekvationen kan lösas numeriskt för att se var utbrottet ebbar ut. För mer information kontakta oss på vår mailadress.
+                    <p class="off-white-primary-color">Vi som ligger bakom Coronawatch.se är två KTH-studenter.
+                        Vi läser båda en Master i Tillämpad Matematik på KTH. Inspirationen för sidan kommer från John Hopkins <a href="https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6" class="text-info">karta</a> över Coronavirusets spridning.
                     </p>
+                    <h1 class="text-warning pt-4">Varför skapade ni sidan?</h1>
                     <hr>
-
-                    <h1>Hur ofta uppdateras datan?</h1>
-                    <p>Datan uppdateras flera gången dagligen och algoritmen skrapar andra nyhetssidor en gång var 10e minut. Datan läses in automatiskt
-                        och granskas manuellt några gånger om dagen.
+                    <p class="off-white-primary-color">Vi skapade sidan för att vi tyckte det skulle vara intressant att ta fram en egen modell för att prognostisera
+                        virusets spridning i Sverige. Detta började vi göra redan då Sverige bara hade några enstaka bekräftade fall.
+                        När vi undersökte andra länder med epidemiska utbrott såg vi att Coronaviruset följde samma mönster överallt och
+                        vi ville följa upp vår prognos så vi började samla in data för att dagligen kunna jämföra utfallet mot prognosen.
                     </p>
-                    <div class="text-center my-4">
-                        <a href="mailto:kontakt@coronawatch.se">kontakt@coronawatch.se</a>
+                    <h1 class="text-warning pt-4">Var hämtar ni datan?</h1>
+                    <hr>
+                    <p class="off-white-primary-color">
+
+                        Datan för prognosen hämtas från ECDC, European Centre for Disease Prevention and Control och worldometers.com.
+                        <br>
+                        Data på smitta i Sverige hämtas från etablerade medier som <a class="text-info" href="https://www.svt.se/datajournalistik/har-sprider-sig-coronaviruset/">SVT</a>,
+                        <a class="text-info" href="https://www.expressen.se/nyheter/coronaviruset/sverige-saknar-lager-for-en-langre-kris-1/">Expressen</a>,
+                        <a class="text-info" href="https://www.aftonbladet.se/nyheter/a/y3rdeA/coronaviruset-har-ar-de-senaste-siffrorna">Aftonbladet</a>,
+                        <a class="text-info" href="https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/aktuellt-epidemiologiskt-lage/">Folkhälsomyndigheten</a>.
+                    </p>
+
+                    <h1 class="text-warning pt-4 ">Hur hämtar ni datan? Granskas den?</h1>
+                    <hr>
+                    <p class="off-white-primary-color">Datan uppdateras flera gången dagligen och algoritmen skrapar alla nyhetssidor en gång var 10e minut. Datan läses in automatiskt från sidorna om de har publicerat nya fall
+                        och vi granskar manuellt sidan några gånger om dagen. Det har hänt någon enstaka gång att vi behövt revidera aktuella siffrorna efter att vi märkt att sidorna publicerat fel.
+                    </p>
+                    <div class="text-center mt-4 pt-4" >
+                        <a class="text-info" href="mailto:kontakt@coronawatch.se">kontakt@coronawatch.se</a>
                     </div>
                 </div>
 
