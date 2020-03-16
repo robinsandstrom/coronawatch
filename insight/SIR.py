@@ -123,7 +123,7 @@ class SIR_model:
             sd[i] = (y[i+2] - 2 * y[i+1] + y[i]) / (dt**2)
         return np.mean(sd)
 
-    def minimize_parameters(self):
+    def minimize_parameters(self, f, a):
         gamma_values = np.power(10, -np.arange(100+1)/20)
         alpha_min = 0
         theta_min = 0
@@ -142,7 +142,7 @@ class SIR_model:
                     SIN = prediction[1]
                     S = SIN[0, :]
                     N = SIN[2, :]
-                    res = sir.get_residuals(sir.x_confirmed, sir.cases_confirmed, x_prediction, N - S)
+                    res = self.get_residuals(self.x_confirmed, self.cases_confirmed, x_prediction, N - S)
                     if np.mean(res) == 0:
                         break
                     elif np.mean(res) < 0:
@@ -212,12 +212,7 @@ class SIR_model:
         I = SIN[1, :]
         N = SIN[2, :]
         R = N - S - I
-        #res = self.get_residuals(sir.x_confirmed, sir.cases_confirmed, x_prediction, I + R)
-        #plt.plot(sir.x_confirmed, sir.cases_confirmed, 'bo', fillstyle='none')
-        #plt.plot(x_prediction, I + R)
-        # plt.plot(sir.x_confirmed, res, 'bo', fillstyle='none')
-        # plt.plot([min(x_prediction), max(x_prediction)], [0, 0])
-        #plt.show()
+
         data = []
 
         last_int = 0
@@ -225,7 +220,7 @@ class SIR_model:
         for i in range(len(I)):
             data.append({
                     'bx': x_prediction[i],
-                    'by': I[i] + R[i]
+                    'by': I[i]
             })
 
         for i in range(len(self.x_confirmed)):
@@ -233,4 +228,4 @@ class SIR_model:
                     'ax': int(self.x_confirmed[i]),
                     'ay': int(self.cases_confirmed[i])
             })
-        return data
+        return data, len(self.x_confirmed)+P

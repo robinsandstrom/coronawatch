@@ -10,6 +10,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.db.models import Sum
 from insight.SIR import SIR_model
 import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 def index(request):
     date_from = datetime.now()
@@ -85,22 +86,33 @@ def update(request):
     return HttpResponse('updated')
 
 def get_curve(request):
-    alpha = float(request.GET.get('alpha', None))
-    gamma = float(request.GET.get('gamma', None))
-    theta = float(request.GET.get('theta', None))
-    f = float(request.GET.get('f', None))
-    a = float(request.GET.get('a', None))
-    P = int(request.GET.get('p_days', None))
+    alpha = float(request.GET.get('alpha', None) or 0.5)
+    gamma = float(request.GET.get('gamma', None) or 1)
+    theta = float(request.GET.get('theta', None) or 0.1)
+    f = float(request.GET.get('f', None) or 0.97)
+    a = float(request.GET.get('a', None) or 0.05)
+    P = int(request.GET.get('p_days', None) or 0)
+    health_cap = int(request.GET.get('health_cap', None))
+
     country = request.GET.get('country', None)
-    print(country)
     covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-14.xls'
     population_filename = 'PopulationByCountry.xlsx'
-    sir = SIR_model(covid19_filename, population_filename, country, 500)
-    par = [alpha, theta, gamma]
-    data = (sir.get_curve(par, f, a, P))
 
-    dump = json.dumps(data)
+    sir = SIR_model(covid19_filename, population_filename, country, 500)
+    #par = sir.minimize_parameters(f, a) #[alpha_min, theta_min, gamma_min]
+    par = [alpha, theta, gamma]
+    data, len = sir.get_curve(par, f, a, P)
+
+    dump = json.dumps(data + [{'cx':0, 'cy': health_cap},{'cx': len, 'cy':health_cap}])
     return HttpResponse(dump, content_type='application/json')
+
+
+def get_numbers(request):
+    tracked=['Sweden', 'Denmark', 'Norway', 'Spain', 'Germany']
+    values = CountryTracker.objects.filter(total_cases__gte=100, country__in=tracked).order_by('date').values('date', 'total_cases','country')
+    dump = json.dumps(list(values), indent=4, sort_keys=True, default=str)
+    return HttpResponse(dump, content_type='application/json')
+
 
 @xframe_options_exempt
 def iframe_test(request):

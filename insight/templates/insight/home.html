@@ -47,7 +47,7 @@
 
         .chartdiv {
              width: 100%;
-             height: 40vh;
+             height: 60vh;
         }
 
         @media (max-width: 600px) {
@@ -236,7 +236,7 @@
                                 <td style="font-size: 1.125rem;" class="text-warning">687</td>
                                 <td style="font-size: 1.125rem;" class="text-warning">829</td>
                                 <td style="font-size: 1.125rem;" class="text-warning">967</td>
-                                <td style="font-size: 1.125rem;" class="text-muted">-</td>
+                                <td style="font-size: 1.125rem;" class="text-warning">1032</td>
                                 <td style="font-size: 1.125rem;" class="text-muted">-</td>
                                 <td style="font-size: 1.125rem;" class="text-muted">-</td>
                                 <td style="font-size: 1.125rem;" class="text-muted">-</td>
@@ -377,76 +377,46 @@ am4core.ready(function() {
     var swe_and_avg = {{ swe_and_avg }}
     var prognosis = {{ prognosis }}
 
-    var colors = ['#4285F4', '#2BBBAD', '#2BBBAD', '#fb8c00', '#ef6c00', '#fbc02d', '#ff8f00', '#ffeb3b'];
+    var country_trans = {
+        'Italy': 'Italien',
+        'Sweden': 'Sverige',
+        'Denmark': 'Danmark',
+        'Norway': 'Norge',
+        'France': 'Frankrike',
+        'Germany': 'Tyskland',
+        'Spain': 'Spanien',
+    }
 
-    createLineChart(swe_and_avg, prognosis);
+    var colors = ['#4285F4', '#2BBBAD', '#ffeb3b', '#ef6c00', '#fff', '#ff8f00', '#ffeb3b'];
+
+    var line_chart = createLineChart(swe_and_avg, prognosis);
     createMapChart(data[8]);
     realMapChart();
+
+    var align_me = 'right';
+
+    var w = parseInt(window.innerWidth);
+    if (w < 500){
+        transpose(1);
+        align_me = 'bottom';
+    }
 
     function createLineChart(swe_and_avg, prognosis){
 
         // Create chart instance
         var chart = am4core.create("chartdiv", am4charts.XYChart);
-
         // Create axes
-        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        valueAxis.max = 3000;
-        //dateAxis.max = new Date(2019, 2, 2);
-        console.log(prognosis)
-        var land = {
-                1: 'Snitt för andra länder',
-                2: 'Bekräftade fall',
-                3: 'Prognos'
-        }
+        var valueAxisX = chart.xAxes.push(new am4charts.ValueAxis());
+        var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxisX.title.text = "Dagar sen 100:e fallet";
 
-        createSeries("value" + 2, land[1], swe_and_avg[1], 0, 4);
+        //valueAxisY.logarithmic = true;
 
-        createSeries("value" + 1, land[2], swe_and_avg[0], 1, 4);
-
-        createSeries("value" + 3, land[3], prognosis, 2, 4);
-
-        // Create series
-        function createSeries(s, name, data_row, j, offset) {
-            var series = chart.series.push(new am4charts.LineSeries());
-            series.dataFields.valueY = "value" + s;
-            series.dataFields.dateX = "date";
-            series.name = name;
-            //series.tensionX = 0.85;
-            series.stroke = am4core.color(colors[j]); // red
-            series.strokeWidth = 2;
-
-
-            series.tooltipText = "{value}"
-
-            series.tooltip.pointerOrientation = "vertical";
-
-            if(j == 2){
-                series.strokeDasharray = "5,4";
-            }
-
-            for (var i = 0; i < data_row.length; i++) {
-              value = data_row[i];
-              var seriesdate = new Date(2020, 2, (i-offset) +1)
-              var today = new Date();
-              var dataItem = {date: seriesdate, value: value };
-              dataItem["value" + s] = value;
-
-                  if(value != 0 && i < 20){
-                     data.push(dataItem);
-                  }
-
-            }
-
-            series.data = data;
-            chart.cursor = new am4charts.XYCursor();
-            chart.cursor.snapToSeries = series;
-            return series;
-        }
-
+        valueAxisX.renderer.grid.template.disabled = true;
+        //valueAxisY.renderer.grid.template.disabled = true;
 
         chart.legend = new am4charts.Legend();
-        chart.legend.position = "bottom";
+        chart.legend.position = align_me;
         chart.legend.scrollable = false;
         chart.mouseWheelBehavior = "none";
         chart.chartContainer.wheelable = false;
@@ -468,8 +438,9 @@ am4core.ready(function() {
         chart.seriesContainer.draggable = false;
         chart.seriesContainer.resizable = false;
         chart.mouseWheelBehavior = "none";
-    }
 
+        return chart;
+    }
 
     function realMapChart(data){
         var chart = am4core.create("mapchart", am4maps.MapChart);
@@ -519,7 +490,7 @@ am4core.ready(function() {
           // Set up heat legend
           let heatLegend = chart.createChild(am4maps.HeatLegend);
           heatLegend.series = polygonSeries;
-          heatLegend.align = "right";
+          heatLegend.align = 'right';
           heatLegend.valign = "bottom";
           heatLegend.width = am4core.percent(40);
           heatLegend.marginRight = am4core.percent(4);
@@ -554,10 +525,6 @@ am4core.ready(function() {
           chart.seriesContainer.resizable = false;
           chart.mouseWheelBehavior = "none";
     }
-    var w = parseInt(window.innerWidth);
-    if (w < 500){
-        transpose(1);
-    }
 
     function transpose(id){
 
@@ -580,7 +547,9 @@ am4core.ready(function() {
 
     }
 
+
     function createMapChart(data){
+
         var chart = am4core.create("bar_chart", am4charts.XYChart);
 
         var chart_data = [];
@@ -600,6 +569,7 @@ am4core.ready(function() {
         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
 
         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.logarithmic = true;
 
         // Create series
         var series = chart.series.push(new am4charts.ColumnSeries());
@@ -630,7 +600,72 @@ am4core.ready(function() {
         chart.seriesContainer.resizable = false;
         chart.mouseWheelBehavior = "none";
         chart.responsive.enabled = true;
+
+
+        return chart;
+
         }
+
+        function reloadData(params){
+            $.ajax({
+                    type: "GET",
+                    url: '/api/get_numbers',
+                    data: params,
+                    cache: true,
+                    success: fetchSuccess,
+                    dataType: 'json',
+                });
+            }
+
+        function fetchSuccess(Data, textStatus, jqXHR){
+            country_codes = cleanData(Data);
+            var i = 0;
+            for(key in country_codes){
+                createSeries(line_chart, key, country_codes[key], i);
+                i+=1
+            }
+        }
+
+        function createSeries(chart, name, new_data, j) {
+            var series = chart.series.push(new am4charts.LineSeries());
+            series.dataFields.valueY = "total_cases" + new_data[0]['country'];
+            series.dataFields.valueX = "date";
+            series.name = country_trans[name];
+            series.stroke = am4core.color(colors[j]); // red
+            series.strokeWidth = 1;
+
+            for (var i = 0; i < new_data.length; i++) {
+                if(i<10){
+                  value = new_data[i]['total_cases'];
+                  var dataItem = {date: i, total_cases: value };
+                  dataItem["total_cases" + name] = value;
+                  data.push(dataItem);
+                }
+            }
+            series.data = data;
+            chart.cursor = new am4charts.XYCursor();
+            chart.cursor.fullWidthLineX = true;
+            chart.cursor.lineX.strokeOpacity = 0;
+            chart.cursor.lineX.fill = am4core.color("#000");
+            chart.cursor.lineX.fillOpacity = 0.1;
+            return series;
+        }
+
+
+        function cleanData(data){
+            var summary = {};
+            for(d in data){
+                if(data[d]['country'] in summary){
+                    (summary[data[d]['country']]).push(data[d])
+                }else{
+                    summary[data[d]['country']] = [data[d]];
+                }
+            }
+            return summary;
+        }
+
+        reloadData();
+
     }); // end am4core.ready()
 </script>
 

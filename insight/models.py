@@ -344,7 +344,6 @@ class CountryTracker(models.Model):
     total_deaths = models.IntegerField(default=0)
     new_deaths = models.IntegerField(default=0)
 
-
     def __str__(self):
         return str(self.country) + ' ' + str(self.date)
 

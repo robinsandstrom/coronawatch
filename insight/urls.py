@@ -12,6 +12,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('about', views.about, name='about'),
     path('api/get_curve', views.get_curve, name='get_curve'),
+    path('api/get_numbers', views.get_numbers, name='get_numbers'),
     path('modeling', views.modeling, name='modeling'),
     path('update', views.update, name='update'),
     path('iframe_test', views.iframe_test, name='iframe_test'),

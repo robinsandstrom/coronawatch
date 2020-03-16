@@ -51,40 +51,41 @@
     <div class="row mx-lg-1 mx-sm-2" style="min-height: 95vh;">
         <div class="col-sm-12 col-lg-3 my-sm-4">
             <div class="card mx-sm-0 my-2 z-depth-0">
-                <div class="card-header text-muted list-group-item-warning">
-                    <h1 class="text-blue text-center my-0">Parametrar</h1>
-                </div>
                 <div class="card-body">
                     <table>
                         <tr>
                             <td><label for="alpha">Alpha (>0)</label></td>
-                            <td><input type="text" id="alpha" class="form-control"></td>
+                            <td><input type="text" id="alpha" class="form-control" value="0.00048828125"></td>
                         </tr>
                         <tr>
                             <td><label for="gamma">Gamma (>0)</label></td>
-                            <td><input type="text" id="gamma" class="form-control"></td>
+                            <td><input type="text" id="gamma" class="form-control" value="0.8912509381337456"></td>
                         </tr>
                         <tr>
                             <td><label for="theta">Theta (>0)</label></td>
-                            <td><input type="text" id="theta" class="form-control"></td>
+                            <td><input type="text" id="theta" class="form-control" value="0.1083984375"></td>
                         </tr>
                         <tr>
                             <td><label for="a">a</label></td>
-                            <td><input type="text" id="a" class="form-control"></td>
+                            <td><input type="text" id="a" class="form-control" value="0.05"></td>
                         </tr>
                         <tr>
                             <td><label for="f">f</label></td>
-                            <td><input type="text" id="f" class="form-control"></td>
+                            <td><input type="text" id="f" class="form-control" value="0.95"></td>
                         </tr>
                         <tr>
                             <td><label for="p_days">P</label></td>
-                            <td><input type="text" id="p_days" class="form-control"></td>
+                            <td><input type="text" id="p_days" class="form-control" value="0"></td>
                         </tr>
                         <tr>
-                            <td><label for="country">Choose a car:</label></td>
+                            <td><label for="health_cap">P</label></td>
+                            <td><input type="text" id="health_cap" class="form-control" value="500"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="country">Välj land:</label></td>
                             <td>
                                 <select id="country">
-                                  <option value="Sweden">Sweden</option>
+                                  <option value="Sweden" selected>Sweden</option>
                                   <option value="Italy">Italy</option>
                                   <option value="Denmark">Denmark</option>
                                   <option value="Norway">Norway</option>
@@ -105,9 +106,6 @@
         </div>
         <div class="col-sm-12 col-lg-9 my-sm-4">
             <div class="card mx-sm-0 my-2 z-depth-0">
-                <div class="card-header text-muted">
-                    <h1 class="text-blue text-center my-0">Modellera eget scenario</h1>
-                </div>
                 <div class="card-body">
                     <div id="chartdiv" class="chartdiv" style="height: 500px;"></div>
 
@@ -130,6 +128,12 @@ am4core.ready(function() {
         loadNewData();
     });
 
+    loadNewData();
+
+    var health_cap = $('#health_cap').val();
+
+    var colors = ['#4285F4', '#2BBBAD', '#2BBBAD', '#fb8c00', '#ef6c00', '#CC0000', '#ff8f00', '#ffeb3b'];
+
     function reloadData(params){
         $.ajax({
                 type: "GET",
@@ -142,7 +146,6 @@ am4core.ready(function() {
         }
 
     function fetchSuccess(Data, textStatus, jqXHR){
-        console.log(Data)
         chart.data = Data;
     }
 
@@ -155,6 +158,7 @@ am4core.ready(function() {
         var a = $('#a').val();
         var p_days = $('#p_days').val();
         var country = $('#country').val();
+        var health_cap = $('#health_cap').val();
         return {
             'alpha': alpha,
             'a': a,
@@ -163,6 +167,7 @@ am4core.ready(function() {
             'theta': theta,
             'p_days': p_days,
             'country' : country,
+            'health_cap': health_cap,
         }
     }
 
@@ -170,7 +175,6 @@ am4core.ready(function() {
         params = getParams();
         reloadData(params);
     }
-
     // Add data
     chart.data = [];
 
@@ -181,6 +185,10 @@ am4core.ready(function() {
     // Create value axis
     var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxisY.title.text = 'Y Axis';
+    //valueAxisY.logarithmic = true;
+
+    valueAxisX.renderer.grid.template.disabled = true;
+    valueAxisY.renderer.grid.template.disabled = true;
 
     // Create series
     var lineSeries = chart.series.push(new am4charts.LineSeries());
@@ -192,6 +200,23 @@ am4core.ready(function() {
     lineSeries2.dataFields.valueY = "by";
     lineSeries2.dataFields.valueX = "bx";
     lineSeries2.strokeOpacity = 1;
+    lineSeries2.fillOpacity = 0.1;
+    lineSeries2.fill = am4core.color(colors[1]); // red
+
+    // Create a range to change stroke for values below 0
+    var range = valueAxisY.createSeriesRange(lineSeries2);
+    range.value = health_cap;
+    range.endValue = 100000000;
+    range.contents.stroke = chart.colors.getIndex(4);
+    lineSeries2.fill = am4core.color(colors[5]); // red
+    range.contents.strokeOpacity = 0.7;
+    range.contents.fillOpacity = 0.5;
+
+
+    var med_cap = chart.series.push(new am4charts.LineSeries());
+    med_cap.dataFields.valueY = "cy";
+    med_cap.dataFields.valueX = "cx";
+    med_cap.strokeOpacity = 1;
 
     // Add a bullet
     var bullet = lineSeries.bullets.push(new am4charts.Bullet());
@@ -205,7 +230,7 @@ am4core.ready(function() {
     arrow.direction = "top";
     arrow.width = 12;
     arrow.height = 12;
-    
+
     chart.scrollbarX = new am4core.Scrollbar();
     chart.scrollbarY = new am4core.Scrollbar();
 
