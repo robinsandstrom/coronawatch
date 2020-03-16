@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0 minimal-ui"/>
     <meta name="description" content=""/>
     <meta name="author" content=""/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.0/css/mdb.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-160071660-1"></script>
     <script>
@@ -29,9 +29,10 @@
     <script rel="{% static 'swe.js' %}"></script>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap-grid.css' %}">
-    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <title>Coronawatch: {{ total }} (+ {{new_cases}} nya fall)</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.0/css/mdb.min.css" rel="stylesheet">
 
     <meta property="og:title" content="Coronawatch.se" />
     <meta property="og:description" content="Utvecklingen av CoVid-19 i Sverige"/>
@@ -41,48 +42,50 @@
 </head>
 
 
-<body style="background-color: #f4f3ef;" >
+<body class="grey darken-4">
         <!-- As a link -->
-    <nav class="navbar py-0 navbar-dark special-color z-depth-0 text-left">
+    <nav class="navbar py-2 navbar-dark special-color-dark z-depth-0 text-left">
         <img style="height: 2.5rem;" src="{% static 'logob.svg' %}" class="pr-4">
         <a class="navbar-brand mr-auto py-0 my-0" href="/" style="font-family: biohazard;">Coronawatch.se</a>
         <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-2" style="min-height: 95vh;">
         <div class="col-sm-12 col-lg-3 my-sm-4">
-            <div class="card mx-sm-0 my-2 z-depth-0">
+            <div class="card border-dark special-color mx-sm-0 my-2 z-depth-0">
                 <div class="card-body">
+                    <h4 class="text-warning">Parametrar</h4>
+                    <hr>
                     <table>
                         <tr>
-                            <td><label for="alpha">Alpha (>0)</label></td>
-                            <td><input type="text" id="alpha" class="form-control" value="0.00048828125"></td>
+                            <td><label for="alpha" class="text-white">Alpha (>0)</label></td>
+                            <td><input type="text" id="alpha" class="form-control form-control-sm" value="0.00048828125"></td>
                         </tr>
                         <tr>
-                            <td><label for="gamma">Gamma (>0)</label></td>
-                            <td><input type="text" id="gamma" class="form-control" value="0.8912509381337456"></td>
+                            <td><label for="gamma" class="text-white">Gamma (>0)</label></td>
+                            <td><input type="text" id="gamma" class="form-control form-control-sm" value="0.8912509381337456"></td>
                         </tr>
                         <tr>
-                            <td><label for="theta">Theta (>0)</label></td>
-                            <td><input type="text" id="theta" class="form-control" value="0.1083984375"></td>
+                            <td><label for="theta" class="text-white">Theta (>0)</label></td>
+                            <td><input type="text" id="theta" class="form-control form-control-sm" value="0.1083984375"></td>
                         </tr>
                         <tr>
-                            <td><label for="a">a</label></td>
-                            <td><input type="text" id="a" class="form-control" value="0.05"></td>
+                            <td><label for="a" class="text-white">a</label></td>
+                            <td><input type="text" id="a" class="form-control form-control-sm" value="0.05"></td>
                         </tr>
                         <tr>
-                            <td><label for="f">f</label></td>
-                            <td><input type="text" id="f" class="form-control" value="0.95"></td>
+                            <td><label for="f" class="text-white">f</label></td>
+                            <td><input type="text" id="f" class="form-control form-control-sm" value="0.95"></td>
                         </tr>
                         <tr>
-                            <td><label for="p_days">P</label></td>
-                            <td><input type="text" id="p_days" class="form-control" value="0"></td>
+                            <td><label for="p_days" class="text-white">P</label></td>
+                            <td><input type="text" id="p_days" class="form-control form-control-sm" value="0"></td>
                         </tr>
                         <tr>
-                            <td><label for="health_cap">P</label></td>
-                            <td><input type="text" id="health_cap" class="form-control" value="500"></td>
+                            <td><label for="health_cap" class="text-white">P</label></td>
+                            <td><input type="text" id="health_cap" class="form-control form-control-sm" value="500"></td>
                         </tr>
                         <tr>
-                            <td><label for="country">Välj land:</label></td>
+                            <td><label for="country" class="text-white">Välj land:</label></td>
                             <td>
                                 <select id="country">
                                   <option value="Sweden" selected>Sweden</option>
@@ -99,7 +102,7 @@
                         </tr>
                     </table>
                     <div class="text-center my-2">
-                        <button class="btn text-center z-depth-0" type="button" name="button" id="calc">Beräkna</button>
+                        <button class="btn text-center z-depth-0 text-white" type="button" name="button" id="calc">Beräkna</button>
                     </div>
                 </div>
             </div>
@@ -180,15 +183,15 @@ am4core.ready(function() {
 
     // Create axes
     var valueAxisX = chart.xAxes.push(new am4charts.ValueAxis());
-    valueAxisX.title.text = 'X Axis';
+    valueAxisX.title.text = 'Dagar i framtiden';
 
     // Create value axis
     var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxisY.title.text = 'Y Axis';
+    valueAxisY.title.text = 'Antal smittade';
     //valueAxisY.logarithmic = true;
 
     valueAxisX.renderer.grid.template.disabled = true;
-    valueAxisY.renderer.grid.template.disabled = true;
+    valueAxisY.renderer.grid.template.disabled = false;
 
     // Create series
     var lineSeries = chart.series.push(new am4charts.LineSeries());
@@ -200,7 +203,7 @@ am4core.ready(function() {
     lineSeries2.dataFields.valueY = "by";
     lineSeries2.dataFields.valueX = "bx";
     lineSeries2.strokeOpacity = 1;
-    lineSeries2.fillOpacity = 0.1;
+    lineSeries2.fillOpacity = 0;
     lineSeries2.fill = am4core.color(colors[1]); // red
 
     // Create a range to change stroke for values below 0
@@ -208,9 +211,9 @@ am4core.ready(function() {
     range.value = health_cap;
     range.endValue = 100000000;
     range.contents.stroke = chart.colors.getIndex(4);
-    lineSeries2.fill = am4core.color(colors[5]); // red
+    lineSeries2.fill = am4core.color(colors[1]); // red
     range.contents.strokeOpacity = 0.7;
-    range.contents.fillOpacity = 0.5;
+    range.contents.fillOpacity = 0;
 
 
     var med_cap = chart.series.push(new am4charts.LineSeries());
@@ -225,8 +228,10 @@ am4core.ready(function() {
     var arrow = bullet.createChild(am4core.Circle);
     arrow.horizontalCenter = "middle";
     arrow.verticalCenter = "middle";
-    arrow.strokeWidth = 0;
-    arrow.fill = chart.colors.getIndex(0);
+    arrow.strokeWidth = 1;
+    arrow.strokeOpacity = 1;
+    arrow.stroke = chart.colors.getIndex(0);
+    arrow.fillOpacity = 0;
     arrow.direction = "top";
     arrow.width = 12;
     arrow.height = 12;

@@ -103,7 +103,7 @@ def get_curve(request):
     par = [alpha, theta, gamma]
     data, len = sir.get_curve(par, f, a, P)
 
-    dump = json.dumps(data + [{'cx':0, 'cy': health_cap},{'cx': len, 'cy':health_cap}])
+    dump = json.dumps(data)# + [{'cx':0, 'cy': health_cap},{'cx': len, 'cy':health_cap}])
     return HttpResponse(dump, content_type='application/json')
 
 
