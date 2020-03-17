@@ -138,7 +138,7 @@ class NewsParser:
 
     def add_cases_from_summary(self, summary, site):
 
-        cases = CoronaCase.objects.all()
+        cases = CoronaCase.objects.filter(case_type='confirmed')
         ord, regional_data = populate_regional_data(cases)
 
         for region_dict in summary:
