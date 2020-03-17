@@ -147,7 +147,7 @@ class NewsParser:
             current_value = region_dict['antal']
             previous_value = regional_data[region_code]['value']
 
-            if current_value != previous_value:
+            if current_value > previous_value:
                 infected = current_value - previous_value
                 self.add_new_case(infected, region_code, site)
 

@@ -78,7 +78,7 @@
                         </tr>
                         <tr>
                             <td><label for="p_days" class="text-white">P</label></td>
-                            <td><input type="text" id="p_days" class="form-control form-control-sm" value="0"></td>
+                            <td><input type="text" id="p_days" class="form-control form-control-sm" value="100"></td>
                         </tr>
                         <tr>
                             <td><label for="health_cap" class="text-white">P</label></td>
@@ -149,6 +149,10 @@ am4core.ready(function() {
         }
 
     function fetchSuccess(Data, textStatus, jqXHR){
+        for(var i in Data){
+            Data[i]['dx']=new Date(Data[i]['dx']);
+            console.log(Data[i]['dx']);
+        }
         chart.data = Data;
     }
 
@@ -178,51 +182,39 @@ am4core.ready(function() {
         params = getParams();
         reloadData(params);
     }
-    // Add data
-    chart.data = [];
+
+        // Create chart instance
+    var chart = am4core.create("chartdiv", am4charts.XYChart);
 
     // Create axes
-    var valueAxisX = chart.xAxes.push(new am4charts.ValueAxis());
-    valueAxisX.title.text = 'Dagar i framtiden';
+    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    dateAxis.baseInterval = {
+      "timeUnit": "minute",
+      "count": 1
+    };
+    dateAxis.tooltipDateFormat = "d MMMM";
 
-    // Create value axis
-    var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxisY.title.text = 'Antal smittade';
-    //valueAxisY.logarithmic = true;
 
-    valueAxisX.renderer.grid.template.disabled = true;
-    valueAxisY.renderer.grid.template.disabled = false;
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 
     // Create series
-    var lineSeries = chart.series.push(new am4charts.LineSeries());
-    lineSeries.dataFields.valueY = "ay";
-    lineSeries.dataFields.valueX = "ax";
-    lineSeries.strokeOpacity = 0;
+    var series = chart.series.push(new am4charts.LineSeries());
+    series.dataFields.valueY = "dy";
+    series.dataFields.dateX = "dx";
+    series.strokeWidth = 2;
+    series.tooltipText = "{dy}";
+    series.tooltip.pointerOrientation = "vertical";
+    series.tooltip.background.fillOpacity = 0.5;
+    series.tooltip.label.padding(12,12,12,12)
 
-    var lineSeries2 = chart.series.push(new am4charts.LineSeries());
-    lineSeries2.dataFields.valueY = "by";
-    lineSeries2.dataFields.valueX = "bx";
-    lineSeries2.strokeOpacity = 1;
-    lineSeries2.fillOpacity = 0;
-    lineSeries2.fill = am4core.color(colors[1]); // red
-
-    // Create a range to change stroke for values below 0
-    var range = valueAxisY.createSeriesRange(lineSeries2);
-    range.value = health_cap;
-    range.endValue = 100000000;
-    range.contents.stroke = chart.colors.getIndex(4);
-    lineSeries2.fill = am4core.color(colors[1]); // red
-    range.contents.strokeOpacity = 0.7;
-    range.contents.fillOpacity = 0;
-
-
-    var med_cap = chart.series.push(new am4charts.LineSeries());
-    med_cap.dataFields.valueY = "cy";
-    med_cap.dataFields.valueX = "cx";
-    med_cap.strokeOpacity = 1;
+    // Create series
+    var measurepoints = chart.series.push(new am4charts.LineSeries());
+    measurepoints.dataFields.valueY = "ay";
+    measurepoints.dataFields.dateX = "ax";
+    measurepoints.strokeOpacity = 0;
 
     // Add a bullet
-    var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+    var bullet = measurepoints.bullets.push(new am4charts.Bullet());
 
     // Add a triangle to act as am arrow
     var arrow = bullet.createChild(am4core.Circle);
@@ -236,8 +228,22 @@ am4core.ready(function() {
     arrow.width = 12;
     arrow.height = 12;
 
-    chart.scrollbarX = new am4core.Scrollbar();
+    dateAxis.start = 0;
+    //dateAxis.end = 0.05;
+    valueAxis.start = 0;
+    valueAxis.end = 0.000001;
+    dateAxis.keepSelection = true;
+
+    // Add scrollbar
+    chart.scrollbarX = new am4charts.XYChartScrollbar();
+    chart.scrollbarX.series.push(series);
+    // Add vertical scrollbar
     chart.scrollbarY = new am4core.Scrollbar();
+    chart.scrollbarY.marginLeft = 0;
+    // Add cursor
+    chart.cursor = new am4charts.XYCursor();
+    chart.cursor.xAxis = dateAxis;
+    chart.cursor.snapToSeries = series;
 
     }); // end am4core.ready()
 </script>

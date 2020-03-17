@@ -172,6 +172,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-sm-12">
             <h1 class="text-white text-center">Globalt</h1>
         </div>
@@ -443,6 +444,7 @@ am4core.ready(function() {
     var line_chart = createLineChart(swe_and_avg, prognosis);
     createMapChart(data[8]);
     realMapChart();
+    drawCurveChart();
 
     var align_me = 'right';
 
@@ -599,62 +601,152 @@ am4core.ready(function() {
 
     }
 
+    function drawCurveChart(data){
+
+            // Create chart
+            var chart = am4core.create("curvechart", am4charts.XYChart);
+            chart.paddingRight = 20;
+
+            chart.data = generateChartData();
+
+            var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+            dateAxis.baseInterval = {
+              "timeUnit": "minute",
+              "count": 1
+            };
+            dateAxis.tooltipDateFormat = "d MMMM";
+
+            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.tooltip.disabled = true;
+            valueAxis.title.text = "Unique visitors";
+
+            var series = chart.series.push(new am4charts.LineSeries());
+            series.dataFields.dateX = "date";
+            series.dataFields.valueY = "visits";
+            series.tooltipText = "Smittade: [bold]{valueY}[/]%";
+            series.fillOpacity = 0.3;
+
+
+            chart.cursor = new am4charts.XYCursor();
+            chart.cursor.lineY.opacity = 0;
+            chart.scrollbarX = new am4charts.XYChartScrollbar();
+            chart.scrollbarX.series.push(series);
+
+
+            dateAxis.keepSelection = true;
+
+        }
+
+        function generateChartData(){
+        var dp = [0.00010392, 0.00011905, 0.00014173, 0.00016961, 0.0002012, 0.00023558,
+                0.00027216, 0.0003106, 0.00035071, 0.00039236, 0.00043552, 0.00048018,
+                0.00052633, 0.00057402, 0.00062327, 0.00067412, 0.00072663, 0.00078083,
+                0.00083678, 0.00089453, 0.00095415, 0.00101568, 0.00107918, 0.00114471,
+                0.00121234, 0.00128212, 0.00135413, 0.00142843, 0.00150509, 0.00158417,
+                0.00166575, 0.00174991, 0.00183672, 0.00192625, 0.00201858, 0.00211381,
+                0.002212, 0.00231325, 0.00241764, 0.00252525, 0.00263619, 0.00275054,
+                0.0028684, 0.00298986, 0.00311503, 0.00324399, 0.00337687, 0.00351375,
+                0.00365474, 0.00379996, 0.00394951, 0.00410351, 0.00426206, 0.00442528,
+                0.00459329, 0.00476621, 0.00494415, 0.00512724, 0.00531559, 0.00550934,
+                0.00570861, 0.00591351, 0.00612419, 0.00634076, 0.00656336, 0.0067921,
+                0.00702713, 0.00726857, 0.00751655, 0.00777119, 0.00803263, 0.00830099,
+                0.0085764, 0.00885898, 0.00914887, 0.00944617, 0.00975102, 0.01006353,
+                0.01038382, 0.010712, 0.01104818, 0.01139247, 0.01174497, 0.01210578,
+                0.012475, 0.01285271, 0.013239, 0.01363396, 0.01403765, 0.01445014,
+                0.0148715, 0.01530177, 0.015741, 0.01618924, 0.01664651, 0.01711284,
+                0.01758823, 0.0180727, 0.01856623, 0.01906882, 0.01958043, 0.02010103,
+                0.02063058, 0.02116901, 0.02171626, 0.02227224, 0.02283687, 0.02341004,
+                0.02399163, 0.02458151, 0.02517955, 0.02578558, 0.02639946, 0.02702099,
+                0.02764998, 0.02828624, 0.02892956, 0.0295797, 0.03023643, 0.03089949,
+                0.03156864, 0.03224361, 0.0329241, 0.03360983, 0.0343005, 0.03499581,
+                0.03569543, 0.03639904, 0.03710631, 0.0378169, 0.03853046, 0.03924665,
+                0.03996512, 0.04068549, 0.04140742, 0.04213053, 0.04285446, 0.04357885,
+                0.04430332, 0.04502751, 0.04575106, 0.0464736, 0.04719476, 0.0479142,
+                0.04863156, 0.04934649, 0.05005864, 0.05076768, 0.05147329, 0.05217512,
+                0.05287288, 0.05356625, 0.05425493, 0.05493863, 0.05561708, 0.05629,
+                0.05695713, 0.05761823, 0.05827305, 0.05892137, 0.05956297, 0.06019765,
+                0.06082521, 0.06144548, 0.06205828, 0.06266344, 0.06326084, 0.06385033,
+                0.06443178, 0.06500509, 0.06557015, 0.06612687, 0.06667517, 0.06721499,
+                0.06774627, 0.06826895, 0.068783, 0.06928839, 0.06978509, 0.07027311,
+                0.07075244, 0.07122308, 0.07168505, 0.07213838, 0.07258308, 0.07301921,
+                0.07344679, 0.07386589, 0.07427656, 0.07467886, 0.07507286, 0.07545863,
+                0.07583625, 0.0762058, 0.07656736, 0.07692103, 0.07726689, 0.07760505,
+                0.07793561, 0.07825866, 0.07857432]
+                var chartData = [];
+                // current date
+                var firstDate = new Date();
+                // and generate 500 data items
+                for (var i = 0; i < dp.length; i++) {
+                    var newDate = new Date(firstDate);
+                    newDate.setDate(newDate.getDate() + i);
+
+
+                    // add data item to the array
+                    chartData.push({
+                        date: newDate,
+                        visits: 100*dp[i]
+                    });
+                }
+
+                return chartData;
+            }
+
 
     function createMapChart(data){
 
-        var chart = am4core.create("bar_chart", am4charts.XYChart);
+            var chart = am4core.create("bar_chart", am4charts.XYChart);
 
-        var chart_data = [];
+            var chart_data = [];
 
-        {% for key,value in agg_by_dates.items %}
-            value = parseInt({{value}})
-            var today = new Date();
-            var seriesdate = Date.parse('{{key}}');
+            {% for key,value in agg_by_dates.items %}
+                value = parseInt({{value}})
+                var today = new Date();
+                var seriesdate = Date.parse('{{key}}');
 
-            if(seriesdate<today){
-                var dataItem = {date: seriesdate,  value: value};
-                chart_data.push(dataItem);
-            }
-        {% endfor %}
+                if(seriesdate<today){
+                    var dataItem = {date: seriesdate,  value: value};
+                    chart_data.push(dataItem);
+                }
+            {% endfor %}
 
-        // Create axes
-        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+            // Create axes
+            var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
 
-        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        //valueAxis.logarithmic = true;
+            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            //valueAxis.logarithmic = true;
 
-        // Create series
-        var series = chart.series.push(new am4charts.ColumnSeries());
+            // Create series
+            var series = chart.series.push(new am4charts.ColumnSeries());
 
-        series.dataFields.valueY = "value" ;
-        series.dataFields.dateX = "date";
-        series.name = name;
-        //series.stroke = am4core.color('#e65100');
-        //series.f= am4core.color("#ffecb3");
+            series.dataFields.valueY = "value" ;
+            series.dataFields.dateX = "date";
+            series.name = name;
+            //series.stroke = am4core.color('#e65100');
+            //series.f= am4core.color("#ffecb3");
 
-        series.data = chart_data;
+            series.data = chart_data;
 
-        series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Nya smittade";
-        series.columns.template.fillOpacity = .85;
+            series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Nya smittade";
+            series.columns.template.fillOpacity = .85;
 
-        var columnTemplate = series.columns.template;
-        columnTemplate.strokeWidth = 2;
-        columnTemplate.strokeOpacity = 1;
+            var columnTemplate = series.columns.template;
+            columnTemplate.strokeWidth = 2;
+            columnTemplate.strokeOpacity = 1;
 
-        let scrollbarX = new am4core.Scrollbar();
-        scrollbarX.marginBottom = 20;
-        chart.scrollbarX = scrollbarX;
-        scrollbarX.interactionsEnabled = false;
-        chart.scrollbarX.disabled = true;
-        chart.scrollbarX.startGrip.disabled = true;
-        chart.scrollbarX.endGrip.disabled = true;
-        chart.seriesContainer.draggable = false;
-        chart.seriesContainer.resizable = false;
-        chart.mouseWheelBehavior = "none";
-        chart.responsive.enabled = true;
+            let scrollbarX = new am4core.Scrollbar();
+            scrollbarX.marginBottom = 20;
+            chart.scrollbarX = scrollbarX;
+            scrollbarX.interactionsEnabled = false;
+            chart.scrollbarX.disabled = true;
+            chart.scrollbarX.startGrip.disabled = true;
+            chart.scrollbarX.endGrip.disabled = true;
+            chart.seriesContainer.draggable = false;
+            chart.seriesContainer.resizable = false;
+            chart.mouseWheelBehavior = "none";
+            chart.responsive.enabled = true;
 
 
-        return chart;
+            return chart;
 
         }
 
@@ -711,7 +803,6 @@ am4core.ready(function() {
             series.data = data;
             return series;
         }
-
 
         function cleanData(data){
             var summary = {};

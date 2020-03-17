@@ -21,6 +21,7 @@
 
 import numpy as np
 import xlrd
+from datetime import datetime, timedelta
 
 class SIR_model:
     def __init__(self, covid19_filename, population_filename, country, steps=100, min_cases=100):
@@ -216,16 +217,24 @@ class SIR_model:
         data = []
 
         last_int = 0
-
+        no_of_seconds = int(x_prediction[-1])*24*60*60
+        time_interval = no_of_seconds/len(x_prediction)
+        d = datetime.now().replace(hour=0, minute=0) - timedelta(len(self.x_confirmed))
         for i in range(len(I)):
             data.append({
-                    'bx': x_prediction[i],
-                    'by': I[i]
+                    'dx': d,
+                    'dy': I[i] + R[i]
             })
+            d+=timedelta(seconds=time_interval)
+
+        d = datetime.now() - timedelta(len(self.x_confirmed))
 
         for i in range(len(self.x_confirmed)):
             data.append({
-                    'ax': int(self.x_confirmed[i]),
+                    'ax': d,
                     'ay': int(self.cases_confirmed[i])
             })
+
+            d+=timedelta(days=1)
+
         return data, len(self.x_confirmed)+P
