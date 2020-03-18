@@ -392,7 +392,7 @@ am4core.ready(function() {
 
     // Create axes
     var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    chart.numberFormatter.numberFormat = "#.";
+    chart.numberFormatter.numberFormat = "#,###.";
 
     dateAxis.baseInterval = {
       "timeUnit": "minute",
