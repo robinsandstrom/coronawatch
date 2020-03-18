@@ -138,15 +138,19 @@
                             <td><label for="country" class="text-muted">Country:</label></td>
                             <td>
                                 <select id="country">
-                                  <option value="Sweden" selected>Sweden</option>
-                                  <option value="Italy">Italy</option>
                                   <option value="Denmark">Denmark</option>
-                                  <option value="Norway">Norway</option>
-                                  <option value="South Korea">South Korea</option>
-                                  <option value="Germany">Germany</option>
+                                  <option value="Finland">Finland</option>
                                   <option value="France">France</option>
-                                  <option value="Spain">Spain</option>
+                                  <option value="Germany">Germany</option>
+                                  <option value="Italy">Italy</option>
                                   <option value="Netherlands">Netherlands</option>
+                                  <option value="Norway">Norway</option>
+                                  <option value="Sweden" selected>Sweden</option>
+                                  <option value="South Korea">South Korea</option>
+                                  <option value="Spain">Spain</option>
+                                  <option value="United Kingdom">United Kingdom</option>
+                                  <option value="United States of America">United States</option>
+                                  <option value="Switzerland">Switzerland</option>
                                 </select>
                             </td>
                         </tr>
@@ -388,6 +392,8 @@ am4core.ready(function() {
 
     // Create axes
     var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    chart.numberFormatter.numberFormat = "#.";
+
     dateAxis.baseInterval = {
       "timeUnit": "minute",
       "count": 1
@@ -461,6 +467,7 @@ am4core.ready(function() {
 
 
     var valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
+    chart2.numberFormatter.numberFormat = "#.";
 
     // Create series
     var series = chart2.series.push(new am4charts.LineSeries());
