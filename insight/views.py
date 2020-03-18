@@ -8,7 +8,8 @@ from collections import OrderedDict
 from insight.management.commands.new_parser import NewsParser
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.db.models import Sum
-from insight.SIR import SIR_model
+from insight.andre.SEQIJR import SEQIJR
+from insight.andre.FileReader import FileReader
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 
@@ -86,25 +87,42 @@ def update(request):
     return HttpResponse('updated')
 
 def get_curve(request):
-    alpha = float(request.GET.get('alpha', None) or 0.5)
-    gamma = float(request.GET.get('gamma', None) or 1)
-    theta = float(request.GET.get('theta', None) or 0.1)
-    f = float(request.GET.get('f', None) or 0.97)
-    a = float(request.GET.get('a', None) or 0.05)
-    P = int(request.GET.get('p_days', None) or 0)
-    health_cap = int(request.GET.get('health_cap', None))
+    print('Getting curve')
+
+    N = float(request.GET.get('N', None))
+    Pi = float(request.GET.get('pi', None))
+    mu = 1 / (80 * 365)
+    b = float(request.GET.get('b', None))
+    e_E = float(request.GET.get('e_E', None))
+    e_Q = float(request.GET.get('e_Q', None))
+    e_J = float(request.GET.get('e_J', None))
+    g_1 = float(request.GET.get('g_1', None))
+    g_2 = float(request.GET.get('g_2', None))
+    s_1 = float(request.GET.get('s_1', None))
+    s_2 = float(request.GET.get('s_2', None))
+    k_1 = float(request.GET.get('k_1', None))
+    k_2 = float(request.GET.get('k_2', None))
+    d_1 = float(request.GET.get('d_1', None))
+    d_2 = float(request.GET.get('d_2', None))
+    p_days = int(request.GET.get('p_days', None))
+    country = request.GET.get('country', None)
 
     country = request.GET.get('country', None)
     covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-14.xls'
     population_filename = 'PopulationByCountry.xlsx'
+    files = FileReader()
+    N = N * files.population(country)
 
-    sir = SIR_model(covid19_filename, population_filename, country, 500)
-    #par = sir.minimize_parameters(f, a) #[alpha_min, theta_min, gamma_min]
-    par = [alpha, theta, gamma]
-    data, len = sir.get_curve(par, f, a, P)
+    model = SEQIJR(N, Pi, mu, b,
+                    e_E, e_Q, e_J,
+                    g_1, g_2,
+                    s_1, s_2,
+                    k_1, k_2,
+                    d_1, d_2)
 
-    #dump = json.dumps(data)# + [{'cx':0, 'cy': health_cap},{'cx': len, 'cy':health_cap}])
+    data = model.calc(country, files, p_days)
     dump = json.dumps(data, indent=4, sort_keys=True, default=str)
+    print(dump)
 
     return HttpResponse(dump, content_type='application/json')
 

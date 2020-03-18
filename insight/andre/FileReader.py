@@ -3,9 +3,10 @@ import numpy as np
 
 
 class FileReader:
-    def __init__(self, covid19_filename, population_filename):
-        self.covid19 = self.read_covid19_file(covid19_filename)
-        self.populations = self.read_population_file(population_filename)
+    def __init__(self):
+        self.covid19 = self.read_covid19_file('COVID-19-geographic-disbtribution-worldwide-2020-03-16.xls')
+        self.populations = self.read_population_file('PopulationByCountry.xlsx')
+        pass
 
     # Returns dictionary on the form {'Sweden' : [np.array(# smittade), np.array(# döda)]}
     @staticmethod
@@ -36,12 +37,13 @@ class FileReader:
     # Returns dictionary on the form {'Sweden' : int(population size)}
     @staticmethod
     def read_population_file(filename):
+
+
         workbook = xlrd.open_workbook(filename)
         worksheet = workbook.sheet_by_index(0)
         dictionary = {}
         for row in range(1, worksheet.nrows):
             dictionary[worksheet.cell_value(row, 0)] = int(worksheet.cell_value(row, 1))
-        return dictionary
         return dictionary
 
     def population(self, country):

@@ -42,50 +42,100 @@
 </head>
 
 
-<body class="grey darken-4">
+<body class="grey lighten-4">
         <!-- As a link -->
-    <nav class="navbar py-2 navbar-dark special-color-dark z-depth-0 text-left">
-        <img style="height: 2.5rem;" src="{% static 'logob.svg' %}" class="pr-4">
-        <a class="navbar-brand mr-auto py-0 my-0" href="/" style="font-family: biohazard;">Coronawatch.se</a>
+    <nav class="navbar py-2 navbar-dark blue-grey z-depth-0 text-left">
+        <img style="height: 2.5rem;" src="{% static 'virus_cw.svg' %}" class="pr-4">
+        <a class="navbar-brand mr-auto py-0 my-0" href="/" style="font-family: biohazard;">coronawatch.se</a>
         <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-2" style="min-height: 95vh;">
         <div class="col-sm-12 col-lg-3 my-sm-4">
-            <div class="card border-dark special-color mx-sm-0 my-2 z-depth-0">
+            <div class="card border-light mx-sm-0 my-2 z-depth-0">
                 <div class="card-body">
-                    <h4 class="text-warning">Parametrar</h4>
+                    <h4 class="">Parametrar</h4>
                     <hr>
                     <table>
                         <tr>
-                            <td><label for="alpha" class="text-white">Alpha (>0)</label></td>
-                            <td><input type="text" id="alpha" class="form-control form-control-sm" value="0.00048828125"></td>
+                            <td><label for="N" class="text-muted">Population factor(0-1)</label></td>
+                            <td><input type="text" id="N" class="form-control form-control-sm" value="0.8"></td>
                         </tr>
                         <tr>
-                            <td><label for="gamma" class="text-white">Gamma (>0)</label></td>
-                            <td><input type="text" id="gamma" class="form-control form-control-sm" value="0.4112509381337456"></td>
+                            <td><label for="pi" class="text-muted">Inflow</label></td>
+                            <td><input type="text" id="pi" class="form-control form-control-sm" value="0"></td>
                         </tr>
                         <tr>
-                            <td><label for="theta" class="text-white">Theta (>0)</label></td>
-                            <td><input type="text" id="theta" class="form-control form-control-sm" value="0.1083984375"></td>
+                            <td colspan="2"><hr></td>
                         </tr>
                         <tr>
-                            <td><label for="a" class="text-white">a</label></td>
-                            <td><input type="text" id="a" class="form-control form-control-sm" value="0.05"></td>
+                            <td><label for="b" class="text-muted">Infectiousness</label></td>
+                            <td><input type="text" id="b" class="form-control form-control-sm" value="0.64"></td>
                         </tr>
                         <tr>
-                            <td><label for="f" class="text-white">f</label></td>
-                            <td><input type="text" id="f" class="form-control form-control-sm" value="0.95"></td>
+                            <td><label for="e_E" class="text-muted">Asymptomatic infectiousness</label></td>
+                            <td><input type="text" id="e_E" class="form-control form-control-sm" value="0.5"></td>
                         </tr>
                         <tr>
-                            <td><label for="p_days" class="text-white">P</label></td>
-                            <td><input type="text" id="p_days" class="form-control form-control-sm" value="100"></td>
+                            <td><label for="e_Q" class="text-muted">Quarantined infectiousness</label></td>
+                            <td><input type="text" id="e_Q" class="form-control form-control-sm" value="0.1"></td>
                         </tr>
                         <tr>
-                            <td><label for="health_cap" class="text-white">P</label></td>
-                            <td><input type="text" id="health_cap" class="form-control form-control-sm" value="500"></td>
+                            <td><label for="e_J" class="text-muted">Isolated infectiousness</label></td>
+                            <td><input type="text" id="e_J" class="form-control form-control-sm" value="0.9"></td>
                         </tr>
                         <tr>
-                            <td><label for="country" class="text-white">Välj land:</label></td>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                        <tr>
+                            <td><label for="g_1" class="text-muted">Rate of quarantine</label></td>
+                            <td><input type="text" id="g_1" class="form-control form-control-sm" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="g_2" class="text-muted">Rate of isolation infective cases</label></td>
+                            <td><input type="text" id="g_2" class="form-control form-control-sm" value="0.5"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                        <tr>
+                            <td><label for="s_1" class="text-muted">Recovery rate, infective cases</label></td>
+                            <td><input type="text" id="s_1" class="form-control form-control-sm" value="0.5"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="s_2" class="text-muted">Recovery rate, isolated cases</label></td>
+                            <td><input type="text" id="s_2" class="form-control form-control-sm" value="0.5"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                        <tr>
+                            <td><label for="k_1" class="text-muted">Symptom development rate</label></td>
+                            <td><input type="text" id="k_1" class="form-control form-control-sm" value="0.4"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="k_2" class="text-muted">Symptom development rate in Quarantine</label></td>
+                            <td><input type="text" id="k_2" class="form-control form-control-sm" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                        <tr>
+                            <td><label for="d_1" class="text-muted">Deathrate infective cases</label></td>
+                            <td><input type="text" id="d_1" class="form-control form-control-sm" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="d_2" class="text-muted">Deathrate isolated cases</label></td>
+                            <td><input type="text" id="d_2" class="form-control form-control-sm" value="0.004"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr></td>
+                        </tr>
+                        <tr>
+                            <td><label for="p_days" class="text-muted">Days in future to calculate</label></td>
+                            <td><input type="text" id="p_days" class="form-control form-control-sm" value="0"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="country" class="text-muted">Country:</label></td>
                             <td>
                                 <select id="country">
                                   <option value="Sweden" selected>Sweden</option>
@@ -102,15 +152,68 @@
                         </tr>
                     </table>
                     <div class="text-center my-2">
-                        <button class="btn text-center z-depth-0 text-white" type="button" name="button" id="calc">Beräkna</button>
+                        <button class="btn text-center z-depth-0 text-muted" type="button" name="button" id="calc">Calculate</button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-sm-12 col-lg-9 my-sm-4">
-            <div class="card mx-sm-0 my-2 z-depth-0">
+            <div class="card border-light mx-sm-0 my-2 z-depth-0">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h1>Graf 1</h1>
+                        </div>
+                        <div class="col-md-8">
+                            <select id="graph_1_mp" class="float-right">
+                              <option value="cases_confirmed" selected>Confirmed cases (I)</option>
+                              <option value="deaths_confirmed">Confirmed deaths (J)</option>
+                              <option value="no_measurement">No measurement</option>
+                            </select>
+                            <select id="graph_1_display" class="float-right">
+                              <option value="infective">Infective (I)</option>
+                              <option value="isolated">Isolated (J)</option>
+                              <option value="susceptibles">Suspectibles (S)</option>
+                              <option value="exposed">Exposed (E)</option>
+                              <option value="removed">Accumulated recovered (R)</option>
+                              <option value="accumulated_isolated">Accumulated Isolated (AJ)</option>
+                              <option value="accumulated_isolated_infective" selected>Accumulated Isolated+Infective (AJI)</option>
+                              <option value="accumulated_deaths">Accumulated Deaths (AD)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <div id="chartdiv" class="chartdiv" style="height: 500px;"></div>
+                    <div id="graph_1" class="chartdiv" style="height: 400px;"></div>
+                </div>
+            </div>
+            <div class="card border-light mx-sm-0 my-2 z-depth-0">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h1>Graf 2</h1>
+                        </div>
+                        <div class="col-md-8">
+                            <select id="graph_2_mp" class="float-right">
+                              <option value="cases_confirmed">Confirmed cases (I)</option>
+                              <option value="deaths_confirmed" selected>Confirmed deaths (J)</option>
+                              <option value="no_measurement">No measurement</option>
+                            </select>
+                            <select id="graph_2_display" class="float-right">
+                              <option value="infective">Infective (I)</option>
+                              <option value="isolated">Isolated (J)</option>
+                              <option value="susceptibles">Suspectibles (S)</option>
+                              <option value="exposed">Exposed (E)</option>
+                              <option value="removed">Accumulated recovered (R)</option>
+                              <option value="accumulated_isolated">Accumulated Isolated (AJ)</option>
+                              <option value="accumulated_isolated_infective">Accumulated Isolated+Infective (AJI)</option>
+                              <option value="accumulated_deaths" selected>Accumulated Deaths (AD)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="graph_2" class="chartdiv" style="height: 400px;"></div>
 
                 </div>
             </div>
@@ -125,10 +228,32 @@ am4core.ready(function() {
     // Themes begin
     am4core.useTheme(am4themes_animated);
     // Create chart instance
-    var chart = am4core.create("chartdiv", am4charts.XYChart);
+    var chart = am4core.create("graph_1", am4charts.XYChart);
+    var chart2 = am4core.create("graph_2", am4charts.XYChart);
+    var sum_data;
 
     $('#calc').click(function() {
         loadNewData();
+    });
+
+    $('#graph_1_mp').on('change', function() {
+        measurement_1 = $(this).val();
+        populateGraph1();
+    });
+
+    $('#graph_2_mp').on('change', function() {
+        measurement_2 = $(this).val();
+        populateGraph2();
+    });
+
+    $('#graph_1_display').on('change', function() {
+        display_1 = $(this).val();
+        populateGraph1();
+    });
+
+    $('#graph_2_display').on('change', function() {
+        display_2 = $(this).val();
+        populateGraph2();
     });
 
     loadNewData();
@@ -136,6 +261,13 @@ am4core.ready(function() {
     var health_cap = $('#health_cap').val();
 
     var colors = ['#4285F4', '#2BBBAD', '#2BBBAD', '#fb8c00', '#ef6c00', '#CC0000', '#ff8f00', '#ffeb3b'];
+
+    var display_1 = $('#graph_1_display').val();
+    var measurement_1 = 'cases_confirmed';
+
+    var display_2 = $('#graph_2_display').val();
+    var measurement_2 = 'deaths_confirmed';
+
 
     function reloadData(params){
         $.ajax({
@@ -149,32 +281,103 @@ am4core.ready(function() {
         }
 
     function fetchSuccess(Data, textStatus, jqXHR){
-        for(var i in Data){
-            Data[i]['dx']=new Date(Data[i]['dx']);
-            console.log(Data[i]['dx']);
+        sum_data = Data;
+        populateGraph1();
+        populateGraph2();
+    }
+
+    function populateGraph1(){
+        data = [];
+
+        var measured_points = sum_data[measurement_1];
+        var measured_dates = sum_data['dates_measured'];
+
+        for(var i=0; i < measured_points.length; i++){
+            m =  ({
+                    'ax': new Date(Date.parse(measured_dates[i])),
+                    'ay': measured_points[i]
+            })
+            data.push(m)
         }
-        chart.data = Data;
+
+
+        var display_points = sum_data[display_1];
+        var dates_prognosis = sum_data['dates_prognosis'];
+
+        for(var i=0; i < display_points.length; i++){
+            m =  ({
+                    'dx': new Date(Date.parse(dates_prognosis[i])),
+                    'dy': display_points[i]
+            })
+            data.push(m)
+        }
+
+        chart.data = data;
+    }
+
+    function populateGraph2(){
+        data = [];
+
+        var measured_points = sum_data[measurement_2];
+        var measured_dates = sum_data['dates_measured'];
+
+        for(var i=0; i < measured_points.length; i++){
+            m =  ({
+                    'ax': new Date(Date.parse(measured_dates[i])),
+                    'ay': measured_points[i]
+            })
+            data.push(m)
+        }
+
+
+        var display_points = sum_data[display_2];
+        var dates_prognosis = sum_data['dates_prognosis'];
+
+        for(var i=0; i < display_points.length; i++){
+            m =  ({
+                    'dx': new Date(Date.parse(dates_prognosis[i])),
+                    'dy': display_points[i]
+            })
+            data.push(m)
+        }
+        chart2.data = data;
     }
 
     function getParams(){
         var p = {};
-        var alpha = $('#alpha').val();
-        var gamma = $('#gamma').val();
-        var theta = $('#theta').val();
-        var f = $('#f').val();
-        var a = $('#a').val();
-        var p_days = $('#p_days').val();
-        var country = $('#country').val();
-        var health_cap = $('#health_cap').val();
+        var No = $('#N').val()
+        var pi  = $('#pi').val()
+        var b = $('#b').val()
+        var e_E = $('#e_E').val()
+        var e_Q = $('#e_Q').val()
+        var e_J = $('#e_J').val()
+        var g_1 = $('#g_1').val()
+        var g_2 = $('#g_2').val()
+        var s_1 = $('#s_1').val()
+        var s_2 = $('#s_2').val()
+        var k_1 = $('#k_1').val()
+        var k_2 = $('#k_2').val()
+        var d_1 = $('#d_1').val()
+        var d_2 = $('#d_2').val()
+        var p_days = $('#p_days').val()
+        var country = $('#country').val()
         return {
-            'alpha': alpha,
-            'a': a,
-            'f': f,
-            'gamma': gamma,
-            'theta': theta,
+            'N': No,
+            'pi': pi,
+            'b': b,
+            'e_E': e_E,
+            'e_Q': e_Q,
+            'e_J': e_J,
+            'g_1': g_1,
+            'g_2': g_2,
+            's_1': s_1,
+            's_2': s_2,
+            'k_1': k_1,
+            'k_2': k_2,
+            'd_1': d_1,
+            'd_2': d_2,
             'p_days': p_days,
             'country' : country,
-            'health_cap': health_cap,
         }
     }
 
@@ -182,9 +385,6 @@ am4core.ready(function() {
         params = getParams();
         reloadData(params);
     }
-
-        // Create chart instance
-    var chart = am4core.create("chartdiv", am4charts.XYChart);
 
     // Create axes
     var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
@@ -196,6 +396,7 @@ am4core.ready(function() {
 
 
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    dateAxis.renderer.grid.template.disabled = true;
 
     // Create series
     var series = chart.series.push(new am4charts.LineSeries());
@@ -212,21 +413,25 @@ am4core.ready(function() {
     measurepoints.dataFields.valueY = "ay";
     measurepoints.dataFields.dateX = "ax";
     measurepoints.strokeOpacity = 0;
+    measurepoints.tooltipText = "Mätvärde: {ay}";
+    measurepoints.tooltip.pointerOrientation = "vertical";
+    measurepoints.tooltip.background.fillOpacity = 0.5;
+    measurepoints.tooltip.label.padding(12,12,12,12)
 
     // Add a bullet
     var bullet = measurepoints.bullets.push(new am4charts.Bullet());
 
     // Add a triangle to act as am arrow
-    var arrow = bullet.createChild(am4core.Circle);
+    var arrow = bullet.createChild(am4core.Triangle);
     arrow.horizontalCenter = "middle";
     arrow.verticalCenter = "middle";
     arrow.strokeWidth = 1;
     arrow.strokeOpacity = 1;
     arrow.stroke = chart.colors.getIndex(0);
-    arrow.fillOpacity = 0;
+    arrow.fillOpacity = 1;
     arrow.direction = "top";
-    arrow.width = 12;
-    arrow.height = 12;
+    arrow.width = 8;
+    arrow.height = 8;
 
     dateAxis.start = 0;
     //dateAxis.end = 0.05;
@@ -243,7 +448,74 @@ am4core.ready(function() {
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
-    chart.cursor.snapToSeries = series;
+
+
+    // Create axes
+    var dateAxis = chart2.xAxes.push(new am4charts.DateAxis());
+    dateAxis.renderer.grid.template.disabled = true;
+    dateAxis.baseInterval = {
+      "timeUnit": "minute",
+      "count": 1
+    };
+    dateAxis.tooltipDateFormat = "d MMMM";
+
+
+    var valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
+
+    // Create series
+    var series = chart2.series.push(new am4charts.LineSeries());
+    series.dataFields.valueY = "dy";
+    series.dataFields.dateX = "dx";
+    series.strokeWidth = 2;
+    series.tooltipText = "{dy}";
+    series.tooltip.pointerOrientation = "vertical";
+    series.tooltip.background.fillOpacity = 0.5;
+    series.tooltip.label.padding(12,12,12,12)
+
+    // Create series
+    var measurepoints = chart2.series.push(new am4charts.LineSeries());
+    measurepoints.dataFields.valueY = "ay";
+    measurepoints.dataFields.dateX = "ax";
+    measurepoints.strokeOpacity = 0;
+    measurepoints.tooltipText = "Mätvärde: {ay}";
+    measurepoints.tooltip.pointerOrientation = "vertical";
+    measurepoints.tooltip.background.fillOpacity = 0.5;
+    measurepoints.tooltip.label.padding(12,12,12,12)
+
+    // Add a bullet
+    var bullet = measurepoints.bullets.push(new am4charts.Bullet());
+
+    // Add a triangle to act as am arrow
+    var arrow = bullet.createChild(am4core.Triangle);
+    arrow.horizontalCenter = "middle";
+    arrow.verticalCenter = "middle";
+    arrow.strokeWidth = 1;
+    arrow.strokeOpacity = 1;
+    arrow.stroke = chart.colors.getIndex(0);
+    arrow.fillOpacity = 1;
+    arrow.direction = "top";
+    arrow.width = 8;
+    arrow.height = 8;
+
+    dateAxis.start = 0;
+    //dateAxis.end = 0.05;
+    valueAxis.start = 0;
+    valueAxis.end = 0.000001;
+    dateAxis.keepSelection = true;
+
+
+    // Add scrollbar
+    chart2.scrollbarX = new am4charts.XYChartScrollbar();
+    //chart2.scrollbarX.position = 'bottom';
+    chart2.scrollbarX.series.push(series);
+    // Add vertical scrollbar
+    // Add vertical scrollbar
+    chart2.scrollbarY = new am4core.Scrollbar();
+    chart2.scrollbarY.marginLeft = 0;
+    // Add cursor
+    chart2.cursor = new am4charts.XYCursor();
+    chart2.cursor.xAxis = dateAxis;
+
 
     }); // end am4core.ready()
 </script>
