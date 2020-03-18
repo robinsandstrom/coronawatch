@@ -290,6 +290,12 @@ am4core.ready(function() {
         populateGraph2();
     }
 
+    $(document).on('keypress',function(e) {
+        if(e.which == 13) {
+            loadNewData();
+        }
+    });
+
     function populateGraph1(){
         data = [];
 
