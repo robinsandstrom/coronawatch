@@ -52,7 +52,7 @@ def index(request):
     italy = CountryTracker.objects.filter(country='Italy').order_by('date').last()
     denmark = CountryTracker.objects.filter(country='Denmark').order_by('date').last()
 
-    articles = Article.objects.filter(active=True)
+    articles = Article.objects.filter()
 
     return render(request, template, context={
                                             'articles': articles,
@@ -74,7 +74,8 @@ def index(request):
                                             'new_cases': total_new,
                                             'total_new_deaths': total_new_deaths,
                                             'last_updated': last_updated,
-                                            'agg_by_dates': agg_by_dates
+                                            'agg_by_dates': agg_by_dates,
+                                            'agg_iv_care_cases': agg_iv_care_cases,
                                             })
 
 def about(request):

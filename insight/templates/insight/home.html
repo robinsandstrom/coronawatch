@@ -135,16 +135,15 @@
 
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
-        {% for article in articles %}
         <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4 mt-lg-2">
             <div class="card list-group-item-warning border-dark mx-sm-0 my-3 z-depth-0">
                 <div class="card-body table-responsive list-group-item-warning py-0 off-white">
                     <img src="{% static 'warning.svg' %}" class="pr-1 pt-2 mb-1 virus-logo">
-                    <h3 class="mb-1 text-uppercase inline-block text-uppercase">{{ article.title }}</h3>
+                    <h3 class="mb-1 text-uppercase inline-block text-uppercase">{{ articles.first.title }}</h3>
                     <p class="mt-0">
-                        {{ article.text }}
+                        {{ articles.first.text }}
 
-                        {% for source in article.source_set.all %}
+                        {% for source in articles.first.source_set.all %}
                             <a href="{{source.url}}">[{{forloop.counter}}]</a>
                         {% endfor %}
 
@@ -152,7 +151,6 @@
                 </div>
             </div>
         </div>
-        {% endfor %}
 
         <div class="col-sm-12">
             <h1 class="text-muted text-center">Sverige</h1>
