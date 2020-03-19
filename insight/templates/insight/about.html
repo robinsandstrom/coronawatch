@@ -47,35 +47,35 @@
 </style>
 </head>
 
-<body class="grey darken-4">
+<body class="grey lighten-4">
         <!-- As a link -->
-    <nav class="navbar py-0 navbar-dark special-color z-depth-0 text-left">
+    <nav class="navbar py-0 navbar-dark blue-grey z-depth-0 text-left">
         <img style="height: 2.5rem;" src="{% static 'virus_cw.svg' %}" class="pr-4">
         <a class="navbar-brand mr-auto py-0 my-0" href="/" style="font-family: biohazard;">coronawatch.se</a>
         <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
         <div class="col-sm-12">
-            <h1 class="text-white text-center">Om oss</h1>
+            <h1 class="text-info text-center">Om oss</h1>
         </div>
         <div class="col-sm-12 offset-lg-2 col-lg-8 px-sm-2 mt-sm-4 pb-5">
-            <div class="card h-100 special-color border-dark mx-sm-0 my-2 z-depth-0">
+            <div class="card h-100 border-dark mx-sm-0 my-2 z-depth-0">
                 <div class="card-body pb-4">
-                    <h1 class="text-warning">Vilka ligger bakom Coronawatch.se?</h1>
+                    <h1 class="text-info">Vilka ligger bakom Coronawatch.se?</h1>
                     <hr>
-                    <p class="off-white-primary-color">Vi som ligger bakom Coronawatch.se är två KTH-studenter.
+                    <p class="text-muted">Vi som ligger bakom Coronawatch.se är två KTH-studenter.
                         Vi läser båda en Master i Tillämpad Matematik på KTH. Inspirationen för sidan kommer från John Hopkins <a href="https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6" class="text-info">karta</a> över Coronavirusets spridning.
                     </p>
-                    <h1 class="text-warning pt-4">Varför skapade ni sidan?</h1>
+                    <h1 class="text-info">Varför skapade ni sidan?</h1>
                     <hr>
-                    <p class="off-white-primary-color">Vi skapade sidan för att vi tyckte det skulle vara intressant att ta fram en egen modell för att prognostisera
+                    <p class="text-muted">Vi skapade sidan för att vi tyckte det skulle vara intressant att ta fram en egen modell för att prognostisera
                         virusets spridning i Sverige. Detta började vi göra redan då Sverige bara hade några enstaka bekräftade fall.
                         När vi undersökte andra länder med epidemiska utbrott såg vi att Coronaviruset följde samma mönster överallt och
                         vi ville följa upp vår prognos så vi började samla in data för att dagligen kunna jämföra utfallet mot prognosen.
                     </p>
-                    <h1 class="text-warning pt-4">Var hämtar ni datan?</h1>
+                    <h1 class="text-info">Var hämtar ni datan?</h1>
                     <hr>
-                    <p class="off-white-primary-color">
+                    <p class="text-muted">
 
                         Datan för prognosen hämtas från ECDC, European Centre for Disease Prevention and Control och worldometers.com.
                         <br>
@@ -85,9 +85,9 @@
                         <a class="text-info" href="https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/aktuellt-epidemiologiskt-lage/">Folkhälsomyndigheten</a>.
                     </p>
 
-                    <h1 class="text-warning pt-4 ">Hur hämtar ni datan? Granskas den?</h1>
+                    <h1 class="text-info">Hur hämtar ni datan? Granskas den?</h1>
                     <hr>
-                    <p class="off-white-primary-color">Datan uppdateras flera gången dagligen och algoritmen skrapar alla nyhetssidor en gång var 10e minut. Datan läses in automatiskt från sidorna om de har publicerat nya fall
+                    <p class="text-muted">Datan uppdateras flera gången dagligen och algoritmen skrapar alla nyhetssidor en gång var 10e minut. Datan läses in automatiskt från sidorna om de har publicerat nya fall
                         och vi granskar manuellt sidan några gånger om dagen. Det har hänt någon enstaka gång att vi behövt revidera aktuella siffrorna efter att vi märkt att sidorna publicerat fel.
                     </p>
                     <div class="text-center mt-4 pt-4" >
