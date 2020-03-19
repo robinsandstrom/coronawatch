@@ -22,8 +22,11 @@ def index(request):
 
     all_cases = CoronaCase.objects.all().order_by('-time_created')[:30]
     cases = CoronaCase.objects.filter(case_type='confirmed')
+    intensive_care_cases = CoronaCase.objects.filter(case_type='intensive_care')
     ordered_regional_data, regional_data = populate_regional_data(cases)
     agg_by_dates = aggregate_by_dates(cases)
+    intensive_care_cases = aggregate_by_dates(intensive_care_cases)
+
     prognosis = data[10]
 
     total = cases.aggregate(Sum('infected'))['infected__sum'] or 0
@@ -52,6 +55,7 @@ def index(request):
                                             'data': data,
                                             'swe_and_avg': swe_and_avg,
                                             'cases': all_cases,
+                                            'intensive_care_cases': intensive_care_cases,
                                             'regional_data': regional_data,
                                             'ordered_regional_data': ordered_regional_data,
                                             'total': total,

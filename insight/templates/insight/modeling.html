@@ -176,6 +176,8 @@
                             </select>
                             <select id="graph_1_display" class="float-right">
                               <option value="infective">Infective (I)</option>
+                              <option value="intensive_care">Intensive Care (IC)</option>
+                              <option value="hospital_care">Hospital Care (HC)</option>
                               <option value="isolated">Isolated (J)</option>
                               <option value="susceptibles">Suspectibles (S)</option>
                               <option value="exposed">Exposed (E)</option>
@@ -205,6 +207,8 @@
                             </select>
                             <select id="graph_2_display" class="float-right">
                               <option value="infective">Infective (I)</option>
+                              <option value="intensive_care">Intensive Care (IC)</option>
+                              <option value="hospital_care">Hospital Care (HC)</option>
                               <option value="isolated">Isolated (J)</option>
                               <option value="susceptibles">Suspectibles (S)</option>
                               <option value="exposed">Exposed (E)</option>
@@ -321,7 +325,6 @@ am4core.ready(function() {
             })
             data.push(m)
         }
-
         chart.data = data;
     }
 
@@ -415,10 +418,12 @@ am4core.ready(function() {
     series.dataFields.valueY = "dy";
     series.dataFields.dateX = "dx";
     series.strokeWidth = 2;
+    series.fillOpacity = 0.1;
     series.tooltipText = "{dy}";
     series.tooltip.pointerOrientation = "vertical";
     series.tooltip.background.fillOpacity = 0.5;
     series.tooltip.label.padding(12,12,12,12)
+
 
     // Create series
     var measurepoints = chart.series.push(new am4charts.LineSeries());

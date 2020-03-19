@@ -50,6 +50,11 @@
              height: 60vh;
         }
 
+        .barcharts{
+            height: 40vh;
+
+        }
+
         @media (max-width: 600px) {
             .chartdiv {
               width: 100%;
@@ -179,6 +184,33 @@
                     </div>
             </div>
         </div>
+        <div class="col-sm-12">
+            <h1 class="text-muted text-center">Ökning</h1>
+        </div>
+        <div class="col-sm-12 offset-lg-1 col-lg-5 px-sm-2 mt-sm-4 mt-lg-2">
+            <div class="card-header">
+                Nya fall
+            </div>
+            <div class="card border-dark mr-lg-2 mx-sm-0 my-3 z-depth-0">
+
+                    <div class="card-body text-center text-danger">
+                        <div id="bar_chart" class="chartdiv barcharts"></div>
+
+                    </div>
+                </div>
+        </div>
+        <div class="col-sm-12 col-lg-5 px-sm-2 mt-sm-4 mt-lg-2">
+            <div class="card-header">
+                Intensivvårdade
+            </div>
+            <div class="card border-dark mr-lg-2 mx-sm-0 my-3 z-depth-0">
+
+                    <div class="card-body text-center text-danger">
+                        <div id="bar_chart_intensive" class="chartdiv barcharts"></div>
+
+                    </div>
+                </div>
+        </div>
 
         <div class="col-sm-12">
             <h1 class="text-muted text-center">Globalt</h1>
@@ -204,6 +236,7 @@
                 </div>
         </div>
         </div>
+
         <div class="col-sm-12">
             <h1 class="text-muted text-center">Andra länder</h1>
         </div>
@@ -318,20 +351,6 @@
             </div>
 
         <div class="col-sm-12">
-            <h1 class="text-muted text-center">Antal nya fall per dag</h1>
-        </div>
-        <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4 mt-lg-2">
-            <div class="card border-dark mr-lg-2 mx-sm-0 my-3 z-depth-0">
-
-                    <div class="card-body text-center text-danger">
-                        <div id="bar_chart" class="chartdiv"></div>
-
-                    </div>
-                </div>
-        </div>
-
-
-        <div class="col-sm-12">
             <h1 class="text-muted text-center">Geografisk smittspridning</h1>
         </div>
         <div class="col-sm-12 offset-lg-1 col-lg-5 px-sm-2 mt-sm-4" >
@@ -367,10 +386,34 @@
 
         </div>
         <div class="col-sm-12">
-            <h1 class="text-muted text-center">Senaste smittor</h1>
+            <h1 class="text-muted text-center">Senaste</h1>
 
         </div>
-        <div class="col-lg-10 offset-lg-1 col-sm-12 px-sm-2 mt-sm-4">
+        <div class="col-lg-5 offset-lg-1 col-sm-12 px-sm-2 mt-sm-4">
+            <div class="card border-dark mx-lg-0 my-3 z-depth-0 ">
+                <div class="card-body table-responsive text-left">
+                    {% for article in articles %}
+                    <div class="col-sm-12 px-sm-2 mt-sm-4 mt-lg-2">
+                        <div class="card list-group-item-warning border-dark mx-sm-0 my-3 z-depth-0">
+                            <div class="card-body table-responsive list-group-item-warning py-0 off-white">
+                                <h3 class="mb-1 text-uppercase inline-block text-uppercase">{{ article.title }}</h3>
+                                <p class="mt-0">
+                                    {{ article.text }}
+
+                                    {% for source in article.source_set.all %}
+                                        <a href="{{source.url}}">[{{forloop.counter}}]</a>
+                                    {% endfor %}
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-5 col-sm-12 px-sm-2 mt-sm-4">
             <div class="card border-dark mx-lg-0 my-3 z-depth-0 ">
                 <div class="card-body table-responsive text-center">
                     <table class="table table-sm text-left">
@@ -460,6 +503,7 @@ am4core.ready(function() {
 
     var line_chart = createLineChart(swe_and_avg, prognosis);
     createMapChart(data[8]);
+    createIntensiveCareChart();
     realMapChart();
     //drawCurveChart();
 
@@ -766,6 +810,70 @@ am4core.ready(function() {
             return chart;
 
         }
+
+        function createIntensiveCareChart(data){
+
+                var chart = am4core.create("bar_chart_intensive", am4charts.XYChart);
+
+                var chart_data = [];
+
+                {% for key,value in intensive_care_cases.items %}
+                    value = parseInt({{value}})
+                    var today = new Date();
+                    var seriesdate = Date.parse('{{key}}');
+
+                    if(seriesdate<today){
+                        var dataItem = {date: seriesdate,  value: value};
+                        chart_data.push(dataItem);
+                    }
+                {% endfor %}
+
+                // Create axes
+                var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+
+                dateAxis.baseInterval = {
+                  "timeUnit": "day",
+                  "count": 1
+                };
+
+                var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                //valueAxis.logarithmic = true;
+
+                // Create series
+                var series = chart.series.push(new am4charts.ColumnSeries());
+
+                series.dataFields.valueY = "value" ;
+                series.dataFields.dateX = "date";
+                series.name = name;
+                series.stroke = am4core.color('#e65100');
+                series.fill = am4core.color("#bf360c");
+
+                series.data = chart_data;
+
+                series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Intensivvårdade";
+                series.columns.template.fillOpacity = .85;
+
+                var columnTemplate = series.columns.template;
+                columnTemplate.strokeWidth = 2;
+                columnTemplate.strokeOpacity = 1;
+
+                let scrollbarX = new am4core.Scrollbar();
+                scrollbarX.marginBottom = 20;
+                chart.scrollbarX = scrollbarX;
+                scrollbarX.interactionsEnabled = false;
+                chart.scrollbarX.disabled = true;
+                chart.scrollbarX.startGrip.disabled = true;
+                chart.scrollbarX.endGrip.disabled = true;
+                chart.seriesContainer.draggable = false;
+                chart.seriesContainer.resizable = false;
+                chart.mouseWheelBehavior = "none";
+                chart.responsive.enabled = true;
+
+
+                return chart;
+
+            }
+
 
         function reloadData(params){
             $.ajax({

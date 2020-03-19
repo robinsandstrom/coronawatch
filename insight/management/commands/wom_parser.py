@@ -25,7 +25,7 @@ class WomParser:
 
         page = requests.get('http://www.worldometers.info/coronavirus/')
         soup = bs4.BeautifulSoup(page.content, 'html.parser')
-        table = soup.find("table", {'id': 'main_table_countries'})
+        table = soup.find("table", {'id': 'main_table_countries_today'})
         tbody = table.findAll("tbody")
         return tbody
 

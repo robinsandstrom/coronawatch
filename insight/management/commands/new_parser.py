@@ -10,6 +10,60 @@ from insight.backend import populate_regional_data
 
 from pprint import pprint
 
+hospitals = {
+    'Alingsås': '14',
+    'Bollnäs': '21',
+    'Borås': '14',
+    'Danderyd': '01',
+    'Eksjö': '06',
+    'Eskilstuna': '04',
+    'Falun': '20',
+    'Gävle': '21',
+    'Halmstad': '13',
+    'Helsingborg': '12',
+    'Jönköping': '06',
+    'K Huddinge IVA': '01',
+    'K Solna BIVA': '01',
+    'K Solna ECMO': '01',
+    'K Solna IVA': '01',
+    'K Solna TIVA': '01',
+    'Kalix': '25',
+    'Kalmar': '08',
+    'Karlskoga': '18',
+    'Karlskrona IVA': '10',
+    'Karlstad': '17',
+    'Kristianstad': '12',
+    'Kungälv': '14',
+    'Linköping IVA': '05',
+    'Ljungby': '07',
+    'Mora': '20',
+    'Norrköping': '05',
+    'Norrtälje': '01',
+    'NU Trollhättan': '14',
+    'Nyköping': '04',
+    'St Göran': '01',
+    'SU BIVA': '14',
+    'SU CIVA': '14',
+    'SU Mölndal': '14',
+    'SU Östra': '14',
+    'SU Östra Inf': '14',
+    'Sundsvall': '22',
+    'SUS Lund IVA': '12',
+    'SUS Lund TIVA': '12',
+    'SUS Malmö Inf': '12',
+    'SÖS IVA': '01',
+    'SÖS MIVA': '01',
+    'Umeå IVA': '24',
+    'Uppsala CIVA': '03',
+    'Varberg': '13',
+    'Värnamo': '06',
+    'Västervik': '08',
+    'Västerås': '19',
+    'Växjö': '07',
+    'Örebro IVA': '18',
+    'Örnsköldsvik': '22',
+}
+
 class NewsParser:
 
     def __init__(self):
@@ -36,13 +90,53 @@ class NewsParser:
         except:
             print('Failed FHM')
 
+        self.parse_sir()
+
+    def parse_sir(self):
+        site = ScrapeSite.objects.get(name='Svenska Intensivvårdsregistret')
+        url = site.url
+        payload = {
+            'highChartUrl': '/api/reports/GenerateHighChart',
+            'tableUrl': 'value2',
+            'chartWidth': 900,
+            'reportName': 'inrapp',
+            'startdat': '2019-03-19',
+            'stopdat': '2020-03-19',
+            'sasong[0]': '2019'
+            }
+
+        r = requests.get(url)
+        r = requests.post(url, data=payload)
+
+        previous_cases = CoronaCase.objects.filter(case_type='intensive_care')
+        ord, regional_data = populate_regional_data(previous_cases)
+
+        intensive_care_cases = r.json()['ChartSeries'][2]['Data']
+        o, summary = populate_regional_data(CoronaCase.objects.none())
+
+        for case in intensive_care_cases:
+            summary[hospitals.get(case['Name'])]['value'] += case['Value']
+
+        for key in summary:
+            summary[key]['kod'] = key
+            summary[key]['antal'] = summary[key]['value']
+
+        self.add_cases_from_summary(summary, site, case_type='intensive_care')
+
+
+
+
     def parse_svt(self):
 
         site = ScrapeSite.objects.get(name='SVT')
         r = requests.get(site.url)
         summary = r.json()['data']
-
         self.add_cases_from_summary(summary, site)
+
+        for reg in summary:
+            reg['antal'] = reg['dead']
+
+        self.add_cases_from_summary(summary, site, case_type='death')
 
     def parse_expressen(self):
 
@@ -64,7 +158,6 @@ class NewsParser:
         site = ScrapeSite.objects.get(name='Folkhälsomyndigheten')
         trs = self.get_fhm_tds(site)
         summary = self.fhm_to_summary(trs)
-        pprint(summary)
         self.add_cases_from_summary(summary, site)
 
     def aftonhoran_to_summary(self, list_of_cases):
@@ -136,10 +229,13 @@ class NewsParser:
 
         return parsed_data
 
-    def add_cases_from_summary(self, summary, site):
+    def add_cases_from_summary(self, summary, site, case_type='confirmed'):
 
-        cases = CoronaCase.objects.filter(case_type='confirmed')
+        cases = CoronaCase.objects.filter(case_type=case_type)
         ord, regional_data = populate_regional_data(cases)
+
+        if (type(summary)) is dict:
+            summary = summary.values()
 
         for region_dict in summary:
 
@@ -149,17 +245,27 @@ class NewsParser:
 
             if current_value > previous_value:
                 infected = current_value - previous_value
-                self.add_new_case(infected, region_code, site)
+                self.add_new_case(infected, region_code, case_type, source=site)
 
-    def add_new_case(self, infected, region, source=None):
+    def add_new_case(self, infected, region, case_type, source=None):
         date = datetime.now().date()
-
+        infected = int(infected)
+        
         if infected == 1:
             ny = 'nytt'
         else:
             ny = 'nya'
 
-        text = str(infected) + ' ' + ny + ' fall i ' + region_codes[region]
+        if case_type=='confirmed':
+            text = str(infected) + ' ' + ny + ' fall i ' + region_codes[region]
+
+        elif case_type=='intensive_care':
+            text = str(infected) + ' ' + ny + ' intensivvårdsfall i ' + region_codes[region]
+
+        elif case_type=='death':
+            text = str(infected) + ' ' + ny + ' dödsfall i ' + region_codes[region]
+
+
 
         if infected > 0:
 
@@ -169,7 +275,7 @@ class NewsParser:
                 'text': text,
                 'infected': infected,
                 'backup': False,
-                'case_type': 'confirmed',
+                'case_type': case_type,
                 'source': source
             }
 
