@@ -177,8 +177,8 @@
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
                             <div class="card text-center border-dark">
                                 <h2 class="text-muted my-1 py-0">Intensivvårdade</h2>
-                                <h1 class="text-info my-0 py-0">45</h1>
-                                <h5 class="mb-1 pb-1 mt-0 text-waning"><br></h5>
+                                <h1 class="text-info my-0 py-0">{{ total_ivs }}</h1>
+                                <h5 class="mb-1 pb-1 mt-0 text-waning">+{{ total_new_ivs }}</h5>
                             </div>
                         </div>
                     </div>
@@ -817,7 +817,7 @@ am4core.ready(function() {
 
                 var chart_data = [];
 
-                {% for key,value in intensive_care_cases.items %}
+                {% for key,value in agg_iv_care_cases.items %}
                     value = parseInt({{value}})
                     var today = new Date();
                     var seriesdate = Date.parse('{{key}}');

@@ -25,7 +25,7 @@ def index(request):
     intensive_care_cases = CoronaCase.objects.filter(case_type='intensive_care')
     ordered_regional_data, regional_data = populate_regional_data(cases)
     agg_by_dates = aggregate_by_dates(cases)
-    intensive_care_cases = aggregate_by_dates(intensive_care_cases)
+    agg_iv_care_cases = aggregate_by_dates(intensive_care_cases)
 
     prognosis = data[10]
 
@@ -36,6 +36,10 @@ def index(request):
     total_deaths = death_cases.aggregate(Sum('infected'))['infected__sum'] or 0
     new_death_cases = death_cases.filter(date__gte=date_from)
     total_new_deaths = new_death_cases.aggregate(Sum('infected'))['infected__sum'] or 0
+
+    total_ivs = intensive_care_cases.aggregate(Sum('infected'))['infected__sum'] or 0
+    new_iv_cases = intensive_care_cases.filter(date__gte=date_from)
+    total_new_ivs = new_iv_cases.aggregate(Sum('infected'))['infected__sum'] or 0
 
     try:
         last_updated = all_cases.first().time_created
@@ -60,6 +64,8 @@ def index(request):
                                             'ordered_regional_data': ordered_regional_data,
                                             'total': total,
                                             'total_deaths': total_deaths,
+                                            'total_ivs': total_ivs,
+                                            'total_new_ivs': total_new_ivs,
                                             'global': global_,
                                             'norway': norway,
                                             'italy': italy,
