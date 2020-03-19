@@ -322,7 +322,7 @@ city_codes = {
 }
 
 class Article(models.Model):
-    title = models.CharField(max_length=25)
+    title = models.CharField(max_length=150)
     text = models.CharField(max_length=500)
     active = models.BooleanField(default=False)
     time_created = models.DateTimeField(auto_now=True)

@@ -33,7 +33,7 @@
     <script rel="{% static 'swe.js' %}"></script>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap-grid.css' %}">
-    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <title>Coronawatch: {{ total }} (+ {{new_cases}} nya fall)</title>
 
@@ -136,9 +136,9 @@
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
         <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4 mt-lg-2">
-            <div class="card list-group-item-warning border-dark mx-sm-0 my-3 z-depth-0">
+            <div class="card list-group-item-warning border-info mx-sm-0 my-3 z-depth-0">
                 <div class="card-body table-responsive list-group-item-warning py-0 off-white">
-                    <h5 class="mb-1 text-uppercase inline-block text-uppercase">{{ articles.first.title }}</h5>
+                    <h5 class="my-1 text-uppercase inline-block text-uppercase">{{ articles.first.title }}</h5>
                     <p class="mt-0">
                         {{ articles.first.text }}
 
@@ -152,27 +152,27 @@
         </div>
 
         <div class="col-sm-12">
-            <h1 class="text-muted text-center">Sverige</h1>
+            <h1 class="text-muted text-center mb-0">Sverige</h1>
         </div>
         <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-2">
             <div class="h-100 mx-sm-0 my-2 z-depth-0">
                     <div class="row">
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-dark">
+                            <div class="card text-center border-info">
                                 <h2 class="text-muted my-1 py-0">Totalt</h2>
                                 <h1 class="my-0 py-0">{{ total }}</h1>
                                 <h5 class="mb-1 pb-1 mt-0 text-muted">+{{ new_cases }} nya idag</h5>
                             </div>
                         </div>
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-dark">
+                            <div class="card text-center border-info">
                                 <h2 class="text-muted my-1 py-0">Dödsfall</h2>
                                 <h1 class="text-danger my-0 py-0">{{ total_deaths }}</h1>
                                 <h5 class="mb-1 pb-1 mt-0 text-muted">+{{ total_new_deaths }} dödsfall</h5>
                             </div>
                         </div>
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-dark">
+                            <div class="card text-center border-info">
                                 <h2 class="text-muted my-1 py-0">Intensivvårdade</h2>
                                 <h1 class="text-info my-0 py-0">{{ total_ivs }}</h1>
                                 <h5 class="mb-1 pb-1 mt-0 text-waning">+{{ total_new_ivs }}</h5>
@@ -185,11 +185,11 @@
             <h1 class="text-muted text-center">Ökning</h1>
         </div>
         <div class="col-sm-12 offset-lg-1 col-lg-5 px-sm-2 mt-sm-4 mt-lg-2">
-            <div class="card-header">
-                Nya fall
-            </div>
-            <div class="card border-dark mr-lg-2 mx-sm-0 my-3 z-depth-0">
 
+            <div class="card border-info mr-lg-2 mx-sm-0 my- z-depth-0">
+                    <div class="card-header">
+                        Nya fall
+                    </div>
                     <div class="card-body text-center text-danger">
                         <div id="bar_chart" class="chartdiv barcharts"></div>
 
@@ -197,11 +197,10 @@
                 </div>
         </div>
         <div class="col-sm-12 col-lg-5 px-sm-2 mt-sm-4 mt-lg-2">
-            <div class="card-header">
-                Intensivvårdade
-            </div>
-            <div class="card border-dark mr-lg-2 mx-sm-0 my-3 z-depth-0">
-
+            <div class="card border-info mr-lg-2 mx-sm-0 mb-3 z-depth-0">
+                    <div class="card-header">
+                        Intensivvårdade
+                    </div>
                     <div class="card-body text-center text-danger">
                         <div id="bar_chart_intensive" class="chartdiv barcharts"></div>
 
@@ -213,10 +212,10 @@
             <h1 class="text-muted text-center">Globalt</h1>
         </div>
         <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-2">
-            <div class="h-100 border-dark mx-sm-0 my-2 z-depth-0">
+            <div class="h-100 border-info mx-sm-0 my-2 z-depth-0">
                 <div class="row">
                     <div class="col-lg-6 my-lg-4 col-sm-12 text-center">
-                        <div class="card text-center border-dark">
+                        <div class="card text-center border-info">
                             {% load l10n %}
                             <h2 class="text-muted my-1 py-0">Totalt</h2>
                             <h1 class="my-0 py-0">{{ global.total_cases }}</h1>
@@ -224,7 +223,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6 my-lg-4 col-sm-12 text-center">
-                        <div class="card text-center border-dark">
+                        <div class="card text-center border-info">
                             <h2 class="text-muted my-1 py-0">Dödsfall</h2>
                             <h1 class="text-danger my-0 py-0">{{ global.total_deaths }}</h1>
                             <h5 class="text-white mb-1 pb-1 mt-0 text-muted">+{{ global.new_deaths }} nya dödsfall</h5>
@@ -238,10 +237,10 @@
             <h1 class="text-muted text-center">Andra länder</h1>
         </div>
         <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4" >
-            <div class="border-dark mx-lg-0 my-2 z-depth-0 ">
+            <div class="border-info mx-lg-0 my-2 z-depth-0 ">
                     <div class="row my-5">
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-dark">
+                            <div class="card text-center border-info">
                                 <div class="pt-2">
                                     <img src="{% static 'denmark.svg' %}" class="virus-logo inline-block pr-1 mt-2 mb-1 m-0">
                                 </div>
@@ -251,7 +250,7 @@
                             </div>
                         </div>
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-dark">
+                            <div class="card text-center border-info">
                                 <div class="pt-2">
                                     <img src="{% static 'italy.svg' %}" class="virus-logo inline-block pr-1 mt-2 mb-1 m-0">
                                 </div>
@@ -261,7 +260,7 @@
                             </div>
                         </div>
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-dark">
+                            <div class="card text-center border-info">
                                 <div class="pt-2">
                                     <img src="{% static 'norge.svg' %}" class="virus-logo inline-block pr-1 mt-2 mb-1 m-0">
                                 </div>
@@ -277,7 +276,7 @@
             <h1 class="text-muted text-center">Utveckling</h1>
         </div>
         <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4" >
-            <div class="card border-dark mx-lg-0 my-2 z-depth-0 ">
+            <div class="card border-info mx-lg-0 my-2 z-depth-0 ">
                 <div class="card-body text-center text-danger">
                     <div id="chartdiv" class="chartdiv"></div>
                     <p class="text-muted">Källa: ECDC, European Centre for Disease Prevention and Control. </p>
@@ -288,7 +287,7 @@
             <h1 class="text-muted text-center">Prognos</h1>
         </div>
         <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4 mt-lg-2">
-            <div class="card border-dark mx-sm-0 my-3 z-depth-0">
+            <div class="card border-info mx-sm-0 my-3 z-depth-0">
                 <div class="card-body table-responsive text-center">
                     <table class="table table-borderless" id="prognosis_table">
                         <tbody>
@@ -351,7 +350,7 @@
             <h1 class="text-muted text-center">Geografisk smittspridning</h1>
         </div>
         <div class="col-sm-12 offset-lg-1 col-lg-5 px-sm-2 mt-sm-4" >
-            <div class="card h-100 border-dark mr-lg-2 my-2 z-depth-0 ">
+            <div class="card h-100 border-info mr-lg-2 my-2 z-depth-0 ">
                 <div class="card-body">
                     <div id="mapchart" class="chartdiv">
 
@@ -361,7 +360,7 @@
         </div>
 
         <div class="col-sm-12 col-lg-5 px-sm-2 mt-sm-4">
-            <div class="card h-100 border-dark mr-lg-2 my-2 z-depth-0 ">
+            <div class="card h-100 border-info mr-lg-2 my-2 z-depth-0 ">
                 <div class="card-body px-sm-2 px-lg-1">
                     <table class="table table-sm table-borderless" id="regional_table">
                         <tbody>
@@ -383,11 +382,11 @@
 
         </div>
         <div class="col-sm-12">
-            <h1 class="text-muted text-center">Senaste</h1>
+            <h1 class="text-muted text-center mt-4 mb-0">Senaste</h1>
 
         </div>
-        <div class="col-lg-5 offset-lg-1 col-sm-12 px-sm-2 mt-sm-4">
-            <div class="card border-dark mx-lg-0 my-3 z-depth-0 ">
+        <div class="col-lg-5 offset-lg-1 col-sm-12 px-sm-2 mt-sm-1">
+            <div class="card border-info mx-lg-0 my-3 z-depth-0 ">
                 <div class="card-body table-responsive text-left">
                     <div class="col-sm-12 px-sm-2 mt-sm-4 mt-lg-2">
                         <ul class="list-group">
@@ -409,8 +408,8 @@
             </div>
 
         </div>
-        <div class="col-lg-5 col-sm-12 px-sm-2 mt-sm-4">
-            <div class="card border-dark mx-lg-0 my-3 z-depth-0 ">
+        <div class="col-lg-5 col-sm-12 px-sm-2 mt-sm-1">
+            <div class="card border-info mx-lg-0 my-3 z-depth-0 ">
                 <div class="card-body table-responsive text-center">
                     <table class="table table-sm text-left">
                         <thead>
@@ -442,7 +441,7 @@
     </div>
 
     <div class="col-lg-10 offset-lg-1 col-sm-12 px-s-2 mt-sm-4 mb-3">
-        <div class="card border-dark mx-lg-1 my-3 z-depth-0 mb-3">
+        <div class="card border-info mx-lg-1 my-3 z-depth-0 mb-3">
             <div class="card-body text-center text-white">
                 Kontakt: <a href="mailto:kontakt@coronawatch.se" class="text-info">kontakt@coronawatch.se</a>
             </div>
