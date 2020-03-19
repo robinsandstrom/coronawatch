@@ -138,8 +138,7 @@
         <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4 mt-lg-2">
             <div class="card list-group-item-warning border-dark mx-sm-0 my-3 z-depth-0">
                 <div class="card-body table-responsive list-group-item-warning py-0 off-white">
-                    <img src="{% static 'warning.svg' %}" class="pr-1 pt-2 mb-1 virus-logo">
-                    <h3 class="mb-1 text-uppercase inline-block text-uppercase">{{ articles.first.title }}</h3>
+                    <h5 class="mb-1 text-uppercase inline-block text-uppercase">{{ articles.first.title }}</h5>
                     <p class="mt-0">
                         {{ articles.first.text }}
 
@@ -390,23 +389,22 @@
         <div class="col-lg-5 offset-lg-1 col-sm-12 px-sm-2 mt-sm-4">
             <div class="card border-dark mx-lg-0 my-3 z-depth-0 ">
                 <div class="card-body table-responsive text-left">
-                    {% for article in articles %}
                     <div class="col-sm-12 px-sm-2 mt-sm-4 mt-lg-2">
-                        <div class="card list-group-item-warning border-dark mx-sm-0 my-3 z-depth-0">
-                            <div class="card-body table-responsive list-group-item-warning py-0 off-white">
-                                <h3 class="mb-1 text-uppercase inline-block text-uppercase">{{ article.title }}</h3>
-                                <p class="mt-0">
-                                    {{ article.text }}
+                        <ul class="list-group">
+                            {% for article in articles %}
+                                <li class="list-group-item">
+                                    <h5 class="mb-1 text-uppercase inline-block text-uppercase">{{ article.title }}</h5>
+                                    <p class="mt-0">
+                                        {{ article.text }}
+                                        {% for source in article.source_set.all %}
+                                            <a href="{{source.url}}">[{{forloop.counter}}]</a>
+                                        {% endfor %}
+                                    </p>
+                                </li>
+                            {% endfor %}
+                        </ul>
 
-                                    {% for source in article.source_set.all %}
-                                        <a href="{{source.url}}">[{{forloop.counter}}]</a>
-                                    {% endfor %}
-
-                                </p>
-                            </div>
-                        </div>
                     </div>
-                    {% endfor %}
                 </div>
             </div>
 
