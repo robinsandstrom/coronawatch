@@ -121,12 +121,12 @@
 
 <body class="grey lighten-4">
         <!-- As a link -->
-    <nav class="navbar py-0 navbar-dark blue-grey z-depth-0 text-left">
+    <nav class="navbar py-1 navbar-dark blue-grey z-depth-0 text-left">
         <img src="{% static 'virus_cw.svg' %}" class="pr-4 virus-logo">
         <a class="navbar-brand py-0 my-1 border-right pr-2" href="/" id="home">coronawatch.se</a>
 
         <h5 class="text-white inline-block pt-2 my-0" href="/about"><a class="text-warning" href="/about">Om sidan</a></h5>
-        <h6 class="text-white ml-auto pr-1 inline-block">Senast uppdaterad: </h6><h6 class="ml-1 text-white inline-block"><strong>{{ last_updated|localtime }}</strong></h6>
+        <h4 class="text-white ml-auto pr-1 inline-block border-right">+{{ new_cases }} nya fall idag </h4><h6 class="ml-1 text-white inline-block pl-1">Senast uppdaterad: <strong>{{ last_updated|localtime }}</strong></h6>
 
     </nav>
     <div class="row mx-lg-1 mx-sm-2">
