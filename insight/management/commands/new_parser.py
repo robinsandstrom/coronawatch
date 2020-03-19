@@ -5,7 +5,7 @@ import requests
 import re
 import json
 
-from insight.models import CoronaCase, region_codes, city_codes, ScrapeSite
+from insight.models import Article, CoronaCase, region_codes, city_codes, ScrapeSite, Source
 from insight.backend import populate_regional_data
 
 from pprint import pprint
@@ -90,7 +90,28 @@ class NewsParser:
         except:
             print('Failed FHM')
 
+        self.parse_omni()
+
         self.parse_sir()
+
+    def parse_omni(self):
+        url = 'https://omni-content.omni.news/articles?topics=3ee2d7f6-56f1-4573-82b9-a4164cbdc902'
+        r = requests.get(url)
+        articles = r.json()['articles']
+        for article in articles:
+
+            article_dict = {
+                    'title': article[0]['title']['value'],
+                    'text' : article[0]['main_text']['paragraphs'][0]['text']['value'],
+                    'active': True
+                    }
+
+            a = Article.objects.get_or_create(**article_dict)[0]
+            source_url = 'https://omni.se/a/' + article[0]['article_id']
+            s = Source.objects.get_or_create(article=a, url=source_url)
+
+
+
 
     def parse_sir(self):
         site = ScrapeSite.objects.get(name='Svenska Intensivvårdsregistret')
@@ -250,7 +271,7 @@ class NewsParser:
     def add_new_case(self, infected, region, case_type, source=None):
         date = datetime.now().date()
         infected = int(infected)
-        
+
         if infected == 1:
             ny = 'nytt'
         else:

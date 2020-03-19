@@ -87,7 +87,7 @@ def about(request):
 
 def modeling(request):
     template = 'insight/modeling.html'
-    last_updated = CoronaCase.objects.all().first().time_created
+    last_updated = CoronaCase.objects.all().order_by('-time_created').last().time_created
     return render(request, template, context={
                                             'last_updated': last_updated,
                                             })
