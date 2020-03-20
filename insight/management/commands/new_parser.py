@@ -90,10 +90,16 @@ class NewsParser:
         except:
             print('Failed FHM')
 
-        self.parse_omni()
+        try:
+            self.parse_omni()
+        except:
+            print('Failed Omni')
 
-        self.parse_sir()
-
+        try:
+            self.parse_sir()
+        except:
+            pass
+            
     def parse_omni(self):
         url = 'https://omni-content.omni.news/articles?topics=3ee2d7f6-56f1-4573-82b9-a4164cbdc902'
         r = requests.get(url)

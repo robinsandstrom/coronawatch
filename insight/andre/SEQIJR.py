@@ -173,7 +173,7 @@ class SEQIJR:
                 'exposed': E_p.tolist(),
                 'quarantined': Q_p.tolist(),
                 'infective': I_p.tolist(),
-                'hospital_care': (0.01*I_p).tolist(),
+                'hospital_care': (0.1*I_p).tolist(),
                 'intensive_care': (0.02*I_p).tolist(),
                 'isolated': J_p.tolist(),
                 'removed': R_p.tolist(),

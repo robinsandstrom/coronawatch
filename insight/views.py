@@ -92,12 +92,14 @@ def modeling(request):
                                             'last_updated': last_updated,
                                             })
 def update(request):
+    return
     template = 'insight/about.html'
     np = NewsParser()
     np.run()
     return HttpResponse('updated')
 
 def get_curve(request):
+    return
     print('Getting curve')
 
     N = float(request.GET.get('N', None))
@@ -138,6 +140,7 @@ def get_curve(request):
 
 
 def get_numbers(request):
+    return
     tracked=['Sweden', 'Denmark', 'Norway', 'Spain', 'Germany']
     values = CountryTracker.objects.filter(total_cases__gte=100, country__in=tracked).order_by('date').values('date', 'total_cases','country')
 

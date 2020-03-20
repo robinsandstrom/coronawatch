@@ -273,7 +273,7 @@
         <div class="col-sm-12">
             <h1 class="text-muted text-center">Utveckling</h1>
         </div>
-        <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4" >
+        <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4" style="display:none;">
             <div class="card border-info mx-lg-0 my-2 z-depth-0 ">
                 <div class="card-body text-center text-danger">
                     <div id="chartdiv" class="chartdiv"></div>
@@ -496,7 +496,7 @@ am4core.ready(function() {
 
     var colors = ['#4285F4', '#2BBBAD', '#4B515D', '#3F729B', '#ff6f00', '#ff8f00', '#ffeb3b'];
 
-    var line_chart = createLineChart(swe_and_avg, prognosis);
+    //var line_chart = createLineChart(swe_and_avg, prognosis);
     createMapChart(data[8]);
     createIntensiveCareChart();
     realMapChart();
