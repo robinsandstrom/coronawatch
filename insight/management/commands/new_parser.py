@@ -95,11 +95,10 @@ class NewsParser:
         except:
             print('Failed Omni')
 
-        try:
-            self.parse_sir()
-        except:
-            pass
-            
+        self.parse_sir()
+        #except:
+        #    pass
+
     def parse_omni(self):
         url = 'https://omni-content.omni.news/articles?topics=3ee2d7f6-56f1-4573-82b9-a4164cbdc902'
         r = requests.get(url)
@@ -142,7 +141,10 @@ class NewsParser:
         o, summary = populate_regional_data(CoronaCase.objects.none())
 
         for case in intensive_care_cases:
-            summary[hospitals.get(case['Name'])]['value'] += case['Value']
+            try:
+                summary[hospitals.get(case['Name'])]['value'] += case['Value']
+            except:
+                pass
 
         for key in summary:
             summary[key]['kod'] = key
