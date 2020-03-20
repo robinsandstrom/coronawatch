@@ -183,8 +183,8 @@ class SEQIJR:
                 'key_figures': {
                     'RSS_aij': 0,
                     'RSS_deaths': 0,
-                    'R0': 0,
-                    'RC': 0,
+                    'R0': self.R_0(),
+                    'RC': self.R_c(),
                     'max_level': 0
                 }
                 }

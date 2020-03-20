@@ -87,7 +87,7 @@ def about(request):
 
 def modeling(request):
     template = 'insight/modeling.html'
-    last_updated = CoronaCase.objects.all().order_by('-time_created').last().time_created
+    last_updated = CoronaCase.objects.all().order_by('time_created').last().time_created
     return render(request, template, context={
                                             'last_updated': last_updated,
                                             })
@@ -119,9 +119,9 @@ def get_curve(request):
     country = request.GET.get('country', None)
 
     country = request.GET.get('country', None)
-    covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-14.xls'
+    covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-20.xlsx'
     population_filename = 'PopulationByCountry.xlsx'
-    files = FileReader()
+    files = FileReader(covid19_filename, population_filename)
     N = N * files.population(country)
 
     model = SEQIJR(N, Pi, mu, b,
