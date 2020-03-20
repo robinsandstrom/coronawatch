@@ -99,7 +99,6 @@ def update(request):
     return HttpResponse('updated')
 
 def get_curve(request):
-    return
     print('Getting curve')
 
     N = float(request.GET.get('N', None))
