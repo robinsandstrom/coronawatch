@@ -52,7 +52,7 @@ def index(request):
     italy = CountryTracker.objects.filter(country='Italy').order_by('date').last()
     denmark = CountryTracker.objects.filter(country='Denmark').order_by('date').last()
 
-    articles = Article.objects.all().order_by('time_created')[0:15]
+    articles = Article.objects.all().order_by('-time_created')[0:10]
 
     return render(request, template, context={
                                             'articles': articles,
@@ -133,7 +133,6 @@ def get_curve(request):
 
     data = model.calc(country, files, p_days)
     dump = json.dumps(data, indent=4, sort_keys=True, default=str)
-    print(dump)
 
     return HttpResponse(dump, content_type='application/json')
 
@@ -141,7 +140,10 @@ def get_curve(request):
 def get_numbers(request):
     tracked=['Sweden', 'Denmark', 'Norway', 'Spain', 'Germany']
     values = CountryTracker.objects.filter(total_cases__gte=100, country__in=tracked).order_by('date').values('date', 'total_cases','country')
+
+
     dump = json.dumps(list(values), indent=4, sort_keys=True, default=str)
+    print(dump)
     return HttpResponse(dump, content_type='application/json')
 
 

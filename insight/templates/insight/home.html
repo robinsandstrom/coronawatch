@@ -24,8 +24,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://www.amcharts.com/lib/4/core.js"></script>
     <script src="https://www.amcharts.com/lib/4/charts.js"></script>
-    <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
-    <script src="https://www.amcharts.com/lib/4/themes/material.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
     <script src="https://www.amcharts.com/lib/4/maps.js"></script>
     <script src="https://www.amcharts.com/lib/4/geodata/usaLow.js"></script>
@@ -336,12 +334,14 @@
                                 <td class="oneonerem">1126</td>
                                 <td class="oneonerem">1190</td>
                                 <td class="oneonerem">1295</td>
-                                <td class="text-muted oneonerem">-</td>
+                                <td class="text-muted oneonerem">1424</td>
                                 <td class="text-muted oneonerem">-</td>
                             </tr>
                         </tbody>
                     </table>
-                    <p class="text-muted">Prognosen är baserad på utvecklingen i andra länder. <a href="/about">Läs mer</a></p>
+                    <p class="text-muted">*Efter 12e mars slutade Sverige testa utanför riskgrupper och sjukvårdspersonal. Prognosen är baserad på data
+                        från innan ändringen och utfallen kommer därför sannolikt visa ett lägre antal än vad som faktiskt smittats.
+                        <a href="/about">Läs mer</a></p>
                     </div>
                 </div>
             </div>
@@ -778,7 +778,10 @@ am4core.ready(function() {
             series.dataFields.dateX = "date";
             series.name = name;
             //series.stroke = am4core.color('#e65100');
-            //series.f= am4core.color("#ffecb3");
+            series.fill = am4core.color("#ffbb33");
+            series.fillOpacity = 0.8;
+            series.stroke = am4core.color("#ffbb33");
+            series.strokeOpacity = 0.6;
 
             series.data = chart_data;
 
@@ -840,12 +843,9 @@ am4core.ready(function() {
                 series.dataFields.valueY = "value" ;
                 series.dataFields.dateX = "date";
                 series.name = name;
-                series.stroke = am4core.color('#e65100');
-                series.fill = am4core.color("#bf360c");
-
                 series.data = chart_data;
 
-                series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Intensivvårdade";
+                series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Nya intensivvårdade";
                 series.columns.template.fillOpacity = .85;
 
                 var columnTemplate = series.columns.template;
