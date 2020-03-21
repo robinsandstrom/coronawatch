@@ -21,6 +21,7 @@ hospitals = {
     'Gävle': '21',
     'Halmstad': '13',
     'Helsingborg': '12',
+    'Hudiksvall': '22',
     'Jönköping': '06',
     'K Huddinge IVA': '01',
     'K Solna BIVA': '01',
@@ -48,6 +49,7 @@ hospitals = {
     'SU Östra': '14',
     'SU Östra Inf': '14',
     'Sundsvall': '22',
+    'Sunderby': '25',
     'SUS Lund IVA': '12',
     'SUS Lund TIVA': '12',
     'SUS Malmö Inf': '12',
@@ -141,9 +143,11 @@ class NewsParser:
         o, summary = populate_regional_data(CoronaCase.objects.none())
 
         for case in intensive_care_cases:
-            region = self.search_region(case['Name'])
-            summary[region]['value'] += case['Value']
-
+            reg = hospitals.get(case['Name'])
+            if reg is None:
+                print(case['Name'])
+            else:
+                summary[reg]['value'] += case['Value']
 
         val = 0
         for key in summary:
@@ -151,9 +155,7 @@ class NewsParser:
             summary[key]['antal'] = summary[key]['value']
             val+=summary[key]['value']
 
-        print(val)
-
-        self.add_cases_from_summary(summary, site, case_type='intensive_care')
+        #self.add_cases_from_summary(summary, site, case_type='intensive_care')
 
 
 
