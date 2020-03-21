@@ -155,7 +155,7 @@ class NewsParser:
             summary[key]['antal'] = summary[key]['value']
             val+=summary[key]['value']
 
-        #self.add_cases_from_summary(summary, site, case_type='intensive_care')
+        self.add_cases_from_summary(summary, site, case_type='intensive_care')
 
 
 
