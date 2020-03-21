@@ -141,14 +141,17 @@ class NewsParser:
         o, summary = populate_regional_data(CoronaCase.objects.none())
 
         for case in intensive_care_cases:
-            try:
-                summary[hospitals.get(case['Name'])]['value'] += case['Value']
-            except:
-                pass
+            region = self.search_region(case['Name'])
+            summary[region]['value'] += case['Value']
 
+
+        val = 0
         for key in summary:
             summary[key]['kod'] = key
             summary[key]['antal'] = summary[key]['value']
+            val+=summary[key]['value']
+
+        print(val)
 
         self.add_cases_from_summary(summary, site, case_type='intensive_care')
 
