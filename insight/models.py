@@ -27,6 +27,40 @@ region_codes = {
     '00': 'Okänd region'
 }
 
+region_choices = (
+    ('01', 'Stockholm'),
+    ('03', 'Uppsala'),
+    ('04', 'Södermanland'),
+    ('05', 'Östergötland'),
+    ('06', 'Jönköping'),
+    ('07', 'Kronoberg'),
+    ('08', 'Kalmar'),
+    ('09', 'Gotland'),
+    ('10', 'Blekinge'),
+    ('12', 'Skåne'),
+    ('13', 'Halland'),
+    ('14', 'Västra Götaland'),
+    ('17', 'Värmland'),
+    ('18', 'Örebro'),
+    ('19', 'Västmanland'),
+    ('20', 'Dalarna'),
+    ('21', 'Gävleborg'),
+    ('22', 'Västernorrland'),
+    ('23', 'Jämtland'),
+    ('24', 'Västerbotten'),
+    ('25', 'Norrbotten'),
+    ('00', 'Okänd region'),
+)
+
+
+case_choices = (
+    ('confirmed', 'Bekräftad'),
+    ('intensive_care', 'Intensivvårdsfall'),
+    ('death', 'Dödsfall'),
+    ('healthy', 'Tillfrisknad'),
+)
+
+
 city_codes = {
     '0114':'Upplands Väsby',
     '0115':'Vallentuna',
@@ -351,12 +385,12 @@ class CountryTracker(models.Model):
 class CoronaCase(models.Model):
 
     date = models.DateField(blank=True, null=True)
-    region = models.CharField(max_length=255, blank=True, null=True)
+    region = models.CharField(max_length=255, choices=region_choices, blank=True, null=True)
     text = models.CharField(max_length=255, blank=True, null=True)
     infected = models.IntegerField(default=0)
     time_created = models.DateTimeField(auto_now=True)
     backup = models.BooleanField(default=True)
-    case_type = models.CharField(max_length=255, default='confirmed')
+    case_type = models.CharField(max_length=255, default='confirmed', choices=case_choices)
     source = models.ForeignKey('insight.ScrapeSite', blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
