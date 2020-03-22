@@ -145,7 +145,12 @@ class NewsParser:
         for case in intensive_care_cases:
             reg = hospitals.get(case['Name'])
             if reg is None:
-                print(case['Name'])
+                reg = self.search_region(case['Name'])
+                if reg != '00':
+                    try:
+                        summary[reg]['value'] += case['Value']
+                    except:
+                        pass
             else:
                 summary[reg]['value'] += case['Value']
 
