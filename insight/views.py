@@ -20,10 +20,10 @@ def index(request):
 
     data, swe_and_avg = load_csv()
 
-    all_cases = CoronaCase.objects.all().order_by('-time_created')[:30]
+    all_cases = CoronaCase.objects.all().order_by('-time_created')
     cases = CoronaCase.objects.filter(case_type='confirmed')
     intensive_care_cases = CoronaCase.objects.filter(case_type='intensive_care')
-    ordered_regional_data, regional_data = populate_regional_data(cases)
+    ordered_regional_data, regional_data = populate_regional_data(all_cases)
     agg_by_dates = aggregate_by_dates(cases)
     agg_iv_care_cases = aggregate_by_dates(intensive_care_cases)
 
@@ -58,7 +58,7 @@ def index(request):
                                             'articles': articles,
                                             'data': data,
                                             'swe_and_avg': swe_and_avg,
-                                            'cases': all_cases,
+                                            'cases': all_cases[0:30],
                                             'intensive_care_cases': intensive_care_cases,
                                             'regional_data': regional_data,
                                             'ordered_regional_data': ordered_regional_data,
