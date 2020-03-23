@@ -360,23 +360,13 @@
         <div class="col-sm-12 col-lg-5 px-sm-2 mt-sm-4">
             <div class="card h-100 border-info mr-lg-2 my-2 z-depth-0 ">
                 <div class="card-body px-sm-2 px-lg-1">
-                    <table class="table table-sm table-striped table-borderless" id="regional_table">
-                        <thead>
-                            <tr class="table blue-grey lighten-1 text-white">
-                                <th>Region</th>
-                                <th>Infekterade</th>
-                                <th>Intensivvårdade</th>
-                                <th>Döda</th>
-                            </tr>
-                        </thead>
+                    <table class="table table-sm table-borderless" id="regional_table">
                         <tbody>
-                        {% for region, data in ordered_regional_data.items %}
-                            {% if data.confirmed > 0 %}
+                        {% for region, infected in ordered_regional_data.items %}
+                            {% if infected.value > 0 %}
                             <tr>
-                                <td class="text-muted onerem"> {{ data.region }}</td>
-                                <td class="oneonerem"><strong>{{ data.confirmed }}</strong></td>
-                                <td class="oneonerem"><strong>{{ data.intensive_care }}</strong></td>
-                                <td class="oneonerem"><strong>{{ data.death }}</strong></td>
+                                <td class="text-muted onerem"> {{ infected.region }}</td>
+                                <td class="oneonerem"><strong>{{ infected.value }}</strong></td>
                             </tr>
                             {% endif %}
                         {% endfor %}
@@ -595,11 +585,11 @@ am4core.ready(function() {
 
           // Set heatmap values for each state
           polygonSeries.data = [
-              {% for region, data in regional_data.items %}
-                {% if data.confirmed > 0 %}
+              {% for region, infection in regional_data.items %}
+                {% if infection.value > 0 %}
                 {
                   id: {{ region }},
-                  value: {{ data.confirmed }}
+                  value: {{ infection.value }}
                 },
                 {% endif %}
             {% endfor %}
