@@ -202,7 +202,7 @@ class NewsParser:
                     print('Inserted for', key)
                     c.infected = infe
                     c.source = site
-                    c.text = 'nytt intensivvårdsfall'
+                    c.text = str(c.infected) + ' intensivvårdsfall idag i ' + key
                     c.save()
 
 
