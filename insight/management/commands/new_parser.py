@@ -66,6 +66,56 @@ hospitals = {
     'Örnsköldsvik': '22',
 }
 
+hospital_codes = {
+'Blekinge': ['37', '87'],
+ 'Dalarna': ['27', '41'],
+ 'Gotland': ['61'],
+ 'Gävleborg': ['46', '4', '44'],
+ 'Halland': ['29', '35'],
+ 'Jämtland': ['23'],
+ 'Jönköping': ['15', '14', '16'],
+ 'Kalmar': ['1', '3'],
+ 'Kronoberg': ['49', '36'],
+ 'Norrbotten': ['45', '70', '68', '48'],
+ 'Skåne': ['54', '10', '73', '30', '74', '75', '88', '24', '53'],
+ 'Stockholm': ['6',
+               '43',
+               '62',
+               '72',
+               '95',
+               '42',
+               '77',
+               '9',
+               '8',
+               '7',
+               '58',
+               '5',
+               '89'],
+ 'Sörmland': ['64', '57'],
+ 'Uppsala': ['55', '90', '56', '79', '78'],
+ 'V. Götaland': ['39',
+                 '28',
+                 '52',
+                 '34',
+                 '92',
+                 '31',
+                 '33',
+                 '59',
+                 '19',
+                 '22',
+                 '20',
+                 '18',
+                 '21',
+                 '86',
+                 '38'],
+ 'Värmland': ['25', '17', '26'],
+ 'Västerbotten': ['71', '51', '47', '81'],
+ 'Västernorrland': ['32', '66', '67'],
+ 'Västmanland': ['65'],
+ 'Örebro': ['84', '85', '50', '83'],
+ 'Östergötland': ['91', '11', '82', '40', '12']
+ }
+
 class NewsParser:
 
     def __init__(self):
@@ -97,9 +147,10 @@ class NewsParser:
         except:
             print('Failed Omni')
 
-        self.parse_sir()
-        #except:
-        #    pass
+        try:
+            self.parse_sir()
+        except:
+            pass
 
     def parse_omni(self):
         url = 'https://omni-content.omni.news/articles?topics=3ee2d7f6-56f1-4573-82b9-a4164cbdc902'
@@ -123,44 +174,36 @@ class NewsParser:
     def parse_sir(self):
         site = ScrapeSite.objects.get(name='Svenska Intensivvårdsregistret')
         url = site.url
-        payload = {
-            'highChartUrl': '/api/reports/GenerateHighChart',
-            'tableUrl': 'value2',
-            'chartWidth': 900,
-            'reportName': 'inrapp',
-            'startdat': '2019-03-19',
-            'stopdat': '2020-03-19',
-            'sasong[0]': '2019'
-            }
+        for key, value in hospital_codes.items():
+            payload = {
+                'highChartUrl': '/api/reports/GenerateHighChart',
+                'tableUrl': 'value2',
+                'chartWidth': 900,
+                'reportName': 'vtfstart-corona',
+                'startdat': '2020-01-01',
+                'stopdat': str(datetime.now().date()),
+                'sasong[0]': '2019'
+                }
+            for j in range(len(value)):
+                payload['avd['+str(j)+']']=value[j]
 
-        r = requests.get(url)
-        r = requests.post(url, data=payload)
+            r = requests.get(url)
+            r = requests.post(url, data=payload)
+            intensive_care_cases = r.json()['ChartSeries']
 
-        previous_cases = CoronaCase.objects.filter(case_type='intensive_care')
-        ord, regional_data = populate_regional_data(previous_cases)
+            region_code = self.search_region(key)
 
-        intensive_care_cases = r.json()['ChartSeries'][2]['Data']
-        o, summary = populate_regional_data(CoronaCase.objects.none())
-
-        for case in intensive_care_cases:
-            reg = hospitals.get(case['Name'])
-            if reg is None:
-                reg = self.search_region(case['Name'])
-                if reg != '00':
-                    try:
-                        summary[reg]['value'] += case['Value']
-                    except:
-                        pass
-            else:
-                summary[reg]['value'] += case['Value']
-
-        val = 0
-        for key in summary:
-            summary[key]['kod'] = key
-            summary[key]['antal'] = summary[key]['value']
-            val+=summary[key]['value']
-
-        self.add_cases_from_summary(summary, site, case_type='intensive_care')
+            if len(intensive_care_cases) > 0:
+                data = intensive_care_cases[0]['Data']
+                for d in data:
+                    date = datetime.strptime(d['Name'], '%Y-%m-%d %H:%M:%S').date()
+                    infe = int(d['Value'])
+                    c = CoronaCase.objects.get_or_create(region=region_code, date=date, case_type='intensive_care')[0]
+                    print('Inserted for', key)
+                    c.infected = infe
+                    c.source = site
+                    c.text = 'nytt intensivvårdsfall'
+                    c.save()
 
 
 
@@ -280,7 +323,7 @@ class NewsParser:
 
             region_code = region_dict['kod']
             current_value = region_dict['antal']
-            previous_value = regional_data[region_code]['value']
+            previous_value = regional_data[region_code][case_type]
 
             if current_value > previous_value:
                 infected = current_value - previous_value

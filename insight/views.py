@@ -20,23 +20,22 @@ def index(request):
 
     data, swe_and_avg = load_csv()
 
-    all_cases = CoronaCase.objects.all().order_by('-time_created')[:30]
-    cases = CoronaCase.objects.filter(case_type='confirmed')
-    intensive_care_cases = CoronaCase.objects.filter(case_type='intensive_care')
-    ordered_regional_data, regional_data = populate_regional_data(cases)
-    agg_by_dates = aggregate_by_dates(cases)
-    agg_iv_care_cases = aggregate_by_dates(intensive_care_cases)
+    all_cases = CoronaCase.objects.all().order_by('-time_created')
+    ordered_regional_data, regional_data = populate_regional_data(all_cases)
 
-    prognosis = data[10]
+    aggregated = aggregate_by_dates(all_cases)
 
+    cases = all_cases.filter(case_type='confirmed')
     total = cases.aggregate(Sum('infected'))['infected__sum'] or 0
-    new_cases = cases.filter(date__gte=date_from)
+    new_cases = cases.filter(case_type='confirmed', date__gte=date_from)
     total_new = new_cases.aggregate(Sum('infected'))['infected__sum'] or 0
+
     death_cases = CoronaCase.objects.filter(case_type='death')
     total_deaths = death_cases.aggregate(Sum('infected'))['infected__sum'] or 0
     new_death_cases = death_cases.filter(date__gte=date_from)
     total_new_deaths = new_death_cases.aggregate(Sum('infected'))['infected__sum'] or 0
 
+    intensive_care_cases = all_cases.filter(case_type='intensive_care')
     total_ivs = intensive_care_cases.aggregate(Sum('infected'))['infected__sum'] or 0
     new_iv_cases = intensive_care_cases.filter(date__gte=date_from)
     total_new_ivs = new_iv_cases.aggregate(Sum('infected'))['infected__sum'] or 0
@@ -46,19 +45,12 @@ def index(request):
     except:
         last_updated = datetime.now()
 
-
-    global_ = CountryTracker.objects.filter(country='Global').order_by('date').last()
-    norway = CountryTracker.objects.filter(country='Norway').order_by('date').last()
-    italy = CountryTracker.objects.filter(country='Italy').order_by('date').last()
-    denmark = CountryTracker.objects.filter(country='Denmark').order_by('date').last()
-
     articles = Article.objects.all().order_by('-time_created')[0:10]
 
     return render(request, template, context={
                                             'articles': articles,
                                             'data': data,
-                                            'swe_and_avg': swe_and_avg,
-                                            'cases': all_cases,
+                                            'cases': all_cases.filter(text__isnull=False)[0:30],
                                             'intensive_care_cases': intensive_care_cases,
                                             'regional_data': regional_data,
                                             'ordered_regional_data': ordered_regional_data,
@@ -66,16 +58,10 @@ def index(request):
                                             'total_deaths': total_deaths,
                                             'total_ivs': total_ivs,
                                             'total_new_ivs': total_new_ivs,
-                                            'global': global_,
-                                            'norway': norway,
-                                            'italy': italy,
-                                            'denmark': denmark,
-                                            'prognosis': prognosis,
                                             'new_cases': total_new,
                                             'total_new_deaths': total_new_deaths,
                                             'last_updated': last_updated,
-                                            'agg_by_dates': agg_by_dates,
-                                            'agg_iv_care_cases': agg_iv_care_cases,
+                                            'aggregated': aggregated,
                                             })
 
 def about(request):

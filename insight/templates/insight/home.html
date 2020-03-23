@@ -45,7 +45,7 @@
 
         .chartdiv {
              width: 100%;
-             height: 60vh;
+             height: 50vh;
         }
 
         .barcharts{
@@ -63,6 +63,10 @@
             }
             .border-right{
                 border-right:none !important;
+            }
+
+            #mapchart{
+                height: 80vh;
             }
         }
 
@@ -132,9 +136,9 @@
         <h4 class="text-white ml-auto pr-1 inline-block border-right">+{{ new_cases }} nya fall idag </h4><h6 class="ml-1 text-white inline-block pl-1">Senast uppdaterad: <strong>{{ last_updated|localtime }}</strong></h6>
 
     </nav>
-    <div class="row mx-lg-1 mx-sm-2">
-        <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4 mt-lg-2">
-            <div class="card list-group-item-warning border-info mx-sm-0 my-3 z-depth-0">
+    <div class="row mx-lg-5 mx-sm-2">
+        <div class="col-sm-12 offset-lg-0 col-lg-12 px-sm-2 mt-sm-4 mt-lg-2">
+            <div class="card list-group-item-warning  mx-sm-0 my-3 z-depth-0">
                 <div class="card-body table-responsive list-group-item-warning py-0 off-white">
                     <h5 class="my-1 text-uppercase inline-block text-uppercase">{{ articles.first.title }}</h5>
                     <p class="mt-0">
@@ -148,207 +152,36 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-12">
-            <h1 class="text-muted text-center mb-0">Sverige</h1>
-        </div>
-        <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-2">
+        <div class="col-sm-12 offset-lg-0 col-lg-12 px-sm-2 mt-sm-2">
             <div class="h-100 mx-sm-0 my-2 z-depth-0">
                     <div class="row">
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-info">
+                            <div class="card text-center  z-depth-0">
                                 <h2 class="text-muted my-1 py-0">Totalt</h2>
                                 <h1 class="my-0 py-0">{{ total }}</h1>
                                 <h5 class="mb-1 pb-1 mt-0 text-muted">+{{ new_cases }} nya idag</h5>
                             </div>
                         </div>
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-info">
-                                <h2 class="text-muted my-1 py-0">Dödsfall</h2>
-                                <h1 class="text-danger my-0 py-0">{{ total_deaths }}</h1>
-                                <h5 class="mb-1 pb-1 mt-0 text-muted">+{{ total_new_deaths }} dödsfall</h5>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-info">
-                                <h2 class="text-muted my-1 py-0">Intensivvårdade</h2>
+                            <div class="card text-center  z-depth-0">
+                                <h2 class="text-muted my-1 py-0">Nya intensivvårdade</h2>
                                 <h1 class="text-info my-0 py-0">{{ total_ivs }}</h1>
                                 <h5 class="mb-1 pb-1 mt-0 text-waning">+{{ total_new_ivs }}</h5>
                             </div>
                         </div>
-                    </div>
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <h1 class="text-muted text-center">Ökning</h1>
-        </div>
-        <div class="col-sm-12 offset-lg-1 col-lg-5 px-sm-2 mt-sm-4 mt-lg-2">
-
-            <div class="card border-info mr-lg-2 mx-sm-0 my- z-depth-0">
-                    <div class="card-header">
-                        Nya fall
-                    </div>
-                    <div class="card-body text-center text-danger">
-                        <div id="bar_chart" class="chartdiv barcharts"></div>
-
-                    </div>
-                </div>
-        </div>
-        <div class="col-sm-12 col-lg-5 px-sm-2 mt-sm-4 mt-lg-2">
-            <div class="card border-info mr-lg-2 mx-sm-0 mb-3 z-depth-0">
-                    <div class="card-header">
-                        Intensivvårdade
-                    </div>
-                    <div class="card-body text-center text-danger">
-                        <div id="bar_chart_intensive" class="chartdiv barcharts"></div>
-
-                    </div>
-                </div>
-        </div>
-
-        <div class="col-sm-12">
-            <h1 class="text-muted text-center">Globalt</h1>
-        </div>
-        <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-2">
-            <div class="h-100 border-info mx-sm-0 my-2 z-depth-0">
-                <div class="row">
-                    <div class="col-lg-6 my-lg-4 col-sm-12 text-center">
-                        <div class="card text-center border-info">
-                            {% load l10n %}
-                            <h2 class="text-muted my-1 py-0">Totalt</h2>
-                            <h1 class="my-0 py-0">{{ global.total_cases }}</h1>
-                            <h5 class="text-white mb-1 pb-1 mt-0 text-muted">+{{ global.new_cases }} nya fall</h5>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 my-lg-4 col-sm-12 text-center">
-                        <div class="card text-center border-info">
-                            <h2 class="text-muted my-1 py-0">Dödsfall</h2>
-                            <h1 class="text-danger my-0 py-0">{{ global.total_deaths }}</h1>
-                            <h5 class="text-white mb-1 pb-1 mt-0 text-muted">+{{ global.new_deaths }} nya dödsfall</h5>
-                        </div>
-                    </div>
-                </div>
-        </div>
-        </div>
-
-        <div class="col-sm-12">
-            <h1 class="text-muted text-center">Andra länder</h1>
-        </div>
-        <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4" >
-            <div class="border-info mx-lg-0 my-2 z-depth-0 ">
-                    <div class="row my-5">
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-info">
-                                <div class="pt-2">
-                                    <img src="{% static 'denmark.svg' %}" class="virus-logo inline-block pr-1 mt-2 mb-1 m-0">
-                                </div>
-                                <h4 class="small text-uppercase mt-0 my-1 text-muted">Danmark</h4>
-                                <h1 class="font-weight-bold mt-0 mb-0" >{{ denmark.total_cases }}</h1>
-                                <h4 class="mt-0 mb-2">(+{{ denmark.new_cases }})</h4>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-info">
-                                <div class="pt-2">
-                                    <img src="{% static 'italy.svg' %}" class="virus-logo inline-block pr-1 mt-2 mb-1 m-0">
-                                </div>
-                                <h4 class="small text-uppercase mt-0 my-1 text-muted">Italien</h4>
-                                <h1 class="font-weight-bold mt-0 mb-0">{{ italy.total_cases }}</h1>
-                                <h4 class="mt-0 mb-2">(+{{ italy.new_cases }})</h4>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
-                            <div class="card text-center border-info">
-                                <div class="pt-2">
-                                    <img src="{% static 'norge.svg' %}" class="virus-logo inline-block pr-1 mt-2 mb-1 m-0">
-                                </div>
-                                <h4 class="small text-uppercase mt-0 my-1 text-muted">Norge</h4>
-                                <h1 class="font-weight-bold mt-0 mb-0">{{ norway.total_cases }}</h1>
-                                <h4 class="mt-0 mb-2">(+{{ norway.new_cases }})</h4>
+                            <div class="card text-center z-depth-0 ">
+                                <h2 class="text-muted my-1 py-0">Nya dödsfall</h2>
+                                <h1 class="text-danger my-0 py-0">{{ total_deaths }}</h1>
+                                <h5 class="mb-1 pb-1 mt-0 text-muted">+{{ total_new_deaths }} dödsfall</h5>
                             </div>
                         </div>
                     </div>
             </div>
         </div>
 
-        <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4" style="display:none;">
-            <div class="card border-info mx-lg-0 my-2 z-depth-0 ">
-                <div class="card-body text-center text-danger">
-                    <div id="chartdiv" class="chartdiv"></div>
-                    <p class="text-muted">Källa: ECDC, European Centre for Disease Prevention and Control. </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <h1 class="text-muted text-center">Prognos</h1>
-        </div>
-        <div class="col-sm-12 offset-lg-1 col-lg-10 px-sm-2 mt-sm-4 mt-lg-2">
-            <div class="card border-info mx-sm-0 my-3 z-depth-0">
-                <div class="card-body table-responsive text-center">
-                    <table class="table table-borderless" id="prognosis_table">
-                        <tbody>
-                            <tr>
-                                <td scope="row" class ="text-muted onerem">Datum</th>
-                                <td class="text-muted onerem">8/3</td>
-                                <td class="text-muted onerem">9/3</td>
-                                <td class="text-muted onerem">10/3</td>
-                                <td class="text-muted onerem">11/3</td>
-                                <td class="text-muted onerem">12/3</td>
-                                <td class="text-muted onerem">13/3</td>
-                                <td class="text-muted onerem">14/3</td>
-                                <td class="text-muted onerem">15/3</td>
-                                <td class="text-muted onerem">16/3</td>
-                                <td class="text-muted onerem">17/3</td>
-                                <td class="text-muted onerem">18/3</td>
-                                <td class="text-muted onerem">19/3</td>
-                                <td class="text-muted onerem">20/3</td>
-                            </tr>
-                            <tr>
-                                <td scope="row" class="text-muted onerem">Prognos</th>
-                                <td class="text-danger oneonerem">202</td>
-                                <td class="text-danger oneonerem">272</td>
-                                <td class="text-danger oneonerem">333</td>
-                                <td class="text-danger oneonerem">480</td>
-                                <td class="text-danger oneonerem">674</td>
-                                <td class="text-danger oneonerem">908</td>
-                                <td class="text-danger oneonerem">1248</td>
-                                <td class="text-danger oneonerem">1681</td>
-                                <td class="text-danger oneonerem">2266</td>
-                                <td class="text-danger oneonerem">3053</td>
-                                <td class="text-danger oneonerem">4114</td>
-                                <td class="text-danger oneonerem">5544</td>
-                                <td class="text-danger oneonerem">7472+</td>
-                            </tr>
-                            <tr>
-                                <td scope="row" class="text-muted onerem">Utfall</th>
-                                <td class="oneonerem">190</td>
-                                <td class="oneonerem">261</td>
-                                <td class="oneonerem">356</td>
-                                <td class="oneonerem">500</td>
-                                <td class="oneonerem">687</td>
-                                <td class="oneonerem">829</td>
-                                <td class="oneonerem">967</td>
-                                <td class="oneonerem">1032</td>
-                                <td class="oneonerem">1126</td>
-                                <td class="oneonerem">1190</td>
-                                <td class="oneonerem">1295</td>
-                                <td class="text-muted oneonerem">1424</td>
-                                <td class="text-muted oneonerem">1652</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p class="text-muted">*Efter 12e mars slutade Sverige testa utanför riskgrupper och sjukvårdspersonal. Prognosen är baserad på data
-                        från innan ändringen och utfallen kommer därför sannolikt visa ett lägre antal än vad som faktiskt smittats.
-                        <a href="/about">Läs mer</a></p>
-                    </div>
-                </div>
-            </div>
-
-        <div class="col-sm-12">
-            <h1 class="text-muted text-center">Geografisk smittspridning</h1>
-        </div>
-        <div class="col-sm-12 offset-lg-1 col-lg-5 px-sm-2 mt-sm-4" >
-            <div class="card h-100 border-info mr-lg-2 my-2 z-depth-0 ">
+        <div class="col-sm-12 offset-lg-0 col-lg-4 px-sm-2 mt-sm-1 mt-lg-0" >
+            <div class="card h-100  mr-lg-2 my-2 z-depth-0 ">
                 <div class="card-body">
                     <div id="mapchart" class="chartdiv">
 
@@ -357,16 +190,26 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-lg-5 px-sm-2 mt-sm-4">
-            <div class="card h-100 border-info mr-lg-2 my-2 z-depth-0 ">
-                <div class="card-body px-sm-2 px-lg-1">
-                    <table class="table table-sm table-borderless" id="regional_table">
+        <div class="col-sm-12 col-lg-8 px-sm-2 mt-sm-1 mt-lg-0">
+            <div class="card h-100  mr-lg-2 my-2 z-depth-0 ">
+                <div class="card-body px-sm-2 px-lg-0 pt-lg-0">
+                    <table class="table table-striped table-sm table-borderless" id="regional_table">
+                        <thead>
+                            <tr class="table blue-grey text-white">
+                                <th>Region</th>
+                                <th>Infekterade</th>
+                                <th>Intensivvårdade</th>
+                                <th>Döda</th>
+                            </tr>
+                        </thead>
                         <tbody>
-                        {% for region, infected in ordered_regional_data.items %}
-                            {% if infected.value > 0 %}
+                        {% for region, data in ordered_regional_data.items %}
+                            {% if data.confirmed > 0 %}
                             <tr>
-                                <td class="text-muted onerem"> {{ infected.region }}</td>
-                                <td class="oneonerem"><strong>{{ infected.value }}</strong></td>
+                                <td class="text-muted onerem">{{ data.region }}</td>
+                                <td class="oneonerem"><strong>{{ data.confirmed }}</strong></td>
+                                <td class="oneonerem"><strong>{{ data.intensive_care }}</strong></td>
+                                <td class="oneonerem"><strong>{{ data.death }}</strong></td>
                             </tr>
                             {% endif %}
                         {% endfor %}
@@ -376,70 +219,93 @@
             </div>
         </div>
 
-        <div class="col-lg-2">
+        <div class="col-sm-12 offset-lg-0 col-lg-12 px-sm-2 mt-sm-2">
+
+            <div class="row">
+
+                <div class="col-sm-12 col-lg-4 px-sm-3 mt-sm-4 mt-lg-2">
+
+                    <div class="card  mr-lg-0 mx-sm-0 my-0 z-depth-0">
+                            <div class="card-header">
+                                Nya fall
+                            </div>
+                            <div class="card-body pl-0 text-center text-danger">
+                                <div id="bar_chart" class="chartdiv barcharts"></div>
+
+                            </div>
+                        </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4 mt-lg-2">
+                    <div class="card  mr-lg-0 mx-sm-0 mb-3 z-depth-0">
+                            <div class="card-header">
+                                Intensivvårdade
+                            </div>
+                            <div class="card-body pl-0 text-center text-danger">
+                                <div id="bar_chart_intensive" class="chartdiv barcharts"></div>
+
+                            </div>
+                        </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4 mt-lg-2">
+                    <div class="card  mr-lg-0 mx-sm-0 mb-3 z-depth-0">
+                            <div class="card-header">
+                                Döda
+                            </div>
+                            <div class="card-body pl-0 text-center text-danger">
+                                <div id="death_chart" class="chartdiv barcharts"></div>
+
+                            </div>
+                        </div>
+                </div>
+
+            </div>
 
         </div>
-        <div class="col-sm-12">
-            <h1 class="text-muted text-center mt-4 mb-0">Senaste</h1>
 
-        </div>
-        <div class="col-lg-5 offset-lg-1 col-sm-12 px-sm-2 mt-sm-1">
-            <div class="card border-info mx-lg-0 my-3 z-depth-0 ">
-                <div class="card-body table-responsive text-left">
-                    <div class="col-sm-12 px-sm-2 mt-sm-4 mt-lg-2">
-                        <ul class="list-group">
-                            {% for article in articles %}
-                                <li class="list-group-item">
-                                    <h5 class="mb-1 text-uppercase inline-block text-uppercase">{{ article.title }}</h5>
-                                    <p class="mt-0">
-                                        {{ article.text }}
-                                        {% for source in article.source_set.all %}
-                                            <a href="{{source.url}}">[{{forloop.counter}}]</a>
-                                        {% endfor %}
-                                    </p>
-                                </li>
-                            {% endfor %}
-                        </ul>
-
+        <div class="col-lg-6 col-sm-12 px-sm-2 mt-sm-1">
+            <div class="list-group ">
+                <li class="list-group-item list-group-item-secondary">Nyheter</li>
+                {% for article in articles %}
+                <li class="list-group-item p-4">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h3 class="mb-2 h3">{{ article.title }}</h3>
                     </div>
-                </div>
+                    <p class="mb-2 text-muted">
+                        {{ article.text }}
+                        {% for source in article.source_set.all %}
+                        <small>
+                            <a href="{{source.url}}">[{{forloop.counter}}]</a>
+                        </small>
+                        {% endfor %}
+                    </p>
+                </li>
+                {% endfor %}
             </div>
-
         </div>
-        <div class="col-lg-5 col-sm-12 px-sm-2 mt-sm-1">
-            <div class="card border-info mx-lg-0 my-3 z-depth-0 ">
-                <div class="card-body table-responsive text-center">
-                    <table class="table table-sm text-left">
-                        <thead>
-                            <tr>
-                                <th class="text-muted">Rubrik</th>
-                                <th class="text-muted">Datum</th>
-                                <th class="text-left">Källa</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for case in cases %}
-                            <tr>
-                                <td style="border:none;">{{ case.text }}</td>
-                                <td style="white-space: nowrap; border:none;">{{ case.time_created|verbose_date }}</td>
-                                {% if case.source %}
-                                <td class="text-left" style="white-space: nowrap; border:none;"><a class="text-center text-info" href="{{ case.source.verbose_url }}">{{ case.source.name }}</a></td>
-                                {% else %}
-                                <td style="white-space: nowrap; border:none;"></td>
-                                {% endif %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    <p class="text-muted"><a href="/about" class="text-info">Källor</a></p>
-                </div>
-            </div>
 
+        <div class="col-lg-6 col-sm-12 px-sm-2 mt-sm-1">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-secondary">Senaste fall</li>
+
+                {% for case in cases %}
+                <li class="list-group-item">
+                  <div class="md-v-line"></div><i class="mr-4 pr-3">{{ case.time_created|verbose_date }}</i> {{ case.text }}
+                  {% if case.source %}
+                    (<a class="text-center text-info" href="{{ case.source.verbose_url }}">{{ case.source.name }}</a>)
+                  {% else %}
+
+                  {% endif %}
+                </li>
+                {% endfor %}
+
+            </ul>
         </div>
     </div>
 
     <div class="col-lg-10 offset-lg-1 col-sm-12 px-s-2 mt-sm-4 mb-3">
-        <div class="card border-info mx-lg-1 my-3 z-depth-0 mb-3">
+        <div class="card  mx-lg-1 my-3 z-depth-0 mb-3">
             <div class="card-body text-center text-white">
                 Kontakt: <a href="mailto:kontakt@coronawatch.se" class="text-info">kontakt@coronawatch.se</a>
             </div>
@@ -479,78 +345,41 @@ am4core.ready(function() {
     am4core.useTheme(am4themes_animated);
     // Themes end
     var data = {{ data|safe }}
-    var swe_and_avg = {{ swe_and_avg }}
-    var prognosis = {{ prognosis }}
-
-    var country_trans = {
-        'Italy': 'Italien',
-        'Sweden': 'Sverige',
-        'Denmark': 'Danmark',
-        'Norway': 'Norge',
-        'France': 'Frankrike',
-        'Germany': 'Tyskland',
-        'Spain': 'Spanien',
-    }
 
     var colors = ['#4285F4', '#2BBBAD', '#4B515D', '#3F729B', '#ff6f00', '#ff8f00', '#ffeb3b'];
 
-    //var line_chart = createLineChart(swe_and_avg, prognosis);
-    createMapChart(data[8]);
-    createIntensiveCareChart();
-    realMapChart();
-    //drawCurveChart();
+    createMapChart();
 
-    var align_me = 'right';
+    confirmed_data = [];
+    ic_data = [];
+    death_data = [];
 
-    var w = parseInt(window.innerWidth);
-    if (w < 500){
-        transpose(1);
-        align_me = 'bottom';
-    }
+    {% for key, dict in aggregated.items %}
 
-    function createLineChart(swe_and_avg, prognosis){
+        confirmed = parseInt({{dict.confirmed}})
+        ic = parseInt({{dict.intensive_care}})
+        death = parseInt({{dict.death}})
 
-        // Create chart instance
-        var chart = am4core.create("chartdiv", am4charts.XYChart);
-        // Create axes
-        var valueAxisX = chart.xAxes.push(new am4charts.ValueAxis());
-        var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
-        valueAxisX.title.text = "Dagar sen 100:e fallet";
-        valueAxisX.max = 15;
+        var seriesdate = Date.parse('{{key}}');
 
-        valueAxisY.logarithmic = true;
+        var confItem = {date: seriesdate,  value: confirmed};
 
-        valueAxisX.renderer.grid.template.disabled = true;
-        //valueAxisY.renderer.grid.template.disabled = true;
+        var icItem = {date: seriesdate,  value: ic};
 
-        chart.legend = new am4charts.Legend();
-        chart.legend.position = 'bottom';
-        chart.legend.scrollable = false;
-        chart.mouseWheelBehavior = "none";
-        chart.chartContainer.wheelable = false;
-        chart.panEventsEnabled = false;
-        chart.chartContainer.pan = false;
-        //chart.chartContainer.ChartCursor.zoomable = false;
-        chart.tapToActivate = true;
-        chart.tapTimeout = 5000;
-        chart.dragGrip.disabled = false;
+        var deathItem = {date: seriesdate,  value: death};
+
+        confirmed_data.push(confItem);
+        ic_data.push(icItem);
+        death_data.push(deathItem);
+
+    {% endfor %}
+
+    createIntensiveCareChart('bar_chart', confirmed_data, '607d8b', 'bekräftade fall');
+    createIntensiveCareChart('bar_chart_intensive', ic_data, '00b8d4', 'intensivvårdsfall');
+    createIntensiveCareChart('death_chart', death_data, 'bf360c', 'dödsfall');
 
 
-        let scrollbarX = new am4core.Scrollbar();
-        scrollbarX.marginBottom = 20;
-        chart.scrollbarX = scrollbarX;
-        scrollbarX.interactionsEnabled = false;
-        chart.scrollbarX.disabled = true;
-        chart.scrollbarX.startGrip.disabled = true;
-        chart.scrollbarX.endGrip.disabled = true;
-        chart.seriesContainer.draggable = false;
-        chart.seriesContainer.resizable = false;
-        chart.mouseWheelBehavior = "none";
-
-        return chart;
-    }
-
-    function realMapChart(data){
+    function createMapChart(data){
         var chart = am4core.create("mapchart", am4maps.MapChart);
 
         // Set map definition
@@ -576,7 +405,7 @@ am4core.ready(function() {
           polygonSeries.heatRules.push({
             property: "fill",
             target: polygonSeries.mapPolygons.template,
-            min: am4core.color("#ffecb3"),
+            min: am4core.color("#cfd8dc"),
             max: am4core.color("#bf360c"),
           });
 
@@ -585,11 +414,11 @@ am4core.ready(function() {
 
           // Set heatmap values for each state
           polygonSeries.data = [
-              {% for region, infection in regional_data.items %}
-                {% if infection.value > 0 %}
+              {% for region, data in regional_data.items %}
+                {% if data.confirmed > 0 %}
                 {
                   id: {{ region }},
-                  value: {{ infection.value }}
+                  value: {{ data.confirmed }}
                 },
                 {% endif %}
             {% endfor %}
@@ -634,195 +463,11 @@ am4core.ready(function() {
           chart.mouseWheelBehavior = "none";
     }
 
-    function transpose(id){
+        function createIntensiveCareChart(id, data, color, fall_typ){
 
-        $("#prognosis_table").each(function() {
-            var $this = $(this);
-            var newrows = [];
-            $this.find("tr").each(function(){
-                var i = 0;
-                $(this).find("td").each(function(){
-                    i++;
-                    if(newrows[i] === undefined) { newrows[i] = $("<tr></tr>"); }
-                    newrows[i].append($(this));
-                });
-            });
-            $this.find("tr").remove();
-            $.each(newrows, function(){
-                $this.append(this);
-            });
-        });
+                var chart = am4core.create(id, am4charts.XYChart);
 
-    }
-
-    function drawCurveChart(data){
-
-            // Create chart
-            var chart = am4core.create("curvechart", am4charts.XYChart);
-            chart.paddingRight = 20;
-
-            chart.data = generateChartData();
-
-            var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-            dateAxis.baseInterval = {
-              "timeUnit": "minute",
-              "count": 1
-            };
-            dateAxis.tooltipDateFormat = "d MMMM";
-
-            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-            valueAxis.tooltip.disabled = true;
-            valueAxis.title.text = "Unique visitors";
-
-            var series = chart.series.push(new am4charts.LineSeries());
-            series.dataFields.dateX = "date";
-            series.dataFields.valueY = "visits";
-            series.tooltipText = "Smittade: [bold]{valueY}[/]%";
-            series.fillOpacity = 0.3;
-
-
-            chart.cursor = new am4charts.XYCursor();
-            chart.cursor.lineY.opacity = 0;
-            chart.scrollbarX = new am4charts.XYChartScrollbar();
-            chart.scrollbarX.series.push(series);
-
-
-            dateAxis.keepSelection = true;
-
-        }
-
-        function generateChartData(){
-        var dp = [0.00010392, 0.00011905, 0.00014173, 0.00016961, 0.0002012, 0.00023558,
-                0.00027216, 0.0003106, 0.00035071, 0.00039236, 0.00043552, 0.00048018,
-                0.00052633, 0.00057402, 0.00062327, 0.00067412, 0.00072663, 0.00078083,
-                0.00083678, 0.00089453, 0.00095415, 0.00101568, 0.00107918, 0.00114471,
-                0.00121234, 0.00128212, 0.00135413, 0.00142843, 0.00150509, 0.00158417,
-                0.00166575, 0.00174991, 0.00183672, 0.00192625, 0.00201858, 0.00211381,
-                0.002212, 0.00231325, 0.00241764, 0.00252525, 0.00263619, 0.00275054,
-                0.0028684, 0.00298986, 0.00311503, 0.00324399, 0.00337687, 0.00351375,
-                0.00365474, 0.00379996, 0.00394951, 0.00410351, 0.00426206, 0.00442528,
-                0.00459329, 0.00476621, 0.00494415, 0.00512724, 0.00531559, 0.00550934,
-                0.00570861, 0.00591351, 0.00612419, 0.00634076, 0.00656336, 0.0067921,
-                0.00702713, 0.00726857, 0.00751655, 0.00777119, 0.00803263, 0.00830099,
-                0.0085764, 0.00885898, 0.00914887, 0.00944617, 0.00975102, 0.01006353,
-                0.01038382, 0.010712, 0.01104818, 0.01139247, 0.01174497, 0.01210578,
-                0.012475, 0.01285271, 0.013239, 0.01363396, 0.01403765, 0.01445014,
-                0.0148715, 0.01530177, 0.015741, 0.01618924, 0.01664651, 0.01711284,
-                0.01758823, 0.0180727, 0.01856623, 0.01906882, 0.01958043, 0.02010103,
-                0.02063058, 0.02116901, 0.02171626, 0.02227224, 0.02283687, 0.02341004,
-                0.02399163, 0.02458151, 0.02517955, 0.02578558, 0.02639946, 0.02702099,
-                0.02764998, 0.02828624, 0.02892956, 0.0295797, 0.03023643, 0.03089949,
-                0.03156864, 0.03224361, 0.0329241, 0.03360983, 0.0343005, 0.03499581,
-                0.03569543, 0.03639904, 0.03710631, 0.0378169, 0.03853046, 0.03924665,
-                0.03996512, 0.04068549, 0.04140742, 0.04213053, 0.04285446, 0.04357885,
-                0.04430332, 0.04502751, 0.04575106, 0.0464736, 0.04719476, 0.0479142,
-                0.04863156, 0.04934649, 0.05005864, 0.05076768, 0.05147329, 0.05217512,
-                0.05287288, 0.05356625, 0.05425493, 0.05493863, 0.05561708, 0.05629,
-                0.05695713, 0.05761823, 0.05827305, 0.05892137, 0.05956297, 0.06019765,
-                0.06082521, 0.06144548, 0.06205828, 0.06266344, 0.06326084, 0.06385033,
-                0.06443178, 0.06500509, 0.06557015, 0.06612687, 0.06667517, 0.06721499,
-                0.06774627, 0.06826895, 0.068783, 0.06928839, 0.06978509, 0.07027311,
-                0.07075244, 0.07122308, 0.07168505, 0.07213838, 0.07258308, 0.07301921,
-                0.07344679, 0.07386589, 0.07427656, 0.07467886, 0.07507286, 0.07545863,
-                0.07583625, 0.0762058, 0.07656736, 0.07692103, 0.07726689, 0.07760505,
-                0.07793561, 0.07825866, 0.07857432]
-                var chartData = [];
-                // current date
-                var firstDate = new Date();
-                // and generate 500 data items
-                for (var i = 0; i < dp.length; i++) {
-                    var newDate = new Date(firstDate);
-                    newDate.setDate(newDate.getDate() + i);
-
-
-                    // add data item to the array
-                    chartData.push({
-                        date: newDate,
-                        visits: 100*dp[i]
-                    });
-                }
-
-                return chartData;
-            }
-
-
-    function createMapChart(data){
-
-            var chart = am4core.create("bar_chart", am4charts.XYChart);
-
-            var chart_data = [];
-
-            {% for key,value in agg_by_dates.items %}
-                value = parseInt({{value}})
-                var today = new Date();
-                var seriesdate = Date.parse('{{key}}');
-
-                if(seriesdate<today){
-                    var dataItem = {date: seriesdate,  value: value};
-                    chart_data.push(dataItem);
-                }
-            {% endfor %}
-
-            // Create axes
-            var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-
-            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-            //valueAxis.logarithmic = true;
-
-            // Create series
-            var series = chart.series.push(new am4charts.ColumnSeries());
-
-            series.dataFields.valueY = "value" ;
-            series.dataFields.dateX = "date";
-            series.name = name;
-            //series.stroke = am4core.color('#e65100');
-            series.fill = am4core.color("#ffbb33");
-            series.fillOpacity = 0.8;
-            series.stroke = am4core.color("#ffbb33");
-            series.strokeOpacity = 0.6;
-
-            series.data = chart_data;
-
-            series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Nya smittade";
-            series.columns.template.fillOpacity = .85;
-
-            var columnTemplate = series.columns.template;
-            columnTemplate.strokeWidth = 2;
-            columnTemplate.strokeOpacity = 1;
-
-            let scrollbarX = new am4core.Scrollbar();
-            scrollbarX.marginBottom = 20;
-            chart.scrollbarX = scrollbarX;
-            scrollbarX.interactionsEnabled = false;
-            chart.scrollbarX.disabled = true;
-            chart.scrollbarX.startGrip.disabled = true;
-            chart.scrollbarX.endGrip.disabled = true;
-            chart.seriesContainer.draggable = false;
-            chart.seriesContainer.resizable = false;
-            chart.mouseWheelBehavior = "none";
-            chart.responsive.enabled = true;
-
-
-            return chart;
-
-        }
-
-        function createIntensiveCareChart(data){
-
-                var chart = am4core.create("bar_chart_intensive", am4charts.XYChart);
-
-                var chart_data = [];
-
-                {% for key,value in agg_iv_care_cases.items %}
-                    value = parseInt({{value}})
-                    var today = new Date();
-                    var seriesdate = Date.parse('{{key}}');
-
-                    if(seriesdate<today){
-                        var dataItem = {date: seriesdate,  value: value};
-                        chart_data.push(dataItem);
-                    }
-                {% endfor %}
+                var chart_data = data;
 
                 // Create axes
                 var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
@@ -840,10 +485,18 @@ am4core.ready(function() {
 
                 series.dataFields.valueY = "value" ;
                 series.dataFields.dateX = "date";
+
+                dateAxis.renderer.cellStartLocation = 0.2;
+                dateAxis.renderer.cellEndLocation = 0.8;
+
                 series.name = name;
                 series.data = chart_data;
+                series.fill =  am4core.color('#' + color);
+                series.fillOpacity = 0.8;
+                series.stroke =  am4core.color('#' + color);
+                series.strokeOpacity = 1;
 
-                series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Nya intensivvårdade";
+                series.columns.template.tooltipText = "{dateX}: [bold]{valueY}[/] Nya " + fall_typ;
                 series.columns.template.fillOpacity = .85;
 
                 var columnTemplate = series.columns.template;
@@ -867,76 +520,7 @@ am4core.ready(function() {
 
             }
 
-
-        function reloadData(params){
-            $.ajax({
-                    type: "GET",
-                    url: '/api/get_numbers',
-                    data: params,
-                    cache: true,
-                    success: fetchSuccess,
-                    dataType: 'json',
-                });
-            }
-
-        function fetchSuccess(Data, textStatus, jqXHR){
-            country_codes = cleanData(Data);
-            var i = 0;
-            for(key in country_codes){
-                createSeries(line_chart, key, country_codes[key], i);
-                i+=1
-            }
-        }
-
-        function createSeries(chart, name, new_data, j) {
-            var series = chart.series.push(new am4charts.LineSeries());
-            series.dataFields.valueY = "total_cases" + new_data[0]['country'];
-            series.dataFields.valueX = "date";
-            series.name = country_trans[name];
-            series.stroke = am4core.color(colors[j]); // red
-            series.strokeWidth = 2;
-            if(name == 'Sweden'){
-                series.strokeWidth = 3;
-                series.fill = am4core.color(colors[j]);
-                series.strokeWidth = 2;
-                series.minBulletDistance = 10;
-                series.tooltipText = "{value}";
-                series.tooltip.pointerOrientation = "vertical";
-                series.tooltip.background.cornerRadius = 20;
-                series.tooltip.background.fillOpacity = 0.5;
-                series.tooltip.label.padding(12,12,12,12)
-                // Add cursor
-                chart.cursor = new am4charts.XYCursor();
-                chart.cursor.snapToSeries = series;
-            }
-
-            for (var i = 0; i < new_data.length; i++) {
-                if(i<15){
-                  value = new_data[i]['total_cases'];
-                  var dataItem = {date: i, total_cases: value };
-                  dataItem["total_cases" + name] = value;
-                  data.push(dataItem);
-                }
-            }
-            series.data = data;
-            return series;
-        }
-
-        function cleanData(data){
-            var summary = {};
-            for(d in data){
-                if(data[d]['country'] in summary){
-                    (summary[data[d]['country']]).push(data[d])
-                }else{
-                    summary[data[d]['country']] = [data[d]];
-                }
-            }
-            return summary;
-        }
-
-        //reloadData();
-
-    }); // end am4core.ready()
+    });
 </script>
 
 </html>

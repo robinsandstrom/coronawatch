@@ -40,9 +40,14 @@ def aggregate_by_dates(cases):
     agg_by_dates = OrderedDict()
     for case in cases.filter(date__gte=(date_from-timedelta(days=31))).order_by('date'):
         if str(case.date) in agg_by_dates:
-            agg_by_dates[str(case.date)]+=case.infected
+            agg_by_dates[str(case.date)][case.case_type]+=case.infected
         else:
-            agg_by_dates[str(case.date)] = case.infected
+            agg_by_dates[str(case.date)] = {
+                            'confirmed': 0,
+                            'death': 0,
+                            'intensive_care': 0
+            }
+            agg_by_dates[str(case.date)][case.case_type] = case.infected
 
     return agg_by_dates
 
@@ -50,7 +55,9 @@ def populate_regional_data(cases):
     regional_data = {}
     regional_data['00'] = {
             'region': region_codes['00'],
-            'value': 0
+            'confirmed': 0,
+            'death': 0,
+            'intensive_care': 0,
         }
     for i in range(1, 26):
         j = str(i)
@@ -60,7 +67,9 @@ def populate_regional_data(cases):
         if i not in [2, 11, 15, 16]:
             regional_data[j] = {
                     'region': region_codes[j],
-                    'value': 0
+                    'confirmed': 0,
+                    'death': 0,
+                    'intensive_care': 0,
             }
 
     for case in cases:
@@ -68,9 +77,14 @@ def populate_regional_data(cases):
         if len(j) == 1:
             j = '0' + j
         if j in regional_data:
-            regional_data[j]['value'] += case.infected
+            regional_data[j][case.case_type] += case.infected
         else:
-            regional_data[j] = { 'region': region_codes[j], 'value': 0 }
-            regional_data[j]['value'] = case.infected
+            regional_data[j] = {
+                    'region': region_codes[j],
+                    'confirmed': 0,
+                    'death': 0,
+                    'intensive_care': 0,
+                    }
+            regional_data[j][case.case_type] = case.infected
 
-    return OrderedDict(sorted(regional_data.items(), key = lambda t: t[1]['value'], reverse=True)), regional_data
+    return OrderedDict(sorted(regional_data.items(), key = lambda t: t[1]['confirmed'], reverse=True)), regional_data

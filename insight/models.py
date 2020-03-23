@@ -388,7 +388,7 @@ class CoronaCase(models.Model):
     region = models.CharField(max_length=255, choices=region_choices, blank=True, null=True)
     text = models.CharField(max_length=255, blank=True, null=True)
     infected = models.IntegerField(default=0)
-    time_created = models.DateTimeField(auto_now=True)
+    time_created = models.DateTimeField(auto_now_add=True)
     backup = models.BooleanField(default=True)
     case_type = models.CharField(max_length=255, default='confirmed', choices=case_choices)
     source = models.ForeignKey('insight.ScrapeSite', blank=True, null=True, on_delete=models.SET_NULL)
