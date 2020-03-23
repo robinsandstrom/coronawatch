@@ -93,7 +93,7 @@ hospital_codes = {
                '89'],
  'Sörmland': ['64', '57'],
  'Uppsala': ['55', '90', '56', '79', '78'],
- 'V. Götaland': ['39',
+ 'Västra Götaland': ['39',
                  '28',
                  '52',
                  '34',
@@ -172,7 +172,7 @@ class NewsParser:
 
 
     def parse_sir(self):
-        site = ScrapeSite.objects.get(name='Svenska Intensivvårdsregistret')
+        site = ScrapeSite.objects.get(name='SIR')
         url = site.url
         for key, value in hospital_codes.items():
             payload = {
