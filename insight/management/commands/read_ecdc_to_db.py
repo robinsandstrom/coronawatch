@@ -25,8 +25,8 @@ class ECDCReader:
 
 
     def load_covid_file(self):
-        filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-14'
-        workbook = xlrd.open_workbook(filename+'.xls')
+        filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-23'
+        workbook = xlrd.open_workbook(filename+'.xlsx')
         worksheet = workbook.sheet_by_index(0)
         return worksheet
 
@@ -51,9 +51,9 @@ class ECDCReader:
 
         for row in range(1, worksheet.nrows):
             date = self.from_excel_date(int(worksheet.cell_value(row, 0)))
-            country_name = worksheet.cell_value(row, 1)
-            new_cases = int(worksheet.cell_value(row, 2))
-            new_deaths = int(worksheet.cell_value(row, 3))
+            country_name = worksheet.cell_value(row, 6)
+            new_cases = int(worksheet.cell_value(row, 4))
+            new_deaths = int(worksheet.cell_value(row, 5))
             if country_name in dictionary:
                 dictionary[country_name][str(date)[0:10]] = {
                             'date': date,
@@ -79,6 +79,8 @@ class ECDCReader:
 
     def insert_tracking_dict_in_db(self, tracking_dict):
         ct = CountryTracker.objects.get_or_create(date=tracking_dict['date'], country=tracking_dict['country'])[0]
+        if tracking_dict['country'] == 'Sweden':
+            pprint(tracking_dict)
         CountryTracker.objects.filter(pk=ct.id).update(**tracking_dict)
 
 

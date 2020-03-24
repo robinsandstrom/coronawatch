@@ -116,7 +116,7 @@ def get_curve(request):
     country = request.GET.get('country', None)
 
     country = request.GET.get('country', None)
-    covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-20.xlsx'
+    covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-23.xlsx'
     population_filename = 'PopulationByCountry.xlsx'
     files = FileReader(covid19_filename, population_filename)
     N = N * files.population(country)
