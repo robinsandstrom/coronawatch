@@ -21,12 +21,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://www.amcharts.com/lib/4/core.js"></script>
     <script src="https://www.amcharts.com/lib/4/charts.js"></script>
-    <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
     <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
     <script src="https://www.amcharts.com/lib/4/maps.js"></script>
-    <script src="https://www.amcharts.com/lib/4/geodata/usaLow.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     </script>
     {% load static %}
     <script rel="{% static 'swe.js' %}"></script>
@@ -82,148 +81,194 @@
   </div>
 </div>
 
-<body class="grey lighten-4">
+<body class="">
         <!-- As a link -->
-    <nav class="navbar py-2 navbar-dark blue-grey z-depth-0 text-left">
+    <nav class="navbar pt-2 navbar-dark blue-grey z-depth-0 text-left">
         <img style="height: 2.5rem;" src="{% static 'virus_cw.svg' %}" class="pr-4">
         <a class="navbar-brand mr-auto py-0 my-0" href="/" style="font-family: biohazard;">coronawatch.se</a>
         <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
     </nav>
-    <div class="row mx-lg-1 mx-sm-2" style="min-height: 95vh;">
-        <div class="col-sm-6">
-            <h1 id="ro" style="display: inline-block;" class="pr-2"</h1>
-            <h1 id="rc" style="display: inline-block;"></h1>
-        </div>
-        <div class="col-sm-6 my-0">
-            <button type="button" class="mt-4 py-0 btn-sm btn btn-info float-right z-depth-0" data-toggle="modal" data-target="#exampleModal">
-              Om modellen
-            </button>
-        </div>
-        <div class="col-sm-12 col-lg-3 my-sm-4">
-            <div class="card border-light mx-sm-0 my-2 z-depth-0">
+    <div class="row m-0 p-0" style="min-height: 95vh;">
+        <div class="col-sm-12 col-lg-3 m-0 p-0">
+            <div class="card mx-sm-0 my-0 z-depth-0" style="background-color: #f0f2f6;">
                 <div class="card-body">
-                    <h4 class="">Parametrar</h4>
-                    <hr>
-                    <table>
+                    <h4 class="font-weight-light"  style="display:inline-block;">SEIR</h4>
+                    <table style="display:inline-block;" class="float-right">
                         <tr>
-                            <td><label for="N" class="text-muted">Population factor(0-1)</label></td>
-                            <td><input type="text" id="N" class="form-control form-control-sm" value="0.8"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="pi" class="text-muted">Inflow</label></td>
-                            <td><input type="text" id="pi" class="form-control form-control-sm" value="0"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><hr></td>
-                        </tr>
-                        <tr>
-                            <td><label for="b" class="text-muted">Infectiousness</label></td>
-                            <td><input type="text" id="b" class="form-control form-control-sm" value="0.64"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="e_E" class="text-muted">Asymptomatic infectiousness</label></td>
-                            <td><input type="text" id="e_E" class="form-control form-control-sm" value="0.5"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="e_Q" class="text-muted">Quarantined infectiousness</label></td>
-                            <td><input type="text" id="e_Q" class="form-control form-control-sm" value="0.1"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="e_J" class="text-muted">Isolated infectiousness</label></td>
-                            <td><input type="text" id="e_J" class="form-control form-control-sm" value="0.9"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><hr></td>
-                        </tr>
-                        <tr>
-                            <td><label for="g_1" class="text-muted">Rate of quarantine</label></td>
-                            <td><input type="text" id="g_1" class="form-control form-control-sm" value="0"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="g_2" class="text-muted">Rate of isolation infective cases</label></td>
-                            <td><input type="text" id="g_2" class="form-control form-control-sm" value="0.5"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><hr></td>
-                        </tr>
-                        <tr>
-                            <td><label for="s_1" class="text-muted">Recovery rate, infective cases</label></td>
-                            <td><input type="text" id="s_1" class="form-control form-control-sm" value="0.5"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="s_2" class="text-muted">Recovery rate, isolated cases</label></td>
-                            <td><input type="text" id="s_2" class="form-control form-control-sm" value="0.5"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><hr></td>
-                        </tr>
-                        <tr>
-                            <td><label for="k_1" class="text-muted">Symptom development rate</label></td>
-                            <td><input type="text" id="k_1" class="form-control form-control-sm" value="0.4"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="k_2" class="text-muted">Symptom development rate in Quarantine</label></td>
-                            <td><input type="text" id="k_2" class="form-control form-control-sm" value="0"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><hr></td>
-                        </tr>
-                        <tr>
-                            <td><label for="d_1" class="text-muted">Deathrate infective cases</label></td>
-                            <td><input type="text" id="d_1" class="form-control form-control-sm" value="0"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="d_2" class="text-muted">Deathrate isolated cases</label></td>
-                            <td><input type="text" id="d_2" class="form-control form-control-sm" value="0.004"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><hr></td>
-                        </tr>
-                        <tr>
-                            <td><label for="p_days" class="text-muted">Days in future to calculate</label></td>
-                            <td><input type="text" id="p_days" class="form-control form-control-sm" value="0"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="country" class="text-muted">Country:</label></td>
                             <td>
-                                <select id="country">
-                                  <option value="Denmark">Denmark</option>
+                                <select id="country" class="js-example-basic-single" style="width: 150px;">
+                                  <option value="Denmark">Danmark</option>
                                   <option value="Finland">Finland</option>
-                                  <option value="France">France</option>
-                                  <option value="Germany">Germany</option>
-                                  <option value="Italy">Italy</option>
-                                  <option value="Netherlands">Netherlands</option>
-                                  <option value="Norway">Norway</option>
-                                  <option value="Sweden" selected>Sweden</option>
-                                  <option value="South Korea">South Korea</option>
-                                  <option value="Spain">Spain</option>
-                                  <option value="United_Kingdom">United Kingdom</option>
-                                  <option value="United_States_of_America">United States</option>
-                                  <option value="Switzerland">Switzerland</option>
+                                  <option value="France">Frankrike</option>
+                                  <option value="Germany">Tyskland</option>
+                                  <option value="Italy">Italien</option>
+                                  <option value="Netherlands">Nederländerna</option>
+                                  <option value="Norway">Norge</option>
+                                  <option value="Sweden" selected>Sverige</option>
+                                  <option value="South Korea">Sydkorea</option>
+                                  <option value="Spain">Spanien</option>
+                                  <option value="United_Kingdom">Storbrittanien</option>
+                                  <option value="United_States_of_America">USA</option>
+                                  <option value="Switzerland">Schweiz</option>
                                 </select>
                             </td>
                         </tr>
                     </table>
+                    <hr>
+                    <div class="form-group">
+                      <label for="N" class="font-weight-light text-small pl-1 mb-0">Befolkningsandel utan självkarantän (0-1)</label>
+                      <div class="input-group mt-0">
+                          <input type="number" id="N" class="form-control form-control-lg mt-0" step="0.01" value="0.8" min="0" max="1">
+                          <input type="button" value="-" class="button-minus" data-field="quantity">
+                          <input type="button" value="+" class="button-plus" data-field="quantity">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pi" class="font-weight-light text-small pl-1 mb-0">Inflöde av mottagliga människor</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="pi" class="form-control form-control-lg mt-0" step="1000" value="0">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <hr class="text-white">
+                    <div class="form-group">
+                        <label for="b" class="font-weight-light text-small pl-1 mb-0">Smittsamhet</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="b" class="form-control form-control-lg mt-0" step="0.01" value="0.8" min="0" max="10">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="e_E" class="font-weight-light text-small pl-1 mb-0">Asymptomatisk smittsamhet</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="e_E" class="form-control form-control-lg mt-0" step="0.01" value="0.5" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="s_1" class="font-weight-light text-small pl-1 mb-0">Tillfriskning, smittsamma</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="s_1" class="form-control form-control-lg mt-0" step="0.01" value="0.5" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="k_1" class="font-weight-light text-small pl-1 mb-0">Symptomutvecklingsgrad</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="k_1" class="form-control form-control-lg mt-0" step="0.01" value="0.4" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="d_1" class="font-weight-light text-small pl-1 mb-0">Dödstakt för smittsamma</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="d_1" class="form-control form-control-lg mt-0" step="0.01" value="0.4" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <h4 class="font-weight-light mt-4 pt-4">QJ</h4>
+                    <hr>
+                    <div class="form-group">
+                        <label for="k_2" class="font-weight-light text-small pl-1 mb-0">Symptomutvecklingsgrad i karantän</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="k_2" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="e_Q" class="font-weight-light text-small pl-1 mb-0">Karantänad smittsamhet</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="e_Q" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="e_J" class="font-weight-light text-small pl-1 mb-0">Isolerad smittsamhet</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="e_J" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="g_1" class="font-weight-light text-small pl-1 mb-0">Karantänsgrad</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="g_1" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="g_2" class="font-weight-light text-small pl-1 mb-0">Isoleringsgrad för smittsamma</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="g_2" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="s_2" class="font-weight-light text-small pl-1 mb-0">Tillfriskning, isolerade</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="s_2" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="d_2" class="font-weight-light text-small pl-1 mb-0">Dödstakt för isolerade</label>
+                        <div class="input-group mt-0">
+                            <input type="number" id="d_2" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
+                            <input type="button" value="-" class="button-minus" data-field="quantity">
+                            <input type="button" value="+" class="button-plus" data-field="quantity">
+                        </div>
+                    </div>
                     <div class="text-center my-2">
-                        <button class="btn text-center z-depth-0 text-muted" type="button" name="button" id="calc">Calculate</button>
+                        <button class="btn text-center z-depth-0" type="button" name="button" id="calc">Beräkna</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-lg-9 my-sm-4">
-            <div class="card border-light mx-sm-0 my-2 z-depth-0">
-                <div class="card-header">
+        <div class="col-sm-12 col-lg-9 m-0 p-0 px-5">
+            <div class="card mx-sm-2 mt-0 pt-4 z-depth-0">
                     <div class="row">
-                        <div class="col-md-4">
-                            <h1>Graf 1</h1>
+                        <div class="col-sm-6">
+                            <h1 id="ro" style="display: inline-block;" class="pr-2"</h1>
+                            <h1 id="rc" style="display: inline-block;"></h1>
                         </div>
-                        <div class="col-md-8">
-                            <select id="graph_1_mp" class="float-right">
+                        <div class="col-sm-6 my-0">
+                            <button type="button" class="mt-4 py-0 btn-sm btn btn-info float-right z-depth-0" data-toggle="modal" data-target="#exampleModal">
+                              Om modellen
+                            </button>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="d-flex justify-content-center my-4">
+                              <div class="w-75">
+                                 <label for="p_days" class="text-muted">Antal dagar att beräkna i framtiden</label>
+                                <input type="range" class="custom-range" id="p_days" min="0" max="200" value="0">
+                              </div>
+                              <span class="font-weight-bold text-primary ml-2 valueSpan2"></span>
+                            </div>
+                        </div>
+                    </div>
+                <div class="card-body">
+                    <h1 class="pl-2 font-weight-light"><br></h1>
+                    <div id="graph_1" class="chartdiv px-0" style="height: 400px;"></div>
+                    <div class="row">
+                        <div class="col-md-12 my-2">
+                            <select id="graph_1_mp" class="float-right js-example-basic-single">
                               <option value="cases_confirmed" selected>Confirmed cases (I)</option>
                               <option value="deaths_confirmed">Confirmed deaths (J)</option>
                               <option value="no_measurement">No measurement</option>
                             </select>
-                            <select id="graph_1_display" class="float-right">
+                            <select id="graph_1_display" class="float-right js-example-basic-single" style="width: 350px;">
                               <option value="infective">Infective (I)</option>
                               <option value="intensive_care">Intensive Care (IC)</option>
                               <option value="hospital_care">Hospital Care (HC)</option>
@@ -239,23 +284,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div id="graph_1" class="chartdiv" style="height: 400px;"></div>
-                </div>
             </div>
-            <div class="card border-light mx-sm-0 my-2 z-depth-0">
-                <div class="card-header">
+            <div class="card mx-sm-0 my-2 z-depth-0">
+                <div class="card-body">
+                    <div id="graph_2" class="chartdiv" style="height: 400px;"></div>
                     <div class="row">
-                        <div class="col-md-4">
-                            <h1>Graf 2</h1>
-                        </div>
-                        <div class="col-md-8">
-                            <select id="graph_2_mp" class="float-right">
+                        <div class="col-md-12 my-3">
+                            <select id="graph_2_mp" class="float-right js-example-basic-single">
                               <option value="cases_confirmed">Confirmed cases (I)</option>
                               <option value="deaths_confirmed" selected>Confirmed deaths (J)</option>
                               <option value="no_measurement">No measurement</option>
                             </select>
-                            <select id="graph_2_display" class="float-right">
+                            <select id="graph_2_display" class="float-right js-example-basic-single" style="width: 350px;">
                               <option value="infective">Infective (I)</option>
                               <option value="intensive_care">Intensive Care (IC)</option>
                               <option value="hospital_care">Hospital Care (HC)</option>
@@ -271,17 +311,131 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div id="graph_2" class="chartdiv" style="height: 400px;"></div>
-
-                </div>
             </div>
         </div>
 
     </div>
 
 </body>
+<style media="screen">
+    input,
+textarea {
+  border: 1px solid #eeeeee;
+  box-sizing: border-box;
+  margin: 0;
+  outline: none;
+  padding: 10px;
+}
+
+input[type="button"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.input-group {
+  clear: both;
+  margin: 15px 0;
+  position: relative;
+}
+
+.input-group input[type='button'] {
+  background-color: #929fba;
+  min-width: 48px;
+  width: auto;
+  transition: all 300ms ease;
+}
+
+.input-group .button-minus,
+.input-group .button-plus {
+  font-weight: bold;
+  height: 48px;
+  padding: 0;
+  width: 48px;
+  position: relative;
+}
+
+.input-group .button-minus{
+    margin-right: 12px;
+}
+
+.input-group .quantity-field {
+  position: relative;
+  height: 48px;
+  left: -6px;
+  text-align: center;
+  width: 62px;
+  display: inline-block;
+  font-size: 13px;
+  margin: 0 0 5px;
+  resize: vertical;
+}
+
+.button-plus {
+  left: -13px;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+}
+</style>
 <script type="text/javascript">
+$(document).ready(function() {
+
+    $('.js-example-basic-single').select2({
+        minimumResultsForSearch: -1,
+    });
+
+  const $valueSpan = $('.valueSpan2');
+  const $value = $('#p_days');
+  $valueSpan.html($value.val());
+  $value.on('input change', () => {
+
+    $valueSpan.html($value.val());
+  });
+
+  $('.button-minus').click(function () {
+        var $input = $(this).parent().find('[type=number]');
+        var step = $input.attr('step');
+        var min = parseFloat($input.attr('min'));
+        var max = parseFloat($input.attr('max'));
+        if(step.indexOf('.')>-1){
+            var j=2;
+        }else{
+            var j=0;
+        }
+  		var count = (parseFloat($input.val()) - parseFloat(step)).toFixed(j);
+        count = count < min ? min : count;
+        count = count > max ? max : count;
+  	    $input.val(count);
+  	    $input.change();
+  	    return false;
+
+    });
+
+    $('.button-plus').click(function () {
+  		var $input = $(this).parent().find('[type=number]');
+        var step = $input.attr('step');
+        var min = parseFloat($input.attr('min'));
+        var max = parseFloat($input.attr('max'));
+        if(step.indexOf('.')>-1){
+            var j=2;
+        }else{
+            var j=0;
+        }
+        var count = (parseFloat($input.val()) + parseFloat(step)).toFixed(j);
+        count = count < min ? min : count;
+        count = count > max ? max : count;
+        $input.val(count);
+  		$input.change();
+  		return false;
+  	});
+});
 am4core.ready(function() {
 
     // Themes begin
@@ -476,7 +630,7 @@ am4core.ready(function() {
     series.dataFields.valueY = "dy";
     series.dataFields.dateX = "dx";
     series.strokeWidth = 2;
-    series.fillOpacity = 0.1;
+    series.fillOpacity = 0;
     series.tooltipText = "{dy}";
     series.tooltip.pointerOrientation = "vertical";
     series.tooltip.background.fillOpacity = 0.5;
@@ -503,7 +657,7 @@ am4core.ready(function() {
     arrow.strokeWidth = 1;
     arrow.strokeOpacity = 1;
     arrow.stroke = chart.colors.getIndex(0);
-    arrow.fillOpacity = 1;
+    arrow.fillOpacity = 0.8;
     arrow.direction = "top";
     arrow.width = 8;
     arrow.height = 8;
@@ -514,12 +668,6 @@ am4core.ready(function() {
     valueAxis.end = 0.000001;
     dateAxis.keepSelection = true;
 
-    // Add scrollbar
-    chart.scrollbarX = new am4charts.XYChartScrollbar();
-    chart.scrollbarX.series.push(series);
-    // Add vertical scrollbar
-    chart.scrollbarY = new am4core.Scrollbar();
-    chart.scrollbarY.marginLeft = 0;
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
@@ -580,14 +728,6 @@ am4core.ready(function() {
     dateAxis.keepSelection = true;
 
 
-    // Add scrollbar
-    chart2.scrollbarX = new am4charts.XYChartScrollbar();
-    //chart2.scrollbarX.position = 'bottom';
-    chart2.scrollbarX.series.push(series);
-    // Add vertical scrollbar
-    // Add vertical scrollbar
-    chart2.scrollbarY = new am4core.Scrollbar();
-    chart2.scrollbarY.marginLeft = 0;
     // Add cursor
     chart2.cursor = new am4charts.XYCursor();
     chart2.cursor.xAxis = dateAxis;

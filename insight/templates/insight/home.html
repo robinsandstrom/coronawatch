@@ -158,23 +158,23 @@
                     <div class="row">
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
                             <div class="card text-center  z-depth-0">
-                                <h2 class="text-muted my-1 py-0">Totalt</h2>
+                                <h2 class="text-muted my-1 py-0 font-weight-light">Totalt</h2>
                                 <h1 class="my-0 py-0">{{ total }}</h1>
                                 <h5 class="mb-1 pb-1 mt-0 text-muted">+{{ new_cases }} nya idag</h5>
                             </div>
                         </div>
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
                             <div class="card text-center  z-depth-0">
-                                <h2 class="text-muted my-1 py-0">Nya intensivvårdade</h2>
+                                <h2 class="text-muted my-1 py-0 font-weight-light">Intensivvårdade</h2>
                                 <h1 class="text-info my-0 py-0">{{ total_ivs }}</h1>
-                                <h5 class="mb-1 pb-1 mt-0 text-waning">+{{ total_new_ivs }}</h5>
+                                <h5 class="mb-1 pb-1 mt-0 text-waning">+{{ total_new_ivs }} nya idag</h5>
                             </div>
                         </div>
                         <div class="col-lg-4 my-sm-4 col-sm-12 text-center">
                             <div class="card text-center z-depth-0 ">
-                                <h2 class="text-muted my-1 py-0">Nya dödsfall</h2>
+                                <h2 class="text-muted my-1 py-0 font-weight-light">Dödsfall</h2>
                                 <h1 class="text-danger my-0 py-0">{{ total_deaths }}</h1>
-                                <h5 class="mb-1 pb-1 mt-0 text-muted">+{{ total_new_deaths }} dödsfall</h5>
+                                <h5 class="mb-1 pb-1 mt-0 text-muted">+{{ total_new_deaths }} nya dödsfall</h5>
                             </div>
                         </div>
                     </div>
@@ -240,7 +240,7 @@
                 <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4 mt-lg-2">
                     <div class="card  mr-lg-0 mx-sm-0 mb-3 z-depth-0">
                             <div class="card-header">
-                                Intensivvårdade
+                                Nya intensivvårdade
                             </div>
                             <div class="card-body pl-0 text-center text-danger">
                                 <div id="bar_chart_intensive" class="chartdiv barcharts"></div>
@@ -252,7 +252,7 @@
                 <div class="col-sm-12 col-lg-4 px-sm-2 mt-sm-4 mt-lg-2">
                     <div class="card  mr-lg-0 mx-sm-0 mb-3 z-depth-0">
                             <div class="card-header">
-                                Döda
+                                Nya dödsfall
                             </div>
                             <div class="card-body pl-0 text-center text-danger">
                                 <div id="death_chart" class="chartdiv barcharts"></div>
