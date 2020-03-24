@@ -95,7 +95,6 @@ def excel(request):
     return response
 
 def get_curve(request):
-    print('Getting curve')
 
     N = float(request.GET.get('N', None))
     Pi = float(request.GET.get('pi', None))
@@ -114,12 +113,19 @@ def get_curve(request):
     d_2 = float(request.GET.get('d_2', None))
     p_days = int(request.GET.get('p_days', None))
     country = request.GET.get('country', None)
+    region = request.GET.get('region', None)
 
-    country = request.GET.get('country', None)
-    covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-23.xlsx'
-    population_filename = 'PopulationByCountry.xlsx'
+    if country != 'Sweden' or region == 'Sverige':
+        covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-23.xlsx'
+        population_filename = 'PopulationByCountry.xlsx'
+        pop_getter = country
+    else:
+        covid19_filename = 'COVID-19-geographic-distribution-sweden-2020-03-24.xlsx'
+        population_filename = 'PopulationBySwedishRegion.xlsx'
+        pop_getter = region
+
     files = FileReader(covid19_filename, population_filename)
-    N = N * files.population(country)
+    N = N * files.population(pop_getter)
 
     model = SEQIJR(N, Pi, mu, b,
                     e_E, e_Q, e_J,
@@ -128,7 +134,7 @@ def get_curve(request):
                     k_1, k_2,
                     d_1, d_2)
 
-    data = model.calc(country, files, p_days)
+    data = model.calc(pop_getter, files, p_days)
     dump = json.dumps(data, indent=4, sort_keys=True, default=str)
 
     return HttpResponse(dump, content_type='application/json')

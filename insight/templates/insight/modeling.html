@@ -93,7 +93,7 @@
             <div class="card mx-sm-0 my-0 z-depth-0" style="background-color: #f0f2f6;">
                 <div class="card-body">
                     <h4 class="font-weight-light"  style="display:inline-block;">SEIR</h4>
-                    <table style="display:inline-block;" class="float-right">
+                    <table style="display:inline-block;">
                         <tr>
                             <td>
                                 <select id="country" class="js-example-basic-single" style="width: 150px;">
@@ -112,9 +112,37 @@
                                   <option value="Switzerland">Schweiz</option>
                                 </select>
                             </td>
+                            <td>
+                                <select id="region" class="js-example-basic-single" style="width: 150px;">
+                                        <option value="Sverige" selected>Hela Sverige</option>
+                                        <option value="Stockholm">Stockholm</option>
+                                        <option value="Uppsala">Uppsala</option>
+                                        <option value="Södermanland">Södermanland</option>
+                                        <option value="Östergötland">Östergötland</option>
+                                        <option value="Jönköping">Jönköping</option>
+                                        <option value="Kronoberg">Kronoberg</option>
+                                        <option value="Kalmar">Kalmar</option>
+                                        <option value="Gotland">Gotland</option>
+                                        <option value="Blekinge">Blekinge</option>
+                                        <option value="Skåne">Skåne</option>
+                                        <option value="Halland">Halland</option>
+                                        <option value="Västra Götaland">Västra Götaland</option>
+                                        <option value="Värmland">Värmland</option>
+                                        <option value="Örebro">Örebro</option>
+                                        <option value="Västmanland">Västmanland</option>
+                                        <option value="Dalarna">Dalarna</option>
+                                        <option value="Gävleborg">Gävleborg</option>
+                                        <option value="Västernorrland">Västernorrland</option>
+                                        <option value="Jämtland">Jämtland</option>
+                                        <option value="Västerbotten">Västerbotten</option>
+                                        <option value="Norrbotten">Norrbotten</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr></td>
                         </tr>
                     </table>
-                    <hr>
                     <div class="form-group">
                       <label for="N" class="font-weight-light text-small pl-1 mb-0">Befolkningsandel utan självkarantän (0-1)</label>
                       <div class="input-group mt-0">
@@ -454,6 +482,15 @@ am4core.ready(function() {
         loadNewData();
     });
 
+
+    $('#country').on('change', function() {
+        if($(this).val()!='Sweden'){
+            $('#region').attr('disabled', true)
+        }else{
+            $('#region').attr('disabled', false)
+        }
+    });
+
     $('#graph_1_mp').on('change', function() {
         measurement_1 = $(this).val();
         populateGraph1();
@@ -591,6 +628,7 @@ am4core.ready(function() {
         var d_2 = $('#d_2').val()
         var p_days = $('#p_days').val()
         var country = $('#country').val()
+        var region = $('#region').val()
         return {
             'N': No,
             'pi': pi,
@@ -608,6 +646,7 @@ am4core.ready(function() {
             'd_2': d_2,
             'p_days': p_days,
             'country' : country,
+            'region' : region,
         }
     }
 
