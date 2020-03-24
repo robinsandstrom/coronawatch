@@ -12,6 +12,8 @@ from insight.andre.SEQIJR import SEQIJR
 from insight.andre.FileReader import FileReader
 import json
 from django.core.serializers.json import DjangoJSONEncoder
+from insight.excel import get_excel_file
+
 
 def index(request):
     date_from = datetime.now()
@@ -78,11 +80,19 @@ def modeling(request):
                                             'last_updated': last_updated,
                                             })
 def update(request):
-    return
-    template = 'insight/about.html'
     np = NewsParser()
     np.run()
     return HttpResponse('updated')
+
+def excel(request):
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    )
+    filename = 'COVID-19-geographic-distribution-sweden-' + str(datetime.now().date())+'.xlsx'
+    response['Content-Disposition'] = 'attachment; filename='+ str(filename)
+    wb = get_excel_file()
+    wb.save(response)
+    return response
 
 def get_curve(request):
     print('Getting curve')

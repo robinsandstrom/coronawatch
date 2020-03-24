@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/get_numbers', views.get_numbers, name='get_numbers'),
     path('modeling', views.modeling, name='modeling'),
     path('update', views.update, name='update'),
+    path('excel', views.excel, name='excel'),
     path('iframe_test', views.iframe_test, name='iframe_test'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap')

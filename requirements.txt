@@ -12,6 +12,7 @@ idna==2.9
 post==2019.4.13
 numpy
 xlrd
+openpyxl==3.0.3
 psycopg2==2.8.4
 public==2019.4.13
 pytz==2019.3

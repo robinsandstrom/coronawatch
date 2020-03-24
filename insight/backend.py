@@ -35,10 +35,10 @@ def get_avg_row(data):
         avgarr.append(int(avg))
     return avgarr
 
-def aggregate_by_dates(cases):
+def aggregate_by_dates(cases, days=31):
     date_from = datetime.now()
     agg_by_dates = OrderedDict()
-    for case in cases.filter(date__gte=(date_from-timedelta(days=31))).order_by('date'):
+    for case in cases.filter(date__gte=(date_from-timedelta(days=days))).order_by('date'):
         if str(case.date) in agg_by_dates:
             agg_by_dates[str(case.date)][case.case_type]+=case.infected
         else:
