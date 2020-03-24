@@ -379,6 +379,11 @@ input::-webkit-inner-spin-button {
   left: -13px;
 }
 
+g[aria-labelledby^='id'] {
+    opacity: 0;
+    color: red;
+}
+
 input[type="number"] {
   -moz-appearance: textfield;
   -webkit-appearance: none;
@@ -671,6 +676,8 @@ am4core.ready(function() {
     // Add cursor
     chart.cursor = new am4charts.XYCursor();
     chart.cursor.xAxis = dateAxis;
+    chart.logo.height = 1000;
+
 
 
     // Create axes
