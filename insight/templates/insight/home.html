@@ -370,17 +370,17 @@ am4core.ready(function() {
 
     {% for key, dict in aggregated.items %}
 
-        confirmed = parseInt({{dict.confirmed}})
-        ic = parseInt({{dict.intensive_care}})
-        death = parseInt({{dict.death}})
+        confirmed = parseInt({{dict.confirmed|unlocalizem}})
+        ic = parseInt({{dict.intensive_care|unlocalize }})
+        death = parseInt({{dict.death|unlocalize }})
 
         var seriesdate = Date.parse('{{key}}');
 
-        var confItem = {date: seriesdate,  value: confirmed|unlocalize };
+        var confItem = {date: seriesdate,  value: confirmed };
 
-        var icItem = {date: seriesdate,  value: ic|unlocalize };
+        var icItem = {date: seriesdate,  value: ic };
 
-        var deathItem = {date: seriesdate,  value: death|unlocalize };
+        var deathItem = {date: seriesdate,  value: death };
 
         confirmed_data.push(confItem);
         ic_data.push(icItem);
