@@ -4,6 +4,31 @@ from insight.models import region_codes
 from collections import OrderedDict
 from datetime import datetime, timedelta
 
+population_by_regions = {
+    'Blekinge': 159606,
+    'Dalarna': 287966,
+    'Gotland': 59686,
+    'Gävleborg': 287382,
+    'Halland': 333848,
+    'Jämtland': 130810,
+    'Jönköping': 363599,
+    'Kalmar': 245446,
+    'Kronoberg': 201469,
+    'Norrbotten': 250093,
+    'Skåne': 1377827,
+    'Stockholm': 2377081,
+    'Södermanland': 297540,
+    'Uppsala': 383713,
+    'Värmland': 282414,
+    'Västerbotten': 271736,
+    'Västernorrland': 245347,
+    'Västmanland': 275845,
+    'Västra Götaland': 1725881,
+    'Örebro': 304805,
+    'Östergötland': 465495,
+    'Okänd region': 100000000
+}
+
 def load_csv():
     data = []
     with open('total.csv', newline='') as csvfile:
@@ -52,6 +77,20 @@ def aggregate_by_dates(cases, days=31):
     return agg_by_dates
 
 def populate_regional_data(cases):
+
+    key_figures = {
+        'confirmed': 0,
+        'intensive_care': 0,
+        'death': 0,
+        'new_confirmed': 0,
+        'new_intensive_care': 0,
+        'new_death': 0
+    }
+
+    today = datetime.now().date()
+
+
+
     regional_data = {}
     regional_data['00'] = {
             'region': region_codes['00'],
@@ -78,13 +117,20 @@ def populate_regional_data(cases):
             j = '0' + j
         if j in regional_data:
             regional_data[j][case.case_type] += case.infected
+            key_figures[case.case_type] += case.infected
+            if case.date >= today:
+                key_figures['new_'+case.case_type] += case.infected
         else:
             regional_data[j] = {
                     'region': region_codes[j],
                     'confirmed': 0,
                     'death': 0,
                     'intensive_care': 0,
+                    'per_capita': 0
                     }
             regional_data[j][case.case_type] = case.infected
 
-    return OrderedDict(sorted(regional_data.items(), key = lambda t: t[1]['confirmed'], reverse=True)), regional_data
+    for regional in regional_data:
+        regional_data[regional]['per_capita'] = int(100000 * regional_data[regional]['confirmed']/population_by_regions[regional_data[regional]['region']])
+
+    return OrderedDict(sorted(regional_data.items(), key = lambda t: t[1]['confirmed'], reverse=True)), regional_data, key_figures

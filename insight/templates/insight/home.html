@@ -126,8 +126,8 @@
         }
 
         #regional_table > tbody > tr > td{
-            font-size: 1rem;
-            line-height: 0.5rem;
+            font-size: 0.9rem;
+            line-height: 0.9rem;
         }
 
     </style>
@@ -189,7 +189,7 @@
         </div>
 
         <div class="col-sm-12 offset-lg-0 col-lg-4 px-sm-2 mt-sm-1 mt-lg-0" >
-            <div class="card h-100  mr-lg-2 my-2 z-depth-0 ">
+            <div class="card h-100 mr-lg-2 my-0 z-depth-0 ">
                 <div class="card-body">
                     <div id="mapchart" class="chartdiv">
 
@@ -199,15 +199,16 @@
         </div>
 
         <div class="col-sm-12 col-lg-8 px-sm-2 mt-sm-1 mt-lg-0">
-            <div class="card h-100 my-2 z-depth-0 ">
+            <div class="card h-100 my-0 z-depth-0 ">
                 <div class="card-body px-sm-0 px-lg-0 pt-lg-0 pb-lg-0">
-                    <table class="table table-striped table-sm table-borderless" id="regional_table">
+                    <table class="table table-striped table-sm table-borderless mb-0" id="regional_table">
                         <thead>
                             <tr class="table blue-grey text-white">
                                 <th>Region</th>
                                 <th>Bekräftade fall</th>
                                 <th>Intensivvårdade</th>
                                 <th>Döda</th>
+                                <th>Incidens*</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -218,6 +219,7 @@
                                 <td class="oneonerem"><strong>{{ data.confirmed }}</strong></td>
                                 <td class="oneonerem"><strong>{{ data.intensive_care }}</strong></td>
                                 <td class="oneonerem"><strong>{{ data.death }}</strong></td>
+                                <td class="oneonerem"><strong>{{ data.per_capita }}</strong></td>
                             </tr>
                             {% endif %}
                         {% endfor %}
@@ -226,9 +228,11 @@
                             <td class="font-weight-bold" style="font-size: 1.1rem;"><strong>{{ total }}</strong></td>
                             <td class="font-weight-bold" style="font-size: 1.1rem;"><strong>{{ total_ivs }}</strong></td>
                             <td class="font-weight-bold" style="font-size: 1.1rem;"><strong>{{ total_deaths }}</strong></td>
+                            <td class="font-weight-bold" style="font-size: 1.1rem;"><strong>{{ total_deaths }}</strong></td>
                         </tr>
                         </tbody>
                     </table>
+                    <p>*Antal fall bekräftade fall per 100,000 invånare</p>
                 </div>
             </div>
         </div>
@@ -357,9 +361,6 @@ am4core.ready(function() {
 
     // Themes begin
     am4core.useTheme(am4themes_animated);
-    // Themes end
-    var data = {{ data|safe }}
-
     var colors = ['#4285F4', '#2BBBAD', '#4B515D', '#3F729B', '#ff6f00', '#ff8f00', '#ffeb3b'];
 
     createMapChart();

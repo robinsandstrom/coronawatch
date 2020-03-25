@@ -16,44 +16,33 @@ from insight.excel import get_excel_file
 
 
 def index(request):
-    date_from = datetime.now()
 
     template = 'insight/home.html'
 
-    data, swe_and_avg = load_csv()
-
     all_cases = CoronaCase.objects.all().order_by('-time_created')
-    ordered_regional_data, regional_data = populate_regional_data(all_cases)
+    ordered_regional_data, regional_data, key_figures = populate_regional_data(all_cases)
 
     aggregated = aggregate_by_dates(all_cases)
 
-    cases = all_cases.filter(case_type='confirmed')
-    total = cases.aggregate(Sum('infected'))['infected__sum'] or 0
-    new_cases = cases.filter(case_type='confirmed', date__gte=date_from)
-    total_new = new_cases.aggregate(Sum('infected'))['infected__sum'] or 0
+    total = key_figures['confirmed']
+    total_new =  key_figures['new_confirmed']
 
-    death_cases = CoronaCase.objects.filter(case_type='death')
-    total_deaths = death_cases.aggregate(Sum('infected'))['infected__sum'] or 0
-    new_death_cases = death_cases.filter(date__gte=date_from)
-    total_new_deaths = new_death_cases.aggregate(Sum('infected'))['infected__sum'] or 0
+    total_deaths = key_figures['death']
+    total_new_deaths = key_figures['new_death']
 
-    intensive_care_cases = all_cases.filter(case_type='intensive_care')
-    total_ivs = intensive_care_cases.aggregate(Sum('infected'))['infected__sum'] or 0
-    new_iv_cases = intensive_care_cases.filter(date__gte=date_from)
-    total_new_ivs = new_iv_cases.aggregate(Sum('infected'))['infected__sum'] or 0
+    total_ivs = key_figures['intensive_care']
+    total_new_ivs = key_figures['new_intensive_care']
 
     try:
         last_updated = all_cases.first().time_created
     except:
         last_updated = datetime.now()
 
-    articles = Article.objects.all().order_by('-time_created')[0:10]
+    articles = Article.objects.all().order_by('-time_created')[0:8]
 
     return render(request, template, context={
                                             'articles': articles,
-                                            'data': data,
                                             'cases': all_cases.filter(text__isnull=False)[0:30],
-                                            'intensive_care_cases': intensive_care_cases,
                                             'regional_data': regional_data,
                                             'ordered_regional_data': ordered_regional_data,
                                             'total': total,
