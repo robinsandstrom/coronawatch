@@ -370,7 +370,7 @@ am4core.ready(function() {
 
     {% for key, dict in aggregated.items %}
 
-        confirmed = parseInt({{dict.confirmed|unlocalizem}})
+        confirmed = parseInt({{dict.confirmed|unlocalize }})
         ic = parseInt({{dict.intensive_care|unlocalize }})
         death = parseInt({{dict.death|unlocalize }})
 
