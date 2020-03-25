@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load tz %}
 {% load extras %}
+{% load l10n %}
 
 <html>
 
@@ -375,11 +376,11 @@ am4core.ready(function() {
 
         var seriesdate = Date.parse('{{key}}');
 
-        var confItem = {date: seriesdate,  value: confirmed};
+        var confItem = {date: seriesdate,  value: confirmed|unlocalize };
 
-        var icItem = {date: seriesdate,  value: ic};
+        var icItem = {date: seriesdate,  value: ic|unlocalize };
 
-        var deathItem = {date: seriesdate,  value: death};
+        var deathItem = {date: seriesdate,  value: death|unlocalize };
 
         confirmed_data.push(confItem);
         ic_data.push(icItem);
@@ -420,7 +421,7 @@ am4core.ready(function() {
                 {% if data.confirmed > 0 %}
                 {
                   id: {{ region }},
-                  value: {{ data.confirmed }}
+                  value: {{ data.confirmed|unlocalize }}
                 },
                 {% endif %}
             {% endfor %}
