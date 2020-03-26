@@ -13,46 +13,16 @@ from insight.andre.FileReader import FileReader
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from insight.excel import get_excel_file
-
+from django.db.models import Count
+from django.db.models.functions import Trunc
 
 def index(request):
 
     template = 'insight/home.html'
-
-    all_cases = CoronaCase.objects.all().order_by('-time_created')
-    ordered_regional_data, regional_data, key_figures = populate_regional_data(all_cases)
-
-    aggregated = aggregate_by_dates(all_cases)
-
-    total = key_figures['confirmed']
-    total_new =  key_figures['new_confirmed']
-
-    total_deaths = key_figures['death']
-    total_new_deaths = key_figures['new_death']
-
-    total_ivs = key_figures['intensive_care']
-    total_new_ivs = key_figures['new_intensive_care']
-
-    try:
-        last_updated = all_cases.first().time_created
-    except:
-        last_updated = datetime.now()
-
-    articles = Article.objects.all().order_by('-time_created')[0:8]
+    articles = Article.objects.all().order_by('-time_created')[0:5]
 
     return render(request, template, context={
                                             'articles': articles,
-                                            'cases': all_cases.filter(text__isnull=False)[0:30],
-                                            'regional_data': regional_data,
-                                            'ordered_regional_data': ordered_regional_data,
-                                            'total': total,
-                                            'total_deaths': total_deaths,
-                                            'total_ivs': total_ivs,
-                                            'total_new_ivs': total_new_ivs,
-                                            'new_cases': total_new,
-                                            'total_new_deaths': total_new_deaths,
-                                            'last_updated': last_updated,
-                                            'aggregated': aggregated,
                                             })
 
 def about(request):
@@ -130,13 +100,53 @@ def get_curve(request):
 
 
 def get_numbers(request):
-    return
-    tracked=['Sweden', 'Denmark', 'Norway', 'Spain', 'Germany']
-    values = CountryTracker.objects.filter(total_cases__gte=100, country__in=tracked).order_by('date').values('date', 'total_cases','country')
 
+    region = request.GET.get('region', None)
+    all_cases = CoronaCase.objects.all().order_by('date')
 
-    dump = json.dumps(list(values), indent=4, sort_keys=True, default=str)
-    print(dump)
+    if region is not None and region!='All':
+        all_cases = all_cases.filter(region=region)
+
+    historic_cases = all_cases.exclude(case_type='in_intensive_care').exclude(case_type='in_hospital_care')
+
+    ordered_regional_data, regional_data, key_figures = populate_regional_data(historic_cases)
+
+    aggregated = aggregate_by_dates(historic_cases)
+
+    data = {
+            'ordered_regional_data': ordered_regional_data,
+            'key_figures': key_figures,
+            'aggregated': aggregated,
+            'all_cases': all_cases
+    }
+
+    dump = json.dumps(data, indent=4, sort_keys=False, default=str)
+
+    return HttpResponse(dump, content_type='application/json')
+
+def current_cases(request):
+    region = request.GET.get('region', None)
+    all_cases = CoronaCase.objects.all().order_by('date')
+
+    if region is not None and region!='All':
+        all_cases = all_cases.filter(region=region)
+
+    current_hospital_cases = all_cases.filter(case_type='in_hospital_care') \
+                                    .annotate(day=Trunc('date', 'day'))\
+                                    .values('day')\
+                                    .annotate(cases=Sum('infected'))
+
+    current_intensive_care_cases = all_cases.filter(case_type='in_intensive_care') \
+                                    .annotate(day=Trunc('date', 'day'))\
+                                    .values('day')\
+                                    .annotate(cases=Sum('infected'))
+
+    data = {
+        'current_hospital_cases': list(current_hospital_cases),
+        'current_intensive_care_cases': list(current_intensive_care_cases)
+    }
+
+    dump = json.dumps(data, indent=4, sort_keys=True, default=str)
     return HttpResponse(dump, content_type='application/json')
 
 

@@ -55,6 +55,8 @@ region_choices = (
 
 case_choices = (
     ('confirmed', 'Bekräftad'),
+    ('in_hospital_care', 'Nuvarande sjukvårdsfall'),
+    ('in_intensive_care', 'Nuvarande intensivvårdsfall'),
     ('intensive_care', 'Intensivvårdsfall'),
     ('death', 'Dödsfall'),
     ('healthy', 'Tillfrisknad'),

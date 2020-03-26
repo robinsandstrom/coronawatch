@@ -4,6 +4,8 @@ from insight.models import region_codes
 from collections import OrderedDict
 from datetime import datetime, timedelta
 
+
+
 population_by_regions = {
     'Blekinge': 159606,
     'Dalarna': 287966,
@@ -84,7 +86,8 @@ def populate_regional_data(cases):
         'death': 0,
         'new_confirmed': 0,
         'new_intensive_care': 0,
-        'new_death': 0
+        'new_death': 0,
+        'per_capita': 0,
     }
 
     today = datetime.now().date()
@@ -98,6 +101,7 @@ def populate_regional_data(cases):
             'death': 0,
             'intensive_care': 0,
         }
+
     for i in range(1, 26):
         j = str(i)
         if len(j) == 1:
@@ -131,6 +135,7 @@ def populate_regional_data(cases):
             regional_data[j][case.case_type] = case.infected
 
     for regional in regional_data:
-        regional_data[regional]['per_capita'] = int(100000 * regional_data[regional]['confirmed']/population_by_regions[regional_data[regional]['region']])
+        regional_data[regional]['per_capita'] = int(1000000 * regional_data[regional]['confirmed']/population_by_regions[regional_data[regional]['region']])
+        key_figures['per_capita'] = int(key_figures['confirmed']/10.3)
 
     return OrderedDict(sorted(regional_data.items(), key = lambda t: t[1]['confirmed'], reverse=True)), regional_data, key_figures
