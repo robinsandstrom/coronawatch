@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 {% load tz %}
-{% load extras %}
 {% load l10n %}
 
 <html>
@@ -165,6 +164,9 @@
 
     </nav>
     <div class="row mx-lg-5 mx-sm-2">
+        <div class="col-sm-12 py-0 my-0">
+            <p class="my-0 py-0">Senast uppdaterad: {{ last_updated|localtime }}</p>
+        </div>
         <div class="col-sm-12 col-lg-9 px-sm-1 mt-2">
             <li class="list-group-item pt-2 pb-1">
                 <h2 class="mb-0 h5">{{ articles.first.title }}<span class="badge badge-pill badge-primary z-depth-0 float-right text-white"><a href="{{ articles.first.source_set.first.url }}" class="text-white nounderline">Källa</a></span></h2>
