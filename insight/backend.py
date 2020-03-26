@@ -72,7 +72,9 @@ def aggregate_by_dates(cases, days=31):
             agg_by_dates[str(case.date)] = {
                             'confirmed': 0,
                             'death': 0,
-                            'intensive_care': 0
+                            'intensive_care': 0,
+                            'in_intensive_care': 0,
+                            'in_hospital_care': 0
             }
             agg_by_dates[str(case.date)][case.case_type] = case.infected
 

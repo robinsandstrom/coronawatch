@@ -17,7 +17,7 @@ def get_excel_file():
     return wb
 
 def setHeader(ws):
-    headers = ['DateRep', 'Day', 'Month', 'Year', 'Cases', 'Deaths', 'Countries and territories', 'GeoId', 'IC']
+    headers = ['DateRep', 'Day', 'Month', 'Year', 'Cases', 'Deaths', 'Countries and territories', 'GeoId', 'In hospital care', 'In intensive care']
     for ix in range(1, len(headers)+1):
         _ = ws.cell(column=ix, row=1, value=headers[ix-1])
 
@@ -36,7 +36,8 @@ def setData(ws):
             _ = ws.cell(column=6, row=ix, value=dict.get('death'))
             _ = ws.cell(column=7, row=ix, value=region_codes[key])
             _ = ws.cell(column=8, row=ix, value=key)
-            _ = ws.cell(column=9, row=ix, value=dict.get('intensive_care'))
+            _ = ws.cell(column=9, row=ix, value=dict.get('in_hospital_care'))
+            _ = ws.cell(column=10, row=ix, value=dict.get('in_intensive_care'))
             ix+=1
 
 def parse_for_excel(cases):
