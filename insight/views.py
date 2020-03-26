@@ -20,9 +20,11 @@ def index(request):
 
     template = 'insight/home.html'
     articles = Article.objects.all().order_by('-time_created')[0:5]
+    all_cases = CoronaCase.objects.all().order_by('-time_created')[0:10]
 
     return render(request, template, context={
                                             'articles': articles,
+                                            'all_cases': all_cases
                                             })
 
 def about(request):
@@ -147,6 +149,17 @@ def current_cases(request):
     }
 
     dump = json.dumps(data, indent=4, sort_keys=True, default=str)
+    return HttpResponse(dump, content_type='application/json')
+
+def get_latest_cases(request):
+
+    region = request.GET.get('region', None)
+    all_cases = CoronaCase.objects.all().order_by('-time_created')
+
+    if region is not None and region!='All':
+        all_cases = all_cases.filter(region=region)
+
+    dump = json.dumps(list(all_cases.values('infected', 'time_created', 'text', 'url')[0:10]), indent=4, sort_keys=True, default=str)
     return HttpResponse(dump, content_type='application/json')
 
 

@@ -394,6 +394,7 @@ class CoronaCase(models.Model):
     backup = models.BooleanField(default=True)
     case_type = models.CharField(max_length=255, default='confirmed', choices=case_choices)
     source = models.ForeignKey('insight.ScrapeSite', blank=True, null=True, on_delete=models.SET_NULL)
+    url = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
 

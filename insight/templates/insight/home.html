@@ -336,28 +336,20 @@
         </div>
 
         <div class="col-lg-6 offset-lg-3 text-center col-sm-12 px-sm-0 mt-sm-1">
+
             <button class="btn btn-link mx-auto z-depth-0 text-lowercase nounderline" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
               Se senaste fall
             </button>
+
             <div class="collapse" id="collapseExample">
 
-                <ul class="list-group">
+                <ul class="list-group text-left" id="latestlist">
                         <li class="list-group-item blue-grey py-1 text-white">Senaste fall</li>
 
-                            {% for case in cases %}
-                            <li class="list-group-item">
-                              <div class="md-v-line"></div><i class="mr-4 pr-3">{{ case.time_created|verbose_date }}</i> {{ case.text }}
-                              {% if case.source %}
-                                (<a class="text-center text-info" href="{{ case.source.verbose_url }}">{{ case.source.name }}</a>)
-                              {% else %}
-
-                              {% endif %}
-                            </li>
-                            {% endfor %}
-
                     </ul>
-                </div>
             </div>
+
+        </div>
     </div>
 
     <div class="col-lg-10 offset-lg-1 col-sm-12 px-s-2 mt-sm-4 mb-3">
@@ -404,10 +396,14 @@ am4core.ready(function() {
     $('#region').on('change', function() {
         reloadData({'region': $(this).val()});
         getCurrentCases({'region': $(this).val()});
+        getLatestCases({'region': $(this).val()});
+
     });
 
     reloadData();
     getCurrentCases();
+    getLatestCases();
+
 
     function reloadData(params){
         $.ajax({
@@ -419,6 +415,31 @@ am4core.ready(function() {
                 dataType: 'json',
             });
         }
+
+    function getLatestCases(params){
+        $.ajax({
+                type: "GET",
+                url: '/api/get_latest_cases',
+                data: params,
+                cache: true,
+                success: fetchSuccessLatestCases,
+                dataType: 'json',
+            });
+        }
+
+    function fetchSuccessLatestCases(data){
+        $('#latestlist').empty();
+        for(c in data){
+            var urlstring = '';
+            if(data[c]['url']){
+                var urlstring = ' <a href="'+data[c]['url']+'"<span class="badge badge-pill badge-primary z-depth-0 float-right text-white">Källa</span>';
+            }
+
+            $('#latestlist').append('<li class="list-group-item">' + data[c]['text'] +  urlstring + '</li>')
+
+        }
+    }
+
 
     var table_updated = 0;
     function fetchSuccess(Data, textStatus, jqXHR){

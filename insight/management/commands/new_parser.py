@@ -122,6 +122,7 @@ class NewsParser:
         pass
 
     def run(self):
+        
         try:
             self.parse_svt()
         except:
@@ -314,7 +315,7 @@ class NewsParser:
     def add_cases_from_summary(self, summary, site, case_type='confirmed'):
 
         cases = CoronaCase.objects.filter(case_type=case_type)
-        ord, regional_data = populate_regional_data(cases)
+        ord, regional_data, key_figures = populate_regional_data(cases)
 
         if (type(summary)) is dict:
             summary = summary.values()
@@ -358,7 +359,7 @@ class NewsParser:
                 'infected': infected,
                 'backup': False,
                 'case_type': case_type,
-                'source': source
+                'url': source.verbose_url
             }
 
             CoronaCase.objects.create(**corona_dict)

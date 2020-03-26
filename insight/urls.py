@@ -13,6 +13,7 @@ urlpatterns = [
     path('about', views.about, name='about'),
     path('api/get_curve', views.get_curve, name='get_curve'),
     path('api/get_numbers', views.get_numbers, name='get_numbers'),
+    path('api/get_latest_cases', views.get_latest_cases, name='get_latest_cases'),
     path('api/current_cases', views.current_cases, name='current_cases'),
     path('modeling', views.modeling, name='modeling'),
     path('update', views.update, name='update'),
