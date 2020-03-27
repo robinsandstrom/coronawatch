@@ -123,11 +123,10 @@ class NewsParser:
 
     def run(self):
 
-
-        self.parse_svt()
-
-        #except:
-        #    print('Failed SVT')
+        try:
+            self.parse_svt()
+        except:
+            print('Failed SVT')
 
         try:
             self.parse_expressen()
@@ -252,9 +251,43 @@ class NewsParser:
         site = ScrapeSite.objects.get(name='Aftonbladet')
         r = requests.get(site.url)
         list_of_cases = r.json()['workSheets']['sverige']['rows']
-        summary = self.aftonhoran_to_summary(list_of_cases)
-
+        summary = self.aftonbladet_to_summary(list_of_cases)
         self.add_cases_from_summary(summary, site)
+
+        dead_site = 'https://tethys.aftonbladet.se/configurationdata/coronaswedead'
+        r = requests.get(dead_site)
+        list_of_cases = r.json()['workSheets']['swedead']['rows']
+        summary = self.aftonbladet_to_summary(list_of_cases)
+        self.add_cases_from_summary(summary, site, case_type='death')
+
+        in_care_site = 'https://tethys.aftonbladet.se/configurationdata/coronaregion'
+        r = requests.get(in_care_site)
+        list_of_cases = r.json()['workSheets']['region']['rows']
+
+        for case in list_of_cases:
+            region_kod = self.search_region(case['region'])
+            date = datetime.strptime(case['date'], '%Y-%m-%d').date()
+            in_hospital_care = case['inlagda-totalt']
+            in_intensive_care = case['varav-iva']
+
+            if in_hospital_care=='nan':
+                in_hospital_care = 0
+
+            if in_intensive_care=='nan':
+                in_intensive_care = 0
+
+            ihc = CoronaCase.objects.get_or_create(region=region_kod, date=date, case_type='in_hospital_care')[0]
+            ihc.infected = int(in_hospital_care)
+            ihc.text = str(ihc.infected) + ' vårdas i ' + case['region']
+            ihc.url = site.verbose_url
+            ihc.save()
+
+            iic = CoronaCase.objects.get_or_create(region=region_kod, date=date, case_type='in_intensive_care')[0]
+            iic.infected = int(in_hospital_care)
+            iic.text = str(ihc.infected) + ' intensivvårdas i ' + case['region']
+            iic.url = site.verbose_url
+            iic.save()
+
 
     def parse_fhm(self):
         site = ScrapeSite.objects.get(name='Folkhälsomyndigheten')
@@ -262,7 +295,7 @@ class NewsParser:
         summary = self.fhm_to_summary(trs)
         self.add_cases_from_summary(summary, site)
 
-    def aftonhoran_to_summary(self, list_of_cases):
+    def aftonbladet_to_summary(self, list_of_cases):
         regional_summary = {}
 
         for l in list_of_cases:
