@@ -122,11 +122,12 @@ class NewsParser:
         pass
 
     def run(self):
-        
-        try:
-            self.parse_svt()
-        except:
-            print('Failed SVT')
+
+
+        self.parse_svt()
+
+        #except:
+        #    print('Failed SVT')
 
         try:
             self.parse_expressen()
@@ -213,13 +214,31 @@ class NewsParser:
 
         site = ScrapeSite.objects.get(name='SVT')
         r = requests.get(site.url)
-        summary = r.json()['data']
-        self.add_cases_from_summary(summary, site)
+        summary = self.svt_to_summary(r.json())
 
+        self.add_cases_from_summary(summary, site)
+        pprint(summary)
         for reg in summary:
             reg['antal'] = reg['dead']
 
         self.add_cases_from_summary(summary, site, case_type='death')
+
+
+    def svt_to_summary(self, some_json):
+        today = str(datetime.now().date().replace(day=26))
+        regions = []
+
+        for d in some_json:
+            if d['date'] == today and d['kod']!='0':
+                intra_day = {
+                        'antal': d['fall'],
+                        'dead': d['avlidna'],
+                        'region': d['region'],
+                        'kod': d['kod']
+                        }
+                regions.append(intra_day)
+
+        return regions
 
     def parse_expressen(self):
 
@@ -316,12 +335,10 @@ class NewsParser:
 
         cases = CoronaCase.objects.filter(case_type=case_type)
         ord, regional_data, key_figures = populate_regional_data(cases)
-
         if (type(summary)) is dict:
             summary = summary.values()
 
         for region_dict in summary:
-
             region_code = region_dict['kod']
             current_value = region_dict['antal']
             previous_value = regional_data[region_code][case_type]
