@@ -8,9 +8,10 @@ from collections import OrderedDict
 from insight.management.commands.new_parser import NewsParser
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.db.models import Sum
-from insight.andre.SEQIJR import SEQIJR
+from insight.andre.SEQIJR import SEQIJCR
 from insight.andre.FileReader import FileReader
 import json
+import pprint
 from django.core.serializers.json import DjangoJSONEncoder
 from insight.excel import get_excel_file
 from django.db.models import Count
@@ -56,25 +57,33 @@ def excel(request):
     return response
 
 def get_curve(request):
-
     N = float(request.GET.get('N', None))
-    Pi = float(request.GET.get('pi', None))
+    Pi = 0
     mu = 1 / (80 * 365)
     b = float(request.GET.get('b', None))
+
     e_E = float(request.GET.get('e_E', None))
     e_Q = float(request.GET.get('e_Q', None))
     e_J = float(request.GET.get('e_J', None))
-    g_1 = float(request.GET.get('g_1', None))
-    g_2 = float(request.GET.get('g_2', None))
-    s_1 = float(request.GET.get('s_1', None))
-    s_2 = float(request.GET.get('s_2', None))
-    k_1 = float(request.GET.get('k_1', None))
-    k_2 = float(request.GET.get('k_2', None))
-    d_1 = float(request.GET.get('d_1', None))
-    d_2 = float(request.GET.get('d_2', None))
-    p_days = int(request.GET.get('p_days', None))
+    e_C = float(request.GET.get('e_C', None))
+
+    T_E = float(request.GET.get('T_E', None))
+    T_Q = float(request.GET.get('T_I', None))
+    T_I = float(request.GET.get('T_I', None))
+    T_J = float(request.GET.get('T_J', None))
+    T_C = float(request.GET.get('T_C', None))
+
+    w_E = float(request.GET.get('w_E', None))
+    w_Q = float(request.GET.get('w_I', None))
+    w_I = float(request.GET.get('w_I', None))
+    w_J = float(request.GET.get('w_J', None))
+    w_C = float(request.GET.get('w_C', None))
+
+    P = int(request.GET.get('P', None))
+
     country = request.GET.get('country', None)
     region = request.GET.get('region', None)
+
 
     if country != 'Sweden' or region == 'Sverige':
         covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-23.xlsx'
@@ -85,17 +94,27 @@ def get_curve(request):
         population_filename = 'PopulationBySwedishRegion.xlsx'
         pop_getter = region
 
+
     files = FileReader(covid19_filename, population_filename)
-    N = N * files.population(pop_getter)
+    #time_confirmed = files.create_t_vector(pop_getter)
+    #cases_confirmed = files.cases(pop_getter)
+    #deaths_confirmed = files.deaths(pop_getter)
 
-    model = SEQIJR(N, Pi, mu, b,
-                    e_E, e_Q, e_J,
-                    g_1, g_2,
-                    s_1, s_2,
-                    k_1, k_2,
-                    d_1, d_2)
+    parameters = {'N': files.population(pop_getter)*N,
+                     'b': b,
+                     'e_E': e_E, 'e_Q': e_Q, 'e_J': e_J, 'e_C': e_C,
+                     'T_E': T_E, 'T_Q': T_Q, 'T_I': T_I, 'T_J': T_J, 'T_C': T_C,
+                     'w_E': w_E, 'w_Q': w_Q, 'w_I': w_I, 'w_J': w_J, 'w_C': w_C,
+                     'mu': 0,
+                     'Pi': 0,
+                     'pi': 0}
 
-    data = model.calc(pop_getter, files, p_days)
+    pprint.pprint(parameters)
+
+    model = SEQIJCR(**parameters)
+
+    data = model.calc(pop_getter, files, P)
+
     dump = json.dumps(data, indent=4, sort_keys=True, default=str)
 
     return HttpResponse(dump, content_type='application/json')

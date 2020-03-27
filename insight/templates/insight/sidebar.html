@@ -1,0 +1,180 @@
+{% load static %}
+<div class="card mx-sm-0 my-0 z-depth-0" style="background-color: #f0f2f6; height: 100vh; overflow-y: scroll;">
+    <div class="card-body">
+        <table style="display:inline-block;">
+            <tr>
+                <td>
+                    <select id="country" class="js-example-basic-single" style="width: 150px;">
+                      <option value="Denmark">Danmark</option>
+                      <option value="Finland">Finland</option>
+                      <option value="France">Frankrike</option>
+                      <option value="Germany">Tyskland</option>
+                      <option value="Italy">Italien</option>
+                      <option value="Netherlands">Nederländerna</option>
+                      <option value="Norway">Norge</option>
+                      <option value="Sweden" selected>Sverige</option>
+                      <option value="South Korea">Sydkorea</option>
+                      <option value="Spain">Spanien</option>
+                      <option value="United_Kingdom">Storbrittanien</option>
+                      <option value="United_States_of_America">USA</option>
+                      <option value="Switzerland">Schweiz</option>
+                    </select>
+                </td>
+                <td>
+                    <select id="region" class="js-example-basic-single" style="width: 150px;">
+                            <option value="Sverige" selected>Hela Sverige</option>
+                            <option value="Stockholm">Stockholm</option>
+                            <option value="Uppsala">Uppsala</option>
+                            <option value="Södermanland">Södermanland</option>
+                            <option value="Östergötland">Östergötland</option>
+                            <option value="Jönköping">Jönköping</option>
+                            <option value="Kronoberg">Kronoberg</option>
+                            <option value="Kalmar">Kalmar</option>
+                            <option value="Gotland">Gotland</option>
+                            <option value="Blekinge">Blekinge</option>
+                            <option value="Skåne">Skåne</option>
+                            <option value="Halland">Halland</option>
+                            <option value="Västra Götaland">Västra Götaland</option>
+                            <option value="Värmland">Värmland</option>
+                            <option value="Örebro">Örebro</option>
+                            <option value="Västmanland">Västmanland</option>
+                            <option value="Dalarna">Dalarna</option>
+                            <option value="Gävleborg">Gävleborg</option>
+                            <option value="Västernorrland">Västernorrland</option>
+                            <option value="Jämtland">Jämtland</option>
+                            <option value="Västerbotten">Västerbotten</option>
+                            <option value="Norrbotten">Norrbotten</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr></td>
+            </tr>
+        </table>
+
+        <div class="form-group">
+          <label for="N" class="font-weight-light text-small pl-1 mb-0">Befolkningsandel</label>
+          <div class="input-group mt-0">
+              <input type="number" id="N" class="form-control form-control-lg mt-0" step="1" value="100" min="0" max="100"><span id="percent-sign">%</span>
+              <input type="button" value="-" class="button-minus" data-field="quantity">
+              <input type="button" value="+" class="button-plus" data-field="quantity">
+          </div>
+        </div>
+
+        <hr class="text-white">
+
+        <div class="form-group">
+            <label for="b" class="font-weight-light text-small pl-1 mb-1">Smittsamhet - <img height="20" src="{% static 'beta.svg' %}"></img></label>
+            <div class="input-group mt-0">
+                <input type="number" id="b" class="form-control form-control-lg mt-0" step="0.01" value="0.67" min="0" max="10">
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="e_E" class="font-weight-light text-small pl-1 mb-0">Asymptomatisk smittsamhet</label>
+            <div class="input-group mt-0">
+                <input type="number" id="e_E" class="form-control form-control-lg mt-0" step="1" value="20" min="0" max="100"><span id="percent-sign">%</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="e_Q" class="font-weight-light text-small pl-1 mb-0">Karantänad smittsamhet</label>
+            <div class="input-group mt-0">
+                <input type="number" id="e_Q" class="form-control form-control-lg mt-0" step="1" value="10" min="0" max="100"><span id="percent-sign">%</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="e_J" class="font-weight-light text-small pl-1 mb-0">Isolerad smittsamhet</label>
+            <div class="input-group mt-0">
+                <input type="number" id="e_J" class="form-control form-control-lg mt-0" step="1" value="10" min="0" max="100"><span id="percent-sign">%</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+            <label for="t_E" class="font-weight-light text-small pl-1 mb-0">Inkubationstid</label>
+            <div class="input-group mt-0">
+                <input type="number" id="t_E" class="form-control form-control-lg mt-0" step="0.1" value="5.1" min="0" max="10"><span id="percent-sign">dagar</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="t_I" class="font-weight-light text-small pl-1 mb-0">Antal dagar som sjuk</label>
+            <div class="input-group mt-0">
+                <input type="number" id="t_I" class="form-control form-control-lg mt-0" step="0.1" value="4" min="0" max="20"><span id="percent-sign">dagar</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="t_J" class="font-weight-light text-small pl-1 mb-0">Dagar på slutenvård</label>
+            <div class="input-group mt-0">
+                <input type="number" id="t_J" class="form-control form-control-lg mt-0" step="0.1" value="8" min="0" max="30"><span id="percent-sign">dagar</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="t_C" class="font-weight-light text-small pl-1 mb-0">Dagar på intensivvård</label>
+            <div class="input-group mt-0">
+                <input type="number" id="t_C" class="form-control form-control-lg mt-0" step="0.1" value="8" min="0" max="30"><span id="percent-sign">dagar</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <label for="w_E" class="font-weight-light text-small pl-1 mb-0">Andel som stannar hemma vid sjukdom</label>
+            <div class="input-group mt-0">
+                <input type="number" id="w_E" class="form-control form-control-lg mt-0" step="0.1" value="0" min="0" max="100"><span id="percent-sign">%</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+        <hr>
+
+        <div class="form-group">
+            <label for="w_I" class="font-weight-light text-small pl-1 mb-0">Fall som behöver slutenvård</label>
+            <div class="input-group mt-0">
+                <input type="number" id="w_I" class="form-control form-control-lg mt-0" step="0.1" value="15" min="0" max="100"><span id="percent-sign">%</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="w_J" class="font-weight-light text-small pl-1 mb-0">Slutenvårdsfall som behöver IV</label>
+            <div class="input-group mt-0">
+                <input type="number" id="w_J" class="form-control form-control-lg mt-0" step="0.1" value="30" min="0" max="100"><span id="percent-sign">%</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="w_C" class="font-weight-light text-small pl-1 mb-0">Andel som dör i intensivvård</label>
+            <div class="input-group mt-0">
+                <input type="number" id="w_C" class="form-control form-control-lg mt-0" step="0.1" value="60" min="0" max="100"><span id="percent-sign">%</span>
+                <input type="button" value="-" class="button-minus" data-field="quantity">
+                <input type="button" value="+" class="button-plus" data-field="quantity">
+            </div>
+        </div>
+        <div class="text-center my-2">
+            <button class="btn btn-info text-center z-depth-0" type="button" name="button" id="calc">Beräkna</button>
+        </div>
+    </div>
+</div>

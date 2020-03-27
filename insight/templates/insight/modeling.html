@@ -33,14 +33,38 @@
     <link rel="stylesheet" href="{% static 'bootstrap-grid.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-    <title>Coronawatch: {{ total }} (+ {{new_cases}} nya fall)</title>
+    <title>SEQIJCR</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.0/css/mdb.min.css" rel="stylesheet">
-
-    <meta property="og:title" content="Coronawatch.se" />
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:100,200,400&display=swap" rel="stylesheet">    <meta property="og:title" content="Coronawatch.se" />
     <meta property="og:description" content="Utvecklingen av CoVid-19 i Sverige"/>
     <meta property="og:type" content="Senaste prognos" />
     <meta property="og:url" content="https://www.coronawatch.se/" />
     <meta property="og:image" content="static/graph2.png" />
+    <style media="screen">
+        body{
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-weight: 200;
+        }
+        .input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
+            border: none;
+        }
+
+        #percent-sign{
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-weight: 200;
+            top: 12px;
+            font-size: 18px;
+            color: #555;
+            left: 55px;
+            position: absolute;
+            z-index: 999;
+        }
+
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
 
 <!-- Modal -->
@@ -83,264 +107,89 @@
 
 <body class="">
         <!-- As a link -->
-    <nav class="navbar pt-2 navbar-dark blue-grey z-depth-0 text-left">
-        <img style="height: 2.5rem;" src="{% static 'virus_cw.svg' %}" class="pr-4">
-        <a class="navbar-brand mr-auto py-0 my-0" href="/" style="font-family: biohazard;">coronawatch.se</a>
-        <h6 class="text-white text-uppercase pr-1">Senast uppdaterad: </h6><h4 class="ml-1 text-uppercase text-white"><strong>{{ last_updated }}</strong></h4>
-    </nav>
-    <div class="row m-0 p-0" style="min-height: 95vh;">
+
+    <div class="row m-0 p-0">
+
         <div class="col-sm-12 col-lg-3 m-0 p-0">
-            <div class="card mx-sm-0 my-0 z-depth-0" style="background-color: #f0f2f6;">
-                <div class="card-body">
-                    <h4 class="font-weight-light"  style="display:inline-block;">SEIR</h4>
-                    <table style="display:inline-block;">
-                        <tr>
-                            <td>
-                                <select id="country" class="js-example-basic-single" style="width: 150px;">
-                                  <option value="Denmark">Danmark</option>
-                                  <option value="Finland">Finland</option>
-                                  <option value="France">Frankrike</option>
-                                  <option value="Germany">Tyskland</option>
-                                  <option value="Italy">Italien</option>
-                                  <option value="Netherlands">Nederländerna</option>
-                                  <option value="Norway">Norge</option>
-                                  <option value="Sweden" selected>Sverige</option>
-                                  <option value="South Korea">Sydkorea</option>
-                                  <option value="Spain">Spanien</option>
-                                  <option value="United_Kingdom">Storbrittanien</option>
-                                  <option value="United_States_of_America">USA</option>
-                                  <option value="Switzerland">Schweiz</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select id="region" class="js-example-basic-single" style="width: 150px;">
-                                        <option value="Sverige" selected>Hela Sverige</option>
-                                        <option value="Stockholm">Stockholm</option>
-                                        <option value="Uppsala">Uppsala</option>
-                                        <option value="Södermanland">Södermanland</option>
-                                        <option value="Östergötland">Östergötland</option>
-                                        <option value="Jönköping">Jönköping</option>
-                                        <option value="Kronoberg">Kronoberg</option>
-                                        <option value="Kalmar">Kalmar</option>
-                                        <option value="Gotland">Gotland</option>
-                                        <option value="Blekinge">Blekinge</option>
-                                        <option value="Skåne">Skåne</option>
-                                        <option value="Halland">Halland</option>
-                                        <option value="Västra Götaland">Västra Götaland</option>
-                                        <option value="Värmland">Värmland</option>
-                                        <option value="Örebro">Örebro</option>
-                                        <option value="Västmanland">Västmanland</option>
-                                        <option value="Dalarna">Dalarna</option>
-                                        <option value="Gävleborg">Gävleborg</option>
-                                        <option value="Västernorrland">Västernorrland</option>
-                                        <option value="Jämtland">Jämtland</option>
-                                        <option value="Västerbotten">Västerbotten</option>
-                                        <option value="Norrbotten">Norrbotten</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><hr></td>
-                        </tr>
-                    </table>
-                    <div class="form-group">
-                      <label for="N" class="font-weight-light text-small pl-1 mb-0">Befolkningsandel utan självkarantän (0-1)</label>
-                      <div class="input-group mt-0">
-                          <input type="number" id="N" class="form-control form-control-lg mt-0" step="0.01" value="0.0003" min="0" max="1">
-                          <input type="button" value="-" class="button-minus" data-field="quantity">
-                          <input type="button" value="+" class="button-plus" data-field="quantity">
-                      </div>
+            {% include 'insight/sidebar.html' %}
+        </div>
+
+        <div class="col-lg-6 mx-auto p-0" style="height: 100vh; overflow-y: scroll;">
+
+            <div class="info px-5">
+                <div class="justify-content-center my-4">
+
+                    <div class="headline mt-5 pt-5">
+                        <img height="30" src="{% static 'cardiogram.svg' %}" class="mb-3 mr-2" style="display: inline-block"></img>
+                        <h2 style="display: inline-block">SEQIJCR - prognostisera vårdbehov</h2>
+                        <p><strong>Viktigt!</strong> Sedan den 12e mars har samtliga regioner valt att sluta testa misstänkta fall utanför riskgrupper, försök hitta trender
+                        i dödsfall och vårdtillfällen istället.</p>
                     </div>
-                    <div class="form-group">
-                        <label for="pi" class="font-weight-light text-small pl-1 mb-0">Inflöde av mottagliga människor</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="pi" class="form-control form-control-lg mt-0" step="1000" value="0">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
+
+                    <div class="subtext mt-2 pt-2">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td><img height="24" src="{% static 'R0.svg' %}" style="display: inline-block" class="mb-1 mr-2"></img> <h6 id="ro" style="font-size: 24px; display: inline-block;"></h6></td>
+                                    <td><img height="24" src="{% static 'RC.svg' %}" style="display: inline-block" class="mb-1 mr-2"></img> <h6 id="rc" style="font-size: 24px; display: inline-block;"></h6></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                     </div>
-                    <hr class="text-white">
-                    <div class="form-group">
-                        <label for="b" class="font-weight-light text-small pl-1 mb-0">Smittsamhet</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="b" class="form-control form-control-lg mt-0" step="0.01" value="0.67" min="0" max="10">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
+
+                    <div class="w-100">
+                        <label for="p_days" class="text-muted">Antal dagar att beräkna i framtiden</label>
+                        <input type="range" class="custom-range" id="p_days" min="0" max="365" value="0" style="border: none;">
                     </div>
-                    <div class="form-group">
-                        <label for="e_E" class="font-weight-light text-small pl-1 mb-0">Asymptomatisk smittsamhet</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="e_E" class="form-control form-control-lg mt-0" step="0.01" value="0.5" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="s_1" class="font-weight-light text-small pl-1 mb-0">Tillfriskning, smittsamma</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="s_1" class="form-control form-control-lg mt-0" step="0.01" value="0.5" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="k_1" class="font-weight-light text-small pl-1 mb-0">Symptomutvecklingsgrad</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="k_1" class="form-control form-control-lg mt-0" step="0.01" value="0.4" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="d_1" class="font-weight-light text-small pl-1 mb-0">Dödstakt för smittsamma</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="d_1" class="form-control form-control-lg mt-0" step="0.01" value="0.004" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <h4 class="font-weight-light mt-4 pt-4">QJ</h4>
-                    <hr>
-                    <div class="form-group">
-                        <label for="k_2" class="font-weight-light text-small pl-1 mb-0">Symptomutvecklingsgrad i karantän</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="k_2" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="e_Q" class="font-weight-light text-small pl-1 mb-0">Karantänad smittsamhet</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="e_Q" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="e_J" class="font-weight-light text-small pl-1 mb-0">Isolerad smittsamhet</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="e_J" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="g_1" class="font-weight-light text-small pl-1 mb-0">Karantänsgrad</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="g_1" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="g_2" class="font-weight-light text-small pl-1 mb-0">Isoleringsgrad för smittsamma</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="g_2" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="s_2" class="font-weight-light text-small pl-1 mb-0">Tillfriskning, isolerade</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="s_2" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="d_2" class="font-weight-light text-small pl-1 mb-0">Dödstakt för isolerade</label>
-                        <div class="input-group mt-0">
-                            <input type="number" id="d_2" class="form-control form-control-lg mt-0" step="0.01" value="0" min="0" max="1">
-                            <input type="button" value="-" class="button-minus" data-field="quantity">
-                            <input type="button" value="+" class="button-plus" data-field="quantity">
-                        </div>
-                    </div>
-                    <div class="text-center my-2">
-                        <button class="btn btn-info text-center z-depth-0" type="button" name="button" id="calc">Beräkna</button>
+
+                    <div class="w-100">
+                        <span class="font-weight-bold text-primary ml-2 valueSpan2"></span>
                     </div>
                 </div>
+
             </div>
-        </div>
-        <div class="col-sm-12 col-lg-9 m-0 p-0 px-5">
-            <div class="card mx-sm-2 mt-0 pt-4 z-depth-0">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h1 id="ro" style="display: inline-block;" class="pr-2"</h1>
-                            <h1 id="rc" style="display: inline-block;"></h1>
-                        </div>
-                        <div class="col-sm-6 my-0">
-                            <button type="button" class="mt-4 py-0 btn-sm btn btn-info float-right z-depth-0" data-toggle="modal" data-target="#exampleModal">
-                              Om modellen
-                            </button>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="d-flex justify-content-center my-4">
-                              <div class="w-75">
-                                 <label for="p_days" class="text-muted">Antal dagar att beräkna i framtiden</label>
-                                <input type="range" class="custom-range" id="p_days" min="0" max="200" value="0">
-                              </div>
-                              <span class="font-weight-bold text-primary ml-2 valueSpan2"></span>
-                            </div>
-                        </div>
-                    </div>
+
+            <div class="card mx-sm-2 mt-0 pt-4 z-depth-0 px-0">
+
                 <div class="card-body">
-                    <h1 class="pl-2 font-weight-light"><br></h1>
+                    <h1 class="pl-2 font-weight-light my-4">Bekräftade fall</h1>
                     <div id="graph_1" class="chartdiv px-0" style="height: 400px;"></div>
-                    <div class="row">
-                        <div class="col-md-12 my-2">
-                            <select id="graph_1_mp" class="float-right js-example-basic-single">
-                              <option value="cases_confirmed" selected>Confirmed cases (I)</option>
-                              <option value="deaths_confirmed">Confirmed deaths (J)</option>
-                              <option value="no_measurement">No measurement</option>
-                            </select>
-                            <select id="graph_1_display" class="float-right js-example-basic-single" style="width: 350px;">
-                              <option value="infective">Infective (I)</option>
-                              <option value="intensive_care">Intensive Care (IC)</option>
-                              <option value="hospital_care">Hospital Care (HC)</option>
-                              <option value="isolated">Isolated (J)</option>
-                              <option value="susceptibles">Suspectibles (S)</option>
-                              <option value="quarantined">Quarantined (Q)</option>
-                              <option value="exposed">Exposed (E)</option>
-                              <option value="removed">Accumulated recovered (R)</option>
-                              <option value="accumulated_isolated">Accumulated Isolated (AJ)</option>
-                              <option value="accumulated_isolated_infective" selected>Accumulated Isolated+Infective (AJI)</option>
-                              <option value="accumulated_deaths">Accumulated Deaths (AD)</option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="card mx-sm-0 my-2 z-depth-0">
                 <div class="card-body">
+                    <h1 class="pl-2 font-weight-light my-4">Slutenvårdsfall</h1>
                     <div id="graph_2" class="chartdiv" style="height: 400px;"></div>
-                    <div class="row">
-                        <div class="col-md-12 my-3">
-                            <select id="graph_2_mp" class="float-right js-example-basic-single">
-                              <option value="cases_confirmed">Confirmed cases (I)</option>
-                              <option value="deaths_confirmed" selected>Confirmed deaths (J)</option>
-                              <option value="no_measurement">No measurement</option>
-                            </select>
-                            <select id="graph_2_display" class="float-right js-example-basic-single" style="width: 350px;">
-                              <option value="infective">Infective (I)</option>
-                              <option value="intensive_care">Intensive Care (IC)</option>
-                              <option value="hospital_care">Hospital Care (HC)</option>
-                              <option value="isolated">Isolated (J)</option>
-                              <option value="susceptibles">Suspectibles (S)</option>
-                              <option value="quarantined">Quarantined (Q)</option>
-                              <option value="exposed">Exposed (E)</option>
-                              <option value="removed">Accumulated recovered (R)</option>
-                              <option value="accumulated_isolated">Accumulated Isolated (AJ)</option>
-                              <option value="accumulated_isolated_infective">Accumulated Isolated+Infective (AJI)</option>
-                              <option value="accumulated_deaths" selected>Accumulated Deaths (AD)</option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
             </div>
-        </div>
+            <div class="card mx-sm-0 my-2 z-depth-0">
+                <div class="card-body">
+                    <h1 class="pl-2 font-weight-light my-4">Intensivvårdsfall</h1>
+                    <div id="graph_3" class="chartdiv" style="height: 400px;"></div>
+                </div>
+            </div>
+            <div class="card mx-sm-0 my-2 z-depth-0">
+                <div class="card-body">
+                    <h1 class="pl-2 font-weight-light my-4">Dödsfall</h1>
+                    <div id="graph_4" class="chartdiv" style="height: 400px;"></div>
+                </div>
+            </div>
+            <div class="card mb-5 z-depth-0 p-5">
+                <h1>Flöden</h1>
+                <p class="font-weight-light mb-3">Vårdbehoven i den här modellen bygger på en utvidgat SEIR-modell som simulerar ett epidemiskt utbrott.
+                Människor delas in i grupperna S, E, Q, I, J, R, C och flödena mellan de olika kategorierna bestäms av parametrarna som anges här. De förinställda parametrarna
+                är en kvalificierad gissning men kan ändras med tiden i och med att vi ändrar våra beteenden.
+                För enkelhetens skull antar vi att människor som intensivvårdas har tidigare vårdats i slutenvård, och att patienter enbart dör i intensivvården.
+                Vi antar också att tillfrisknaden som sjuk är detsamma oavsett om man gått in i frivillig karantän eller inte.
+                </p>
+
+                <div class="model mt-4">
+                    {% include 'insight/svg_model.html' %}
+                </div>
+
+            </div>
+            </div>
 
     </div>
 
@@ -372,7 +221,7 @@ input::-webkit-inner-spin-button {
 }
 
 .input-group input[type='button'] {
-  background-color: #929fba;
+  background-color: #e6eaf1;
   min-width: 48px;
   width: auto;
   transition: all 300ms ease;
@@ -412,6 +261,12 @@ g[aria-labelledby^='id'] {
     color: red;
 }
 
+g {
+    pointer-events: none;
+    cursor: default;
+}
+
+
 input[type="number"] {
   -moz-appearance: textfield;
   -webkit-appearance: none;
@@ -438,7 +293,7 @@ $(document).ready(function() {
         var min = parseFloat($input.attr('min'));
         var max = parseFloat($input.attr('max'));
         if(step.indexOf('.')>-1){
-            var j=2;
+            var j= step.length - step.indexOf('.') - 1;
         }else{
             var j=0;
         }
@@ -457,7 +312,7 @@ $(document).ready(function() {
         var min = parseFloat($input.attr('min'));
         var max = parseFloat($input.attr('max'));
         if(step.indexOf('.')>-1){
-            var j=2;
+            var j= step.length - step.indexOf('.') - 1;
         }else{
             var j=0;
         }
@@ -474,8 +329,7 @@ am4core.ready(function() {
     // Themes begin
     am4core.useTheme(am4themes_animated);
     // Create chart instance
-    var chart = am4core.create("graph_1", am4charts.XYChart);
-    var chart2 = am4core.create("graph_2", am4charts.XYChart);
+    var chart2 = am4core.create("graph_4", am4charts.XYChart);
     var sum_data;
 
     $('#calc').click(function() {
@@ -491,28 +345,13 @@ am4core.ready(function() {
         }
     });
 
-    $('#graph_1_mp').on('change', function() {
-        measurement_1 = $(this).val();
-        populateGraph1();
-    });
-
-    $('#graph_2_mp').on('change', function() {
-        measurement_2 = $(this).val();
-        populateGraph2();
-    });
-
-    $('#graph_1_display').on('change', function() {
-        display_1 = $(this).val();
-        populateGraph1();
-    });
-
-    $('#graph_2_display').on('change', function() {
-        display_2 = $(this).val();
-        populateGraph2();
-    });
 
     loadNewData();
 
+    function loadNewData() {
+        params = getParams();
+        reloadData(params);
+    }
     var health_cap = $('#health_cap').val();
 
     var colors = ['#4285F4', '#2BBBAD', '#2BBBAD', '#fb8c00', '#ef6c00', '#CC0000', '#ff8f00', '#ffeb3b'];
@@ -537,15 +376,17 @@ am4core.ready(function() {
 
     function fetchSuccess(Data, textStatus, jqXHR){
         sum_data = Data;
-        populateGraph1();
-        populateGraph2();
+        populateGraph('graph_1', '#fdc086', 'cases_confirmed', 'infected');
+        populateGraph('graph_2', '#8da0cb', 'no_measurement', 'hospital_care');
+        populateGraph('graph_3', '#3F729B', 'no_measurement', 'intensive_care');
+        populateGraph('graph_4', '#BC6468', 'deaths_confirmed', 'accumulated_deaths');
         updateR();
     }
 
     function updateR(){
         console.log('updateing R');
-        $('#rc').text('RC:'+ sum_data['key_figures']['RC'].toFixed(2))
-        $('#ro').text('RO:'+ sum_data['key_figures']['R0'].toFixed(2)  + ' | ')
+        $('#rc').text(sum_data['key_figures']['RC'].toFixed(2))
+        $('#ro').text(sum_data['key_figures']['R0'].toFixed(2))
     }
 
     $(document).on('keypress',function(e) {
@@ -554,229 +395,153 @@ am4core.ready(function() {
         }
     });
 
-    function populateGraph1(){
+    function populateGraph(id, color, confirmed, estimate){
         data = [];
 
-        var measured_points = sum_data[measurement_1];
+        var measured_points = sum_data[confirmed];
         var measured_dates = sum_data['dates_measured'];
 
         for(var i=0; i < measured_points.length; i++){
             m =  ({
-                    'ax': new Date(Date.parse(measured_dates[i])),
+                    'ax': measured_dates[i],
                     'ay': measured_points[i]
             })
             data.push(m)
         }
 
 
-        var display_points = sum_data[display_1];
+        var display_points = sum_data[estimate];
         var dates_prognosis = sum_data['dates_prognosis'];
 
         for(var i=0; i < display_points.length; i++){
             m =  ({
-                    'dx': new Date(Date.parse(dates_prognosis[i])),
+                    'dx': dates_prognosis[i],
                     'dy': display_points[i]
             })
             data.push(m)
         }
-        chart.data = data;
+        createChart(id, color, data)
     }
 
-    function populateGraph2(){
-        data = [];
-
-        var measured_points = sum_data[measurement_2];
-        var measured_dates = sum_data['dates_measured'];
-
-        for(var i=0; i < measured_points.length; i++){
-            m =  ({
-                    'ax': new Date(Date.parse(measured_dates[i])),
-                    'ay': measured_points[i]
-            })
-            data.push(m)
-        }
-
-
-        var display_points = sum_data[display_2];
-        var dates_prognosis = sum_data['dates_prognosis'];
-
-        for(var i=0; i < display_points.length; i++){
-            m =  ({
-                    'dx': new Date(Date.parse(dates_prognosis[i])),
-                    'dy': display_points[i]
-            })
-            data.push(m)
-        }
-        chart2.data = data;
-    }
 
     function getParams(){
         var p = {};
-        var No = $('#N').val()
-        var pi  = $('#pi').val()
-        var b = $('#b').val()
-        var e_E = $('#e_E').val()
-        var e_Q = $('#e_Q').val()
-        var e_J = $('#e_J').val()
-        var g_1 = $('#g_1').val()
-        var g_2 = $('#g_2').val()
-        var s_1 = $('#s_1').val()
-        var s_2 = $('#s_2').val()
-        var k_1 = $('#k_1').val()
-        var k_2 = $('#k_2').val()
-        var d_1 = $('#d_1').val()
-        var d_2 = $('#d_2').val()
-        var p_days = $('#p_days').val()
-        var country = $('#country').val()
-        var region = $('#region').val()
+
+        var No = parseFloat($('#N').val()/100);
+        var b = $('#b').val();
+
+        var e_E = parseFloat($('#e_E').val()/100);
+        var e_Q = parseFloat($('#e_Q').val()/100);
+        var e_J = parseFloat($('#e_J').val()/100);
+
+        var t_E = $('#t_E').val();
+        var t_I = $('#t_I').val();
+        var t_J = $('#t_J').val();
+        var t_C = $('#t_C').val();
+
+        var w_E = 1-parseFloat($('#w_E').val()/100);
+        var w_I = parseFloat($('#w_I').val()/100);
+        var w_J = parseFloat($('#w_J').val()/100);
+        var w_C = parseFloat($('#w_C').val()/100);
+
+        var country = $('#country').val();
+        var region = $('#region').val();
+        var p_days = $('#p_days').val();
+
         return {
             'N': No,
-            'pi': pi,
             'b': b,
             'e_E': e_E,
             'e_Q': e_Q,
             'e_J': e_J,
-            'g_1': g_1,
-            'g_2': g_2,
-            's_1': s_1,
-            's_2': s_2,
-            'k_1': k_1,
-            'k_2': k_2,
-            'd_1': d_1,
-            'd_2': d_2,
-            'p_days': p_days,
+            'e_C': e_J,
+            'T_E': t_E,
+            'T_Q': t_I,
+            'T_I': t_I,
+            'T_J': t_J,
+            'T_C': t_C,
+            'w_E': w_E,
+            'w_Q': w_I,
+            'w_I': w_I,
+            'w_J': w_J,
+            'w_C': w_C,
+            'P': p_days,
             'country' : country,
             'region' : region,
         }
+
     }
 
-    function loadNewData() {
-        params = getParams();
-        reloadData(params);
+    function createChart(id, color, data){
+        var chart = am4core.create(id, am4charts.XYChart);
+        chart.data = data;
+        chart.language.locale["_thousandSeparator"] = " ";
+        // Create axes
+        chart.numberFormatter.numberFormat = "#,###.";
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.renderer.labels.template.adapter.add("text", function(text, target) {
+              if(text == '0'){
+                  return ''
+              }else{
+                  return text
+            }
+        });
+        valueAxis.fontSize = 12;
+        valueAxis.color = '#999';
+        valueAxis.renderer.inside = true;
+        valueAxis.renderer.dy = -10;
+        valueAxis.renderer.dx = -4;
+        valueAxis.renderer.grid.gridAlpha = 0;
+        valueAxis.renderer.grid.template.strokeDash = 0;
+        valueAxis.renderer.labels.template.fill = am4core.color("#999");
+
+
+        var dateAxis = chart.xAxes.push(new am4charts.ValueAxis());
+
+        dateAxis.renderer.grid.template.disabled = true;
+
+        // Create series
+        var series = chart.series.push(new am4charts.LineSeries());
+        series.dataFields.valueY = "dy";
+        series.dataFields.valueX = "dx";
+        series.strokeWidth = 2;
+        series.fillOpacity = 0;
+        series.tooltipText = "{dy}";
+        series.tooltip.pointerOrientation = "vertical";
+        series.tooltip.background.fillOpacity = 0.5;
+        series.tooltip.label.padding(12,12,12,12)
+        series.stroke = am4core.color(color);
+
+
+        // Create series
+        var measurepoints = chart.series.push(new am4charts.ColumnSeries());
+        measurepoints.dataFields.valueY = "ay";
+        measurepoints.dataFields.valueX = "ax";
+        measurepoints.tooltipText = "Mätvärde: {ay}";
+        measurepoints.tooltip.pointerOrientation = "vertical";
+        measurepoints.tooltip.background.fillOpacity = 0.5;
+        measurepoints.tooltip.label.padding(12,12,12,12)
+
+        var bullet = measurepoints.bullets.push(new am4charts.Bullet());
+
+        // Add a triangle to act as am arrow
+        var arrow = bullet.createChild(am4core.Circle);
+        arrow.horizontalCenter = "middle";
+        arrow.verticalCenter = "middle";
+        arrow.strokeWidth = 2;
+        arrow.strokeOpacity = 0.6;
+        arrow.stroke = am4core.color('#3F729B');
+        arrow.fillOpacity = 0.3;
+        arrow.direction = "top";
+        arrow.width = 6;
+        arrow.height = 6;
+        dateAxis.start = 0;
+
+        // Add cursor
+        chart.logo.height = 1000;
+
+        return chart;
     }
-
-    // Create axes
-    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    chart.numberFormatter.numberFormat = "#,###.";
-
-    dateAxis.baseInterval = {
-      "timeUnit": "minute",
-      "count": 1
-    };
-    dateAxis.tooltipDateFormat = "d MMMM";
-
-
-    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    dateAxis.renderer.grid.template.disabled = true;
-
-    // Create series
-    var series = chart.series.push(new am4charts.LineSeries());
-    series.dataFields.valueY = "dy";
-    series.dataFields.dateX = "dx";
-    series.strokeWidth = 2;
-    series.fillOpacity = 0;
-    series.tooltipText = "{dy}";
-    series.tooltip.pointerOrientation = "vertical";
-    series.tooltip.background.fillOpacity = 0.5;
-    series.tooltip.label.padding(12,12,12,12)
-
-
-    // Create series
-    var measurepoints = chart.series.push(new am4charts.LineSeries());
-    measurepoints.dataFields.valueY = "ay";
-    measurepoints.dataFields.dateX = "ax";
-    measurepoints.strokeOpacity = 0;
-    measurepoints.tooltipText = "Mätvärde: {ay}";
-    measurepoints.tooltip.pointerOrientation = "vertical";
-    measurepoints.tooltip.background.fillOpacity = 0.5;
-    measurepoints.tooltip.label.padding(12,12,12,12)
-
-    // Add a bullet
-    var bullet = measurepoints.bullets.push(new am4charts.Bullet());
-
-    // Add a triangle to act as am arrow
-    var arrow = bullet.createChild(am4core.Triangle);
-    arrow.horizontalCenter = "middle";
-    arrow.verticalCenter = "middle";
-    arrow.strokeWidth = 1;
-    arrow.strokeOpacity = 1;
-    arrow.stroke = chart.colors.getIndex(0);
-    arrow.fillOpacity = 0.8;
-    arrow.direction = "top";
-    arrow.width = 8;
-    arrow.height = 8;
-
-    dateAxis.start = 0;
-    //dateAxis.end = 0.05;
-    valueAxis.start = 0;
-    valueAxis.end = 0.000001;
-    dateAxis.keepSelection = true;
-
-    // Add cursor
-    chart.cursor = new am4charts.XYCursor();
-    chart.cursor.xAxis = dateAxis;
-    chart.logo.height = 1000;
-
-
-
-    // Create axes
-    var dateAxis = chart2.xAxes.push(new am4charts.DateAxis());
-    dateAxis.renderer.grid.template.disabled = true;
-    dateAxis.baseInterval = {
-      "timeUnit": "minute",
-      "count": 1
-    };
-    dateAxis.tooltipDateFormat = "d MMMM";
-
-
-    var valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
-    chart2.numberFormatter.numberFormat = "#,###.";
-
-    // Create series
-    var series = chart2.series.push(new am4charts.LineSeries());
-    series.dataFields.valueY = "dy";
-    series.dataFields.dateX = "dx";
-    series.strokeWidth = 2;
-    series.tooltipText = "{dy}";
-    series.tooltip.pointerOrientation = "vertical";
-    series.tooltip.background.fillOpacity = 0.5;
-    series.tooltip.label.padding(12,12,12,12)
-
-    // Create series
-    var measurepoints = chart2.series.push(new am4charts.LineSeries());
-    measurepoints.dataFields.valueY = "ay";
-    measurepoints.dataFields.dateX = "ax";
-    measurepoints.strokeOpacity = 0;
-    measurepoints.tooltipText = "Mätvärde: {ay}";
-    measurepoints.tooltip.pointerOrientation = "vertical";
-    measurepoints.tooltip.background.fillOpacity = 0.5;
-    measurepoints.tooltip.label.padding(12,12,12,12)
-
-    // Add a bullet
-    var bullet = measurepoints.bullets.push(new am4charts.Bullet());
-
-    // Add a triangle to act as am arrow
-    var arrow = bullet.createChild(am4core.Triangle);
-    arrow.horizontalCenter = "middle";
-    arrow.verticalCenter = "middle";
-    arrow.strokeWidth = 1;
-    arrow.strokeOpacity = 1;
-    arrow.stroke = chart.colors.getIndex(0);
-    arrow.fillOpacity = 1;
-    arrow.direction = "top";
-    arrow.width = 8;
-    arrow.height = 8;
-
-    dateAxis.start = 0;
-    //dateAxis.end = 0.05;
-    valueAxis.start = 0;
-    valueAxis.end = 0.000001;
-    dateAxis.keepSelection = true;
-
-
-    // Add cursor
-    chart2.cursor = new am4charts.XYCursor();
-    chart2.cursor.xAxis = dateAxis;
 
 
     }); // end am4core.ready()

@@ -62,14 +62,14 @@ class FileReader:
     def population(self, country):
         return self.populations[country]
 
-    def cases(self, country, min_cases=10):
+    def cases(self, country, min_cases=100):
         return self.covid19[country][0][self.covid19[country][0] >= min_cases]
 
-    def deaths(self, country, min_cases=10):
+    def deaths(self, country, min_cases=100):
         return self.covid19[country][1][self.covid19[country][0] >= min_cases]
 
-    def number_of_points(self, country, min_cases=10):
+    def number_of_points(self, country, min_cases=100):
         return np.shape(self.cases(country, min_cases))[0]
 
-    def create_t_vector(self, country, min_cases=10):
+    def create_t_vector(self, country, min_cases=100):
         return np.arange(self.number_of_points(country, min_cases))
