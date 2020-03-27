@@ -283,7 +283,7 @@ class NewsParser:
             ihc.save()
 
             iic = CoronaCase.objects.get_or_create(region=region_kod, date=date, case_type='in_intensive_care')[0]
-            iic.infected = int(in_hospital_care)
+            iic.infected = int(in_intensive_care)
             iic.text = str(ihc.infected) + ' intensivvårdas i ' + case['region']
             iic.url = site.verbose_url
             iic.save()
