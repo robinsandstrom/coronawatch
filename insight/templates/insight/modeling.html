@@ -111,7 +111,7 @@
     <div class="row m-0 p-0">
 
         <div class="col-sm-12 col-lg-3 m-0 p-0">
-            {% include 'insight/sidebar.html' %}
+            {% include 'insight/sidebar.html' with countries=countries %}
         </div>
 
         <div class="col-lg-6 mx-auto p-0" style="height: 100vh; overflow-y: scroll;">
@@ -377,8 +377,8 @@ am4core.ready(function() {
     function fetchSuccess(Data, textStatus, jqXHR){
         sum_data = Data;
         populateGraph('graph_1', '#fdc086', 'cases_confirmed', 'infected');
-        populateGraph('graph_2', '#8da0cb', 'no_measurement', 'hospital_care');
-        populateGraph('graph_3', '#3F729B', 'no_measurement', 'intensive_care');
+        populateGraph('graph_2', '#8da0cb', 'in_hospital_confirmed', 'hospital_care');
+        populateGraph('graph_3', '#3F729B', 'intensive_care_confirmed', 'intensive_care');
         populateGraph('graph_4', '#BC6468', 'deaths_confirmed', 'accumulated_deaths');
         updateR();
     }

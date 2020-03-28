@@ -28,7 +28,7 @@ population_by_regions = {
     'Västra Götaland': 1725881,
     'Örebro': 304805,
     'Östergötland': 465495,
-    'Okänd region': 100000000
+    'Sverige': 10300000
 }
 
 def load_csv():

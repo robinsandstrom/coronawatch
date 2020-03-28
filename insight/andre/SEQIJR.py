@@ -6,7 +6,14 @@ class SEQIJCR:
                  'T_E', 'T_Q', 'T_I', 'T_J', 'T_C',
                  'w_E', 'w_Q', 'w_I', 'w_J', 'w_C',
                  'mu', 'Pi', 'pi',
-                 'last_update_time', 'actions']
+                 'last_update_time', 'actions',
+                 'x_confirmed',
+                 'cases_confirmed',
+                 'deaths_confirmed',
+                 'in_hospital_confirmed',
+                 'intensive_care_confirmed',
+                 'minime'
+                 ]
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -192,11 +199,38 @@ class SEQIJCR:
         print(self.Pi)
         print(self.pi)
 
+    def set_measurements(self, cases, minime=10):
+        self.minime = minime
 
-    def calc(self, country, files, P):
-        x_confirmed = files.create_t_vector(country)
-        cases_confirmed = files.cases(country)
-        deaths_confirmed = files.deaths(country)
+        x_confirmed = []
+        cases_confirmed = []
+        deaths_confirmed = []
+        in_hospital_confirmed = []
+        intensive_care_confirmed = []
+
+        i=0
+        for case in cases.filter(total_cases__gte=minime):
+            x_confirmed.append(i)
+            cases_confirmed.append(case.get('total_cases'))
+            deaths_confirmed.append(case.get('total_deaths'))
+            in_hospital_confirmed.append(case.get('in_hospital'))
+            intensive_care_confirmed.append(case.get('in_intensive_care'))
+
+            i+=1
+
+        self.x_confirmed = x_confirmed
+        self.cases_confirmed = cases_confirmed
+        self.deaths_confirmed = deaths_confirmed
+        self.in_hospital_confirmed = in_hospital_confirmed
+        self.intensive_care_confirmed = intensive_care_confirmed
+
+
+    def calc(self, P, shadow_figure=2):
+        x_confirmed = self.x_confirmed
+        cases_confirmed = np.array(self.cases_confirmed)
+        deaths_confirmed = np.array(self.deaths_confirmed)
+        in_hospital_confirmed = np.array(self.in_hospital_confirmed)
+        intensive_care_confirmed = np.array(self.intensive_care_confirmed)
 
 
         h = 1 / 5
@@ -212,10 +246,10 @@ class SEQIJCR:
 
         #model.set_actions(actions)
 
-        y_0 = self.get_y_0(100, shadow_figure=2)
+        y_0 = self.get_y_0(self.minime, shadow_figure=shadow_figure)
 
         x, S, E, Q, I, J, C, R, D = self.prediction(y_0, t_start, t_end, h)
-        infected = (Q + I + J + C + R + D)
+        infected = (Q + I + J + C + R + D)/shadow_figure
 
         last_int = 0
         no_of_seconds = int(x[-1])*24*60*60
@@ -242,6 +276,8 @@ class SEQIJCR:
                 'dates_measured': dates_measured,
                 'cases_confirmed': cases_confirmed.tolist(),
                 'deaths_confirmed': deaths_confirmed.tolist(),
+                'in_hospital_confirmed': in_hospital_confirmed.tolist(),
+                'intensive_care_confirmed': intensive_care_confirmed.tolist(),
                 'no_measurement': [],
                 'steps': x.tolist(),
                 'susceptibles': S.tolist(),
@@ -256,41 +292,41 @@ class SEQIJCR:
                 'key_figures': {
                     'RSS_aij': 0,
                     'RSS_deaths': 0,
-                    'R0': 0,#self.R_0(),
-                    'RC': 0,#self.R_c(),
+                    'R0': self.R_0(),#self.R_0(),
+                    'RC': self.R_c(),#self.R_c(),
                     'max_level': 0
                 }
                 }
-'''
-    def R_0(self):
-        D_1 = self.k_1 + self.mu
-        D_2 = self.d_1 + self.s_1 + self.mu
-        if (D_1 == 0) or (D_2 == 0):
-            return np.inf
-        else:
-            R_0 = self.b * (self.e_E / D_1 + self.k_1 / (D_1 * D_2))
-            return R_0
 
     def R_c(self):
-        D_1 = self.g_1 + self.k_1 + self.mu
-        D_2 = self.g_2 + self.d_1 + self.s_1 + self.mu
-        D_3 = self.s_2 + self.d_2 + self.mu
-        D_4 = self.mu + self.k_2
-        if (D_1 == 0) or (D_2 == 0) or (D_3 == 0) or (D_4 == 0):
-            return np.inf
-        else:
-            R_c = self.b * (self.e_E / D_1 +
-                            self.k_1 / (D_1 * D_2) +
-                            self.e_Q * self.g_1 / (D_1 * D_4) +
-                            self.e_J * self.k_1 * self.g_2 / (D_1 * D_2 * D_3) +
-                            self.e_J * self.g_1 * self.k_2 / (D_1 * D_3 * D_4))
-            return R_c
+        # The spectral radius of F*V^(-1)
+        return np.abs(self.get_b(0) / (1 - self.get_w_J(0) + self.get_w_C(0) * self.get_w_J(0)) * (
+                    - self.get_T_I(0) * self.get_w_E(0) +
+                    self.get_T_I(0) * self.get_w_E(0) * self.get_w_J(0) -
+                    self.get_T_I(0) * self.get_w_C(0) * self.get_w_E(0) * self.get_w_J(0) -
+                    self.get_T_C(0) * self.get_w_I(0) * self.get_w_E(0) * self.get_w_J(0) * self.get_e_C(0) -
+                    self.get_T_C(0) * self.get_w_J(0) * self.get_w_Q(0) * self.get_e_C(0) +
+                    self.get_T_C(0) * self.get_w_E(0) * self.get_w_J(0) * self.get_w_Q(0) * self.get_e_C(0) -
+                    self.get_T_E(0) * self.get_e_E(0) +
+                    self.get_T_E(0) * self.get_w_J(0) * self.get_e_E(0) -
+                    self.get_T_E(0) * self.get_w_C(0) * self.get_w_J(0) * self.get_e_E(0) -
+                    self.get_T_J(0) * self.get_w_I(0) * self.get_w_E(0) * self.get_e_J(0) -
+                    self.get_T_J(0) * self.get_w_Q(0) * self.get_e_J(0) +
+                    self.get_T_J(0) * self.get_w_E(0) * self.get_w_Q(0) * self.get_e_J(0) -
+                    self.get_T_Q(0) * self.get_e_Q(0) +
+                    self.get_T_Q(0) * self.get_w_E(0) * self.get_e_Q(0) +
+                    self.get_T_Q(0) * self.get_w_J(0) * self.get_e_Q(0) -
+                    self.get_T_Q(0) * self.get_w_C(0) * self.get_w_J(0) * self.get_e_Q(0) -
+                    self.get_T_Q(0) * self.get_w_E(0) * self.get_w_J(0) * self.get_e_Q(0) +
+                    self.get_T_Q(0) * self.get_w_C(0) * self.get_w_E(0) * self.get_w_J(0) * self.get_e_Q(0)))
 
-    @staticmethod
-    def integrate(y, h):
-        n = np.shape(y)[0]
-        integral = np.zeros(n)
-        for i in range(n - 1):
-            integral[i + 1] = integral[i] + (y[i] + y[i + 1]) * h / 2
-        return integral
-'''
+
+    def R_0(self):
+        return np.abs((self.get_b(0) / (1 - self.get_w_J(0) + self.get_w_C(0) * self.get_w_J(0)) * (
+                    -self.get_T_I(0) + self.get_T_I(0) * self.get_w_J(0) -
+                    self.get_T_I(0) * self.get_w_C(0) * self.get_w_J(0) -
+                    self.get_T_C(0) * self.get_w_I(0) * self.get_w_J(0) * self.get_e_C(0) -
+                    self.get_T_E(0) * self.get_e_E(0) +
+                    self.get_T_E(0) * self.get_w_J(0) * self.get_e_E(0) -
+                    self.get_T_E(0) * self.get_w_C(0) * self.get_w_J(0) * self.get_e_E(0) -
+                    self.get_T_J(0) * self.get_w_I(0) * self.get_e_J(0))))

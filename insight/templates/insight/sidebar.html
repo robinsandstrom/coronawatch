@@ -5,45 +5,10 @@
             <tr>
                 <td>
                     <select id="country" class="js-example-basic-single" style="width: 150px;">
-                      <option value="Denmark">Danmark</option>
-                      <option value="Finland">Finland</option>
-                      <option value="France">Frankrike</option>
-                      <option value="Germany">Tyskland</option>
-                      <option value="Italy">Italien</option>
-                      <option value="Netherlands">Nederländerna</option>
-                      <option value="Norway">Norge</option>
-                      <option value="Sweden" selected>Sverige</option>
-                      <option value="South Korea">Sydkorea</option>
-                      <option value="Spain">Spanien</option>
-                      <option value="United_Kingdom">Storbrittanien</option>
-                      <option value="United_States_of_America">USA</option>
-                      <option value="Switzerland">Schweiz</option>
-                    </select>
-                </td>
-                <td>
-                    <select id="region" class="js-example-basic-single" style="width: 150px;">
-                            <option value="Sverige" selected>Hela Sverige</option>
-                            <option value="Stockholm">Stockholm</option>
-                            <option value="Uppsala">Uppsala</option>
-                            <option value="Södermanland">Södermanland</option>
-                            <option value="Östergötland">Östergötland</option>
-                            <option value="Jönköping">Jönköping</option>
-                            <option value="Kronoberg">Kronoberg</option>
-                            <option value="Kalmar">Kalmar</option>
-                            <option value="Gotland">Gotland</option>
-                            <option value="Blekinge">Blekinge</option>
-                            <option value="Skåne">Skåne</option>
-                            <option value="Halland">Halland</option>
-                            <option value="Västra Götaland">Västra Götaland</option>
-                            <option value="Värmland">Värmland</option>
-                            <option value="Örebro">Örebro</option>
-                            <option value="Västmanland">Västmanland</option>
-                            <option value="Dalarna">Dalarna</option>
-                            <option value="Gävleborg">Gävleborg</option>
-                            <option value="Västernorrland">Västernorrland</option>
-                            <option value="Jämtland">Jämtland</option>
-                            <option value="Västerbotten">Västerbotten</option>
-                            <option value="Norrbotten">Norrbotten</option>
+                      {% for country in countries %}
+                        <option value="{{ country.country }}">{{ country.country }}</option>
+
+                      {% endfor %}
                     </select>
                 </td>
             </tr>
@@ -174,7 +139,7 @@
             </div>
         </div>
         <div class="text-center my-2">
-            <button class="btn btn-info text-center z-depth-0" type="button" name="button" id="calc">Beräkna</button>
+            <button class="btn btn-info text-center z-depth-0" type="button" name="button" id="calc" style="position: fixed; right: 0px; top: 0px; z-index: 9999;">Beräkna</button>
         </div>
     </div>
 </div>

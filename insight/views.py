@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
-from insight.backend import load_csv, populate_regional_data, aggregate_by_dates
+from insight.backend import load_csv, populate_regional_data, aggregate_by_dates, population_by_regions
 from insight.models import Article, CoronaCase, CountryTracker
 from datetime import datetime, timedelta
 from collections import OrderedDict
@@ -38,8 +38,10 @@ def about(request):
 def modeling(request):
     template = 'insight/modeling.html'
     last_updated = CoronaCase.objects.all().order_by('time_created').last().time_created
+    countries = list(CountryTracker.objects.filter(date=datetime.now().date()).order_by('country').values('country').distinct())
     return render(request, template, context={
                                             'last_updated': last_updated,
+                                            'countries': countries
                                             })
 def update(request):
     np = NewsParser()
@@ -78,29 +80,16 @@ def get_curve(request):
     w_I = float(request.GET.get('w_I', None))
     w_J = float(request.GET.get('w_J', None))
     w_C = float(request.GET.get('w_C', None))
+    shadow_figure = int(request.GET.get('shadow_figure', None) or 2)
 
     P = int(request.GET.get('P', None))
 
-    country = request.GET.get('country', None)
-    region = request.GET.get('region', None)
+    country = request.GET.get('country', None) or 'Sverige'
 
+    all_cases = CountryTracker.objects.filter(country=country).order_by('date').values()
+    N = population_by_regions[country]*N
 
-    if country != 'Sweden' or region == 'Sverige':
-        covid19_filename = 'COVID-19-geographic-disbtribution-worldwide-2020-03-23.xlsx'
-        population_filename = 'PopulationByCountry.xlsx'
-        pop_getter = country
-    else:
-        covid19_filename = 'COVID-19-geographic-distribution-sweden-2020-03-24.xlsx'
-        population_filename = 'PopulationBySwedishRegion.xlsx'
-        pop_getter = region
-
-
-    files = FileReader(covid19_filename, population_filename)
-    #time_confirmed = files.create_t_vector(pop_getter)
-    #cases_confirmed = files.cases(pop_getter)
-    #deaths_confirmed = files.deaths(pop_getter)
-
-    parameters = {'N': files.population(pop_getter)*N,
+    parameters = {'N': N,
                      'b': b,
                      'e_E': e_E, 'e_Q': e_Q, 'e_J': e_J, 'e_C': e_C,
                      'T_E': T_E, 'T_Q': T_Q, 'T_I': T_I, 'T_J': T_J, 'T_C': T_C,
@@ -109,11 +98,12 @@ def get_curve(request):
                      'Pi': 0,
                      'pi': 0}
 
-    pprint.pprint(parameters)
 
     model = SEQIJCR(**parameters)
 
-    data = model.calc(pop_getter, files, P)
+    model.set_measurements(all_cases)
+
+    data = model.calc(P, shadow_figure=shadow_figure)
 
     dump = json.dumps(data, indent=4, sort_keys=True, default=str)
 
