@@ -390,6 +390,9 @@ class NewsParser:
             if country == 'Totalt':
                 continue
 
+            if country == 'Jämtland Härjedalen':
+                country = 'Jämtland'
+
             if country == 'Södermanland':
                 country = 'Sörmland'
 
