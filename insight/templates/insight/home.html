@@ -486,11 +486,38 @@ am4core.ready(function() {
     current_ic_data = [];
 
     function updateMapChartData(data){
+        console.log(data);
         var this_data = []
+        var region_codes = {
+            'Stockholm': '01',
+            'Uppsala': '03',
+            'Södermanland': '04',
+            'Östergötland':'05',
+            'Jönköping': '06',
+            'Kronoberg': '07',
+            'Kalmar': '08',
+            'Gotland': '09',
+            'Blekinge': '10',
+            'Skåne': '12',
+            'Halland': '13',
+            'Västra Götaland': '14',
+            'Värmland': '17',
+            'Örebro': '18',
+            'Västmanland': '19',
+            'Dalarna': '20',
+            'Gävleborg': '21',
+            'Västernorrland': '22',
+            'Jämtland': '23',
+            'Västerbotten': '24',
+            'Norrbotten': '25',
+        }
         for(var region in data){
             this_data.push({
-                    id: region,
-                    value: data[region]['confirmed']
+                    id: parseInt(region_codes[data[region]['country']]),
+                    value: data[region]['total_cases'],
+                    in_hospital: data[region]['in_hospital'],
+                    in_intensive_care: data[region]['in_intensive_care'],
+                    total_deaths: data[region]['total_deaths'],
             })
         }
         return this_data;
@@ -604,7 +631,12 @@ am4core.ready(function() {
 
           // Configure series tooltip
           var polygonTemplate = polygonSeries.mapPolygons.template;
-          polygonTemplate.tooltipText = "{NAME_1}: {value}";
+          polygonTemplate.tooltipText = '{NAME_1}:\n \
+                                        Bekräftade fall: {value} \n \
+                                        I slutenvård: {in_hospital} \n \
+                                        I sjukhusvård: {in_intensive_care} \n \
+                                        Dödsfall: {total_deaths} \n \
+                                        ';
           polygonTemplate.nonScalingStroke = true;
           polygonTemplate.strokeWidth = 0.5;
 
