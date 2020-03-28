@@ -122,8 +122,8 @@ class NewsParser:
         pass
 
     def run(self):
-        self.parse_aftonbladet()
-
+        #self.parse_aftonbladet()
+        self.parse_dn()
 
 
 
@@ -363,6 +363,60 @@ class NewsParser:
                 CountryTracker.objects.filter(id=ct.id).update(**cases)
 
         pprint(summary)
+
+    def parse_dn(self):
+        r = requests.get('https://api.quickshot-widgets.net/fields/1141')
+        updated_string = r.json()['fields'][2]['value']
+        date_string  = updated_string.split('Uppdaterad')[1]
+        date_string  = date_string.split('den ')[1]
+        date_string = date_string.split('.')[0]
+        day = date_string.split('/')[0]
+        month = date_string.split('/')[1]
+
+        today = datetime.now().date()
+
+        if str(today.day) == day and str(today.month) == month:
+            print('its today')
+        else:
+            return
+
+        list_of_regions = r.json()['fields'][3]['value']
+        totalt_inlagda = 0
+        total_iva = 0
+
+        for region in list_of_regions:
+            country = region['region']
+
+            if country == 'Totalt':
+                continue
+
+            in_hospital = int(region['INLAGDA*'])
+            totalt_inlagda+=in_hospital
+
+            in_intensive_care = int(region['VARAV IVA**'])
+            total_iva+=in_intensive_care
+
+            ct = CountryTracker.objects.get_or_create(date=today, country=country)[0]
+
+            if in_hospital > ct.in_hospital:
+                ct.in_hospital = in_hospital
+
+            if in_intensive_care > ct.in_intensive_care:
+                ct.in_intensive_care = in_intensive_care
+
+            ct.save()
+
+        ct = CountryTracker.objects.get_or_create(date=today, country='Sverige')[0]
+
+        if totalt_inlagda > ct.in_hospital:
+            ct.in_hospital = totalt_inlagda
+
+        if total_iva > ct.in_intensive_care:
+            ct.in_intensive_care = total_iva
+
+        ct.save()
+
+    #    for case in list_of_cases:
 
 class Command(BaseCommand):
     #A command which takes a from_date as an input and then tries to put in all Intrabank rates into DB from that date
