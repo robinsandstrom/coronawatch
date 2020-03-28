@@ -390,6 +390,9 @@ class NewsParser:
             if country == 'Totalt':
                 continue
 
+            if country == 'Södermanland':
+                country = 'Sörmland'
+
             in_hospital = int(region['INLAGDA*'])
             totalt_inlagda+=in_hospital
 
