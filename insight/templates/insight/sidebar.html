@@ -6,7 +6,11 @@
                 <td>
                     <select id="country" class="js-example-basic-single" style="width: 150px;">
                       {% for country in countries %}
-                        <option value="{{ country.country }}">{{ country.country }}</option>
+                        {% if country.country == 'Sverige' %}
+                            <option value="{{ country.country }}" selected>{{ country.country }}</option>
+                        {% else %}
+                            <option value="{{ country.country }}">{{ country.country }}</option>
+                        {% endif %}
 
                       {% endfor %}
                     </select>
