@@ -1,5 +1,5 @@
 {% load static %}
-<div class="card mx-sm-0 my-0 z-depth-0" style="background-color: #f0f2f6; height: 100vh; overflow-y: scroll;">
+<div class="card mx-sm-0 my-0 z-depth-0 my-scroll" style="background-color: #f0f2f6;">
     <div class="card-body">
         <table style="display:inline-block;">
             <tr>
@@ -25,6 +25,15 @@
           <label for="N" class="font-weight-light text-small pl-1 mb-0">Befolkningsandel</label>
           <div class="input-group mt-0">
               <input type="number" id="N" class="form-control form-control-lg mt-0" step="1" value="100" min="0" max="100"><span id="percent-sign">%</span>
+              <input type="button" value="-" class="button-minus" data-field="quantity">
+              <input type="button" value="+" class="button-plus" data-field="quantity">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="shadow_figure" class="font-weight-light text-small pl-1 mb-0">Mörkertal</label>
+          <div class="input-group mt-0">
+              <input type="number" id="shadow_figure" class="form-control form-control-lg mt-0" step="1" value="2" min="0" max="99"><span id="percent-sign">x</span>
               <input type="button" value="-" class="button-minus" data-field="quantity">
               <input type="button" value="+" class="button-plus" data-field="quantity">
           </div>

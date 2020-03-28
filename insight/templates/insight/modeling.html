@@ -64,46 +64,19 @@
         ::-webkit-scrollbar {
             display: none;
         }
+
+        @media (min-width: 400px) {
+            .my-scroll{
+                height: 100vh !important;
+                overflow-y: scroll !important;
+            }
+        }
+
+
     </style>
 </head>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Om modellen</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Modellen använder sig av en såkallad SEQIJR-modell med 6 olika stadier: <br>
-        S - Suspectibles <br>
-        E - Exposed <br>
-        Q - Quarantined <br>
-        I - Infective <br>
-        J - Isolated <br>
-        R - Recovered <br>
-        <br>
-        Du kan justera parametrarna för att avgöra flödena mellan de olika stadierna. Du kan även justera
-        andelen av populationen som beblandas. När du ser att kurvorna passar mätpunkterna kan du förlänga modellen
-        in i framtiden för att få en prognos. <br>
-        <br>
-        Modellen ska inte tolkas som en absolut sanning utan enbart ett verktyg för att förstå epidemisk spridning och
-        enkelt få återkoppling på hur ändringar i beteende eller smittsamhet påverkar spridningen över tid.
-        <br>
-        För den som vill läsa mer finns modellen publicerad på GITHUB här: <br>
-        <br>
-        <a href="https://github.com/robinsandstrom/SEQJIR/">SEQIJR</a>
-        <br>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-dismiss="modal">Stäng</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <body class="">
         <!-- As a link -->
@@ -114,7 +87,7 @@
             {% include 'insight/sidebar.html' with countries=countries %}
         </div>
 
-        <div class="col-lg-6 mx-auto p-0" style="height: 100vh; overflow-y: scroll;">
+        <div class="col-lg-6 mx-auto p-0 my-scroll">
 
             <div class="info px-5">
                 <div class="justify-content-center my-4">
@@ -447,9 +420,11 @@ am4core.ready(function() {
         var country = $('#country').val();
         var region = $('#region').val();
         var p_days = $('#p_days').val();
+        var shadow_figure = $('#shadow_figure').val();
 
         return {
             'N': No,
+            'shadow_figure': shadow_figure,
             'b': b,
             'e_E': e_E,
             'e_Q': e_Q,
@@ -511,7 +486,7 @@ am4core.ready(function() {
         series.tooltip.background.fillOpacity = 0.5;
         series.tooltip.label.padding(12,12,12,12)
         series.stroke = am4core.color(color);
-
+        series.name = 'Prognos';
 
         // Create series
         var measurepoints = chart.series.push(new am4charts.ColumnSeries());
@@ -521,6 +496,7 @@ am4core.ready(function() {
         measurepoints.tooltip.pointerOrientation = "vertical";
         measurepoints.tooltip.background.fillOpacity = 0.5;
         measurepoints.tooltip.label.padding(12,12,12,12)
+        measurepoints.name = 'Mätvärden';
 
         var bullet = measurepoints.bullets.push(new am4charts.Bullet());
 
