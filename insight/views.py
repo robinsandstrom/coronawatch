@@ -20,7 +20,7 @@ from django.db.models.functions import Trunc
 def index(request):
 
     template = 'insight/home.html'
-    articles = Article.objects.all().order_by('-time_created')[0:5]
+    articles = Article.objects.all().order_by('-time_created')[0:4]
     last_updated = CoronaCase.objects.all().order_by('time_created').last().time_created
 
     return render(request, template, context={
@@ -123,26 +123,33 @@ def get_curve(request):
 def get_numbers(request):
 
     region = request.GET.get('region', None)
+    date = request.GET.get('date', None)
+
     all_cases = CoronaCase.objects.all().order_by('date')
 
-    if region is not None and region!='All':
-        all_cases = all_cases.filter(region=region)
+    if region is not None:
+        all_cases = CountryTracker.objects.filter(country=region).order_by('date').values()
+    else:
+        all_cases = CountryTracker.objects.filter(country='Sverige').order_by('date').values()
 
-    historic_cases = all_cases.exclude(case_type='in_intensive_care').exclude(case_type='in_hospital_care')
+    if date is not None:
+        pass
+    else:
+        regional_data= CountryTracker.objects.filter(date=datetime.now().date())
+        if len(regional_data) == 0:
+            regional_data= CountryTracker.objects.filter(date=datetime.now().date()-timedelta(days=1))
 
-    ordered_regional_data, regional_data, key_figures = populate_regional_data(historic_cases)
-
-    aggregated = aggregate_by_dates(historic_cases)
-
+    key_figures = all_cases.last()
+    key_figures_yesterday = all_cases[len(all_cases)-2]
+    key_figures['new_hospitalised'] = key_figures['in_hospital'] - key_figures_yesterday['in_hospital']
+    key_figures['new_intensive_cares'] = key_figures['in_intensive_care'] - key_figures_yesterday['in_intensive_care']
     data = {
-            'ordered_regional_data': ordered_regional_data,
+            'ordered_regional_data': list(regional_data.values()),
             'key_figures': key_figures,
-            'aggregated': aggregated,
-            'all_cases': all_cases
+            'aggregated': list(all_cases),
     }
 
     dump = json.dumps(data, indent=4, sort_keys=False, default=str)
-
     return HttpResponse(dump, content_type='application/json')
 
 def current_cases(request):

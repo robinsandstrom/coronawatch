@@ -123,7 +123,7 @@ class NewsParser:
 
     def run(self):
 
-        try:
+        """try:
             self.parse_svt()
         except:
             print('Failed SVT')
@@ -136,14 +136,15 @@ class NewsParser:
         try:
             self.parse_aftonbladet()
         except:
-            print('Failed Aftonbladet')
+            print('Failed Aftonbladet')"""
 
+        self.parse_fhm()
         try:
-            self.parse_fhm()
+            pass
         except:
             print('Failed FHM')
 
-        try:
+        """try:
             self.parse_omni()
         except:
             print('Failed Omni')
@@ -151,7 +152,7 @@ class NewsParser:
         try:
             self.parse_sir()
         except:
-            pass
+            pass"""
 
     def parse_omni(self):
         url = 'https://omni-content.omni.news/articles?topics=3ee2d7f6-56f1-4573-82b9-a4164cbdc902'
@@ -291,6 +292,7 @@ class NewsParser:
 
     def parse_fhm(self):
         site = ScrapeSite.objects.get(name='Folkhälsomyndigheten')
+
         trs = self.get_fhm_tds(site)
         summary = self.fhm_to_summary(trs)
         self.add_cases_from_summary(summary, site)
@@ -336,14 +338,18 @@ class NewsParser:
 
     def get_fhm_tds(self, site):
         url = site.url
-        page = requests.get(url)
+        r = requests.get(url)
+        r = r.json()
+        today = datetime.now().date()
+        measure_dates = r['features']
 
-        soup = bs4.BeautifulSoup(page.content, 'html.parser')
-        div = soup.find("div", {'id': 'content-primary'})
-        table = div.findAll("table")[0]
-        tbody = table.find("tbody")
-        trs = tbody.findAll('tr', limit=None)
-        return trs[:-1]
+        for date in measure_dates:
+            data = date['attributes']
+            datum = datetime.utcfromtimestamp(int(str(data['Statistikdatum'])[0:10])).date()
+            if datum == today:
+                pprint(data)
+
+
 
     def expressen_to_summary(self, ps):
         parsed_data = []

@@ -380,6 +380,8 @@ class CountryTracker(models.Model):
     new_cases = models.IntegerField(default=0)
     total_deaths = models.IntegerField(default=0)
     new_deaths = models.IntegerField(default=0)
+    in_hospital = models.IntegerField(default=0)
+    in_intensive_care = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.country) + ' ' + str(self.date)
