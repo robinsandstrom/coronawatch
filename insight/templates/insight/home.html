@@ -619,8 +619,6 @@ am4core.ready(function() {
           heatLegend.width = am4core.percent(0);
           heatLegend.marginRight = am4core.percent(-400);
           heatLegend.minValue = 0;
-          heatLegend.maxValue = 148;
-          heatLegend.maxValue = 148;
 
           // Set up custom heat map legend labels using axis ranges
           var minRange = heatLegend.valueAxis.axisRanges.create();
@@ -633,8 +631,8 @@ am4core.ready(function() {
           var polygonTemplate = polygonSeries.mapPolygons.template;
           polygonTemplate.tooltipText = '{NAME_1}:\n \
                                         Bekräftade fall: {value} \n \
-                                        I slutenvård: {in_hospital} \n \
-                                        I sjukhusvård: {in_intensive_care} \n \
+                                        I sjukhusvård: {in_hospital} \n \
+                                        Varav-IVA: {in_intensive_care} \n \
                                         Dödsfall: {total_deaths} \n \
                                         ';
           polygonTemplate.nonScalingStroke = true;
