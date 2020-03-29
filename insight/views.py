@@ -126,7 +126,7 @@ def get_numbers(request):
         pass
     else:
         regional_data= CountryTracker.objects.filter(date=datetime.now().date())
-        if len(regional_data) == 0:
+        if len(regional_data) < 20:
             regional_data= CountryTracker.objects.filter(date=datetime.now().date()-timedelta(days=1))
 
     key_figures = all_cases.last()
