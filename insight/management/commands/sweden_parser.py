@@ -122,7 +122,7 @@ class NewsParser:
         pass
 
     def run(self):
-        #self.parse_aftonbladet()
+        self.parse_aftonbladet()
         self.parse_dn()
 
 
@@ -335,16 +335,17 @@ class NewsParser:
             'Sverige': {'cases': 0, 'deaths': 0}
         }
 
-        today = datetime.now().date()
+        stop = datetime.now().date()
+        today = stop-timedelta(days=4)
+        while today <= stop:
+            if str(today) in summary:
+                for name, region in summary[str(today)].items():
+                    if region['in_hospital'] == 0:
+                        region['in_hospital'] = summary[str(today-timedelta(days=1))][name]['in_hospital']
 
-        if str(today) in summary:
-            for name, region in summary[str(today)].items():
-                pprint(region)
-                if region['in_hospital'] == 0:
-                    region['in_hospital'] = summary[str(today-timedelta(days=1))][name]['in_hospital']
-
-                if region['in_intensive_care'] == 0:
-                    region['in_intensive_care'] = summary[str(today-timedelta(days=1))][name]['in_intensive_care']
+                    if region['in_intensive_care'] == 0:
+                        region['in_intensive_care'] = summary[str(today-timedelta(days=1))][name]['in_intensive_care']
+            today+=timedelta(days=1)
 
 
 
