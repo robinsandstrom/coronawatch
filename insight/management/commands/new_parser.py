@@ -136,26 +136,26 @@ class NewsParser:
         try:
             self.parse_aftonbladet()
         except:
-            print('Failed Aftonbladet')"""
+            print('Failed Aftonbladet')
 
         self.parse_fhm()
         try:
             pass
         except:
             print('Failed FHM')
-
-        """try:
+        """
+        try:
             self.parse_omni()
         except:
             print('Failed Omni')
-
+        """
         try:
             self.parse_sir()
         except:
             pass"""
 
     def parse_omni(self):
-        url = 'https://omni-content.omni.news/articles?topics=3ee2d7f6-56f1-4573-82b9-a4164cbdc902'
+        url = 'https://omni-content.omni.news/articles?topics=ecb4d627-d9f4-4bd9-806d-9a132f261133'
         r = requests.get(url)
         articles = r.json()['articles']
         for article in articles:
