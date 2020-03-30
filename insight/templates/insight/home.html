@@ -534,10 +534,10 @@ am4core.ready(function() {
             if(Date.parse(data[date]['date']) > d){
 
 
-            var confItem = {date: data[date]['date'],  value: data[date]['total_cases'] };
+            var confItem = {date: data[date]['date'],  value: data[date]['new_cases'] };
             var icItem = {date: data[date]['date'],  value: data[date]['in_intensive_care'] };
             var hcItem = {date: data[date]['date'],  value: data[date]['in_hospital'] };
-            var deathItem = {date:  data[date]['date'],  value: data[date]['total_deaths'] };
+            var deathItem = {date:  data[date]['date'],  value: data[date]['new_deaths'] };
 
             if(confItem.value > 0){
                 confirmed_data.push(confItem);
