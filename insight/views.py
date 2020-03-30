@@ -21,11 +21,10 @@ def index(request):
 
     template = 'insight/home.html'
     articles = Article.objects.all().order_by('-time_created')[0:4]
-    last_updated = CoronaCase.objects.all().order_by('time_created').last().time_created
 
     return render(request, template, context={
                                             'articles': articles,
-                                            'last_updated': last_updated
+                                            'last_updated': Article.objects.all().last().time_created
                                             })
 
 def about(request):

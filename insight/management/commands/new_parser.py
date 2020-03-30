@@ -123,7 +123,7 @@ class NewsParser:
 
     def run(self):
 
-        """try:
+        try:
             self.parse_svt()
         except:
             print('Failed SVT')
@@ -138,21 +138,20 @@ class NewsParser:
         except:
             print('Failed Aftonbladet')
 
-        self.parse_fhm()
+        try:
+            self.parse_fhm()
+        except:
+            pass
         try:
             pass
         except:
             print('Failed FHM')
-        """
+
         try:
             self.parse_omni()
         except:
             print('Failed Omni')
-        """
-        try:
-            self.parse_sir()
-        except:
-            pass"""
+
 
     def parse_omni(self):
         url = 'https://omni-content.omni.news/articles?topics=ecb4d627-d9f4-4bd9-806d-9a132f261133'
