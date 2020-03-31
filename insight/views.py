@@ -37,7 +37,7 @@ def about(request):
 def modeling(request):
     template = 'insight/modeling.html'
     last_updated = CoronaCase.objects.all().order_by('time_created').last().time_created
-    countries = list(CountryTracker.objects.filter(date=datetime.now().date()).order_by('country').values('country').distinct())
+    countries = list(CountryTracker.objects.all().order_by('country').values('country').distinct())
     return render(request, template, context={
                                             'last_updated': last_updated,
                                             'countries': countries
