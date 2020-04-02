@@ -7,6 +7,7 @@ import json
 
 from insight.models import Article, CoronaCase, CountryTracker
 from insight.backend import populate_regional_data
+from django.db.models import Sum
 
 from pprint import pprint
 
@@ -123,181 +124,37 @@ class NewsParser:
 
     def run(self):
         self.parse_aftonbladet()
-        self.parse_dn()
 
 
 
     def parse_aftonbladet(self):
         r = requests.get('https://tethys.aftonbladet.se/configurationdata/coronaswenumbers')
-        pprint(r.json())
         list_of_cases = r.json()['workSheets']['swe_numbers']['rows']
         summary = {}
+
         for case in list_of_cases:
-            #print(case)
             d = case['date']
             region = case['region']
             cases = int(case['confirmed'])
             deaths = int(case['dead'])
 
-            if d in summary:
-                summary[d][region]['total_cases'] = cases
-                summary[d][region]['total_cases'] = deaths
+            case = {
+                'date': d,
+                'total_cases': cases,
+                'total_deaths': deaths,
+                'country': region,
+            }
 
-                summary[d]['Sverige']['total_cases'] += cases
-                summary[d]['Sverige']['total_deaths'] += deaths
+            ct = CountryTracker.objects.get_or_create(date=case['date'], country=case['country'])[0]
+            ct_old = CountryTracker.objects.get_or_create(date=datetime.strptime(case['date'],'%Y-%m-%d')-timedelta(days=1), country=case['country'])[0]
+            prev_day_c = ct_old.total_cases or 0
+            prev_day_d = ct_old.total_deaths or 0
 
-                try:
-                    old_cases = int(summary[str(datetime.strptime(d, '%Y-%m-%d').date()-timedelta(days=1))][region]['total_cases'])
-                    old_deaths = int(summary[str(datetime.strptime(d, '%Y-%m-%d').date()-timedelta(days=1))][region]['total_deaths'])
-                except:
-                    old_cases = 0
-                    old_deaths = 0
+            case['new_cases']= cases - prev_day_c
+            case['new_deaths']= deaths - prev_day_d
 
-                summary[d][region]['new_cases'] = cases-old_cases
-                summary[d][region]['new_deaths'] = deaths-old_deaths
-                summary[d]['Sverige']['new_cases'] += cases-old_cases
-                summary[d]['Sverige']['new_deaths'] += deaths-old_deaths
+            CountryTracker.objects.filter(id=ct.id).update(**case)
 
-            else:
-                summary[d] = {
-                        'Stockholm': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Uppsala': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Sörmland': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Östergötland': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Jönköping': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Kronoberg': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Kalmar': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Gotland': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Blekinge': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Skåne': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Halland': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Västra Götaland': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Värmland': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Örebro': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Västmanland': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Dalarna': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Gävleborg': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Västernorrland': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Jämtland': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Västerbotten': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Norrbotten': {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0
-                        },
-                        'Sverige' : {
-                            'new_cases': 0,
-                            'new_deaths': 0,
-                            'in_hospital': 0,
-                            'in_intensive_care': 0,
-                            'total_cases': 0,
-                            'total_deaths': 0,
-                        }
-                }
-
-                summary[d][region]['new_cases'] = 1
-                summary[d]['Sverige']['new_cases'] = 1
 
         in_care_site = 'https://tethys.aftonbladet.se/configurationdata/coronaregion'
         r = requests.get(in_care_site)
@@ -305,88 +162,50 @@ class NewsParser:
 
 
         for case in list_of_cases:
-            if case['inlagda-totalt'] != 'nan':
-                summary[case['date']][case['region']]['in_hospital'] = int(case['inlagda-totalt'])
-                summary[case['date']]['Sverige']['in_hospital'] += int(case['inlagda-totalt'])
+            d = case['date']
+            region = case['region']
+            ct = CountryTracker.objects.get_or_create(date=d, country=region)[0]
 
+            if case['inlagda-totalt'] != 'nan':
+                ct.in_hospital = case['inlagda-totalt']
 
             if case['varav-iva'] != 'nan':
-                summary[case['date']][case['region']]['in_intensive_care'] = int(case['varav-iva'])
-                summary[case['date']]['Sverige']['in_intensive_care'] += int(case['varav-iva'])
-
-
-        pprint(summary)
-
-        for date, regions in summary.items():
-
-            for region, cases in regions.items():
-                cases['date'] = date
-                cases['country'] = region
-
-                ct = CountryTracker.objects.get_or_create(date=cases['date'], country=cases['country'])[0]
-                CountryTracker.objects.filter(id=ct.id).update(**cases)
-
-        #pprint(summary)
-
-    def parse_dn(self):
-        r = requests.get('https://api.quickshot-widgets.net/fields/1141')
-        updated_string = r.json()['fields'][2]['value']
-        date_string  = updated_string.split('Uppdaterad')[1]
-        date_string  = date_string.split('den ')[1]
-        date_string = date_string.split('.')[0]
-        day = date_string.split('/')[0]
-        month = date_string.split('/')[1]
-
-        today = datetime.now().date()
-
-        if str(today.day) == day and str(today.month) == month:
-            print('its today')
-        else:
-            return
-
-        list_of_regions = r.json()['fields'][3]['value']
-        totalt_inlagda = 0
-        total_iva = 0
-
-        for region in list_of_regions:
-            country = region['region']
-
-            if country == 'Totalt':
-                continue
-
-            if country == 'Jämtland Härjedalen':
-                country = 'Jämtland'
-
-            if country == 'Södermanland':
-                country = 'Sörmland'
-
-            in_hospital = int(region['INLAGDA*'])
-            totalt_inlagda+=in_hospital
-
-            in_intensive_care = int(region['VARAV IVA**'])
-            total_iva+=in_intensive_care
-
-            ct = CountryTracker.objects.get_or_create(date=today, country=country)[0]
-
-            if in_hospital > ct.in_hospital:
-                ct.in_hospital = in_hospital
-
-            if in_intensive_care > ct.in_intensive_care:
-                ct.in_intensive_care = in_intensive_care
+                ct.in_intensive_care = case['varav-iva']
 
             ct.save()
 
-        ct = CountryTracker.objects.get_or_create(date=today, country='Sverige')[0]
+        all_cases = CountryTracker.objects.exclude(country='Sverige')
 
-        if totalt_inlagda > ct.in_hospital:
-            ct.in_hospital = totalt_inlagda
+        date = datetime.strptime('2020-01-30', '%Y-%m-%d').date()
 
-        if total_iva > ct.in_intensive_care:
-            ct.in_intensive_care = total_iva
+        while date <= datetime.now().date():
+            daily_cases = all_cases.filter(date=date)
+            new_cases = daily_cases.aggregate(Sum('new_cases'))['new_cases__sum'] or 0
+            total_cases = daily_cases.aggregate(Sum('total_cases'))['total_cases__sum'] or 0
+            new_deaths = daily_cases.aggregate(Sum('new_deaths'))['new_deaths__sum'] or 0
+            total_deaths = daily_cases.aggregate(Sum('total_deaths'))['total_deaths__sum'] or 0
+            ct = CountryTracker.objects.get_or_create(date=date, country='Sverige')[0]
+            ct.new_cases = new_cases
+            ct.total_cases = total_cases
+            ct.new_deaths = new_deaths
+            ct.total_deaths = total_deaths
+            ct.save()
+            date += timedelta(days=1)
 
-        ct.save()
+        all_cases_today = CountryTracker.objects.filter(date=datetime.now().date())
+        i=0
+        for case in all_cases_today:
+            previous_case = CountryTracker.objects.filter(country=case.country, date=case.date-timedelta(days=1))[0]
+            if case.in_hospital == 0 or  case.in_hospital ==  None:
+                case.in_hospital = previous_case.in_hospital
+            if case.in_intensive_care == 0 or  case.in_intensive_care ==  None:
+                case.in_intensive_care = previous_case.in_intensive_care
+            case.save()
 
-    #    for case in list_of_cases:
+
+
+
+
 
 class Command(BaseCommand):
     #A command which takes a from_date as an input and then tries to put in all Intrabank rates into DB from that date
