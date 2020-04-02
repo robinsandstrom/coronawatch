@@ -25,6 +25,7 @@ SECRET_KEY = '$8t4_!4*v137lkl-i)avb-vn4%!n7l&m=#vgspg+m64xqqkh!7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 ALLOWED_HOSTS = ['*.herokuapp.com', 'coronawatch.se', 'http://127.0.0.1:8000/']
 
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,6 +71,9 @@ TEMPLATES = [
         },
     },
 ]
+
+LOCALE_PATHS = [ os.path.join(BASE_DIR, 'locale'), ]
+
 
 WSGI_APPLICATION = 'corona.wsgi.application'
 
@@ -106,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'sv'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'Europe/Paris'
 

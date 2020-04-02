@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-04-03 01:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: insight/templates/insight/modeling.html:97
+msgid "Estimate hospitalization needs"
+msgstr "Uppskatta sjukvårdsbehov"
+
+#: insight/templates/insight/modeling.html:98
+msgid "Important"
+msgstr "Viktigt"
+
+#: insight/templates/insight/modeling.html:98
+msgid ""
+"Since the 12th of March, Swedish agencies stopped testing cases outside of\n"
+"                            at-risk population. Look for trends in "
+"hospitalization or intensive care instead.\n"
+"                            "
+msgstr ""
+"Sedan den 12e mars har samtliga regioner valt att sluta testa misstänkta "
+"fall utanför riskgrupper, försök hitta trender i dödsfall och vårdtillfällen "
+"istället."
+
+#: insight/templates/insight/modeling.html:130
+msgid "Confirmed cases"
+msgstr "Bekräftade fall"
+
+#: insight/templates/insight/modeling.html:136
+msgid "In hospital"
+msgstr "I slutenvård"
+
+#: insight/templates/insight/modeling.html:142
+msgid "In intensive care"
+msgstr "I intensivvård"
+
+#: insight/templates/insight/modeling.html:148
+msgid "Dead"
+msgstr "Dödsfall"
+
+#: insight/templates/insight/modeling.html:153
+msgid "Flows"
+msgstr "Flöden"
+
+#: insight/templates/insight/modeling.html:155
+msgid ""
+"\n"
+"                    The hospital care needs in this model builds on an "
+"extended SEIR-model that simulates an epidemic\n"
+"                    outbreak. People are divided into the groups S, E, Q, I, "
+"J, R, C and the flows inbetween the categories are decided\n"
+"                    by the parameters. The preset parameters are a qualified "
+"guess, but they could change with time. To change a parameter with time,\n"
+"                    please look at the code repo on github. For simplicity, "
+"we assume that people that are in intensive care have been hospitalized\n"
+"                    and that no one dies outside of intensive care. We also "
+"assume that the rate of becoming healthy again is the same regardless if "
+"you\n"
+"                    self-quarantine or not.\n"
+"                "
+msgstr ""
+"\n"
+"Vårdbehoven i den här modellen bygger på en utvidgat SEIR-modell som "
+"simulerar ett epidemiskt utbrott. \n"
+"Människor delas in i grupperna S, E, Q, I, J, R, C och flödena mellan de "
+"olika kategorierna bestäms av \n"
+" parametrarna som anges här. De förinställda parametrarna är en "
+"kvalificierad gissning men kan ändras med tiden \n"
+" i och med att vi ändrar våra beteenden. För att ändra parametrar avseende "
+"på tid, ladda hem kod från GITHUB-repot. För enkelhetens skull antar vi att "
+"människor som intensivvårdas har tidigare vårdats i slutenvård, och att "
+"patienter enbart dör i intensivvården. Vi antar också att tillfrisknaden som "
+"sjuk är detsamma oavsett om man gått in i frivillig karantän eller inte."
+
+#: insight/templates/insight/sidebar.html:26
+msgid "Population factor"
+msgstr "Befolkningsandel"
+
+#: insight/templates/insight/sidebar.html:35
+msgid "Unrecorded factor"
+msgstr "Mörkertal"
+
+#: insight/templates/insight/sidebar.html:46
+msgid "Infectiousness constant"
+msgstr "Smittsamhet"
+
+#: insight/templates/insight/sidebar.html:55
+msgid "Asymptomatic infectiousness"
+msgstr "Asymptomatisk smittsamhet"
+
+#: insight/templates/insight/sidebar.html:64
+msgid "Quarantined infectiousness"
+msgstr "Karantänad smittsamhet"
+
+#: insight/templates/insight/sidebar.html:73
+msgid "Isolated infectiousness"
+msgstr "Smittsamhet på sjukhus"
+
+#: insight/templates/insight/sidebar.html:84
+msgid "Incubation time"
+msgstr "Inkubationstid"
+
+#: insight/templates/insight/sidebar.html:86
+#: insight/templates/insight/sidebar.html:95
+#: insight/templates/insight/sidebar.html:104
+#: insight/templates/insight/sidebar.html:113
+msgid "days"
+msgstr "dagar"
+
+#: insight/templates/insight/sidebar.html:93
+msgid "Average days as sick"
+msgstr "Genomsnittlig tid som sjuk"
+
+#: insight/templates/insight/sidebar.html:102
+msgid "Average days in hospital"
+msgstr "Genomsnittlig tid på slutenvård"
+
+#: insight/templates/insight/sidebar.html:111
+msgid "Average days in intensive care"
+msgstr "Genomsnittlig tid på intensivvård"
+
+#: insight/templates/insight/sidebar.html:120
+msgid "Infected population in quarantine"
+msgstr "Smittsamma i karantän"
+
+#: insight/templates/insight/sidebar.html:130
+msgid "Cases needing hospitalization"
+msgstr "Fall som kräver slutenvård"
+
+#: insight/templates/insight/sidebar.html:139
+msgid "Hospitalization cases needing intensive care"
+msgstr "Slutenvårdsfall som kräver intensivvård"
+
+#: insight/templates/insight/sidebar.html:148
+msgid "Death rate in intensive care"
+msgstr "Andel som dör i intensivvård"
+
+#: insight/templates/insight/sidebar.html:156
+msgid "Calculate"
+msgstr "Beräkna"

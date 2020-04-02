@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+{% load i18n %}
 <html>
 
 <head>
@@ -94,9 +94,10 @@
 
                     <div class="headline mt-5 pt-5">
                         <img height="30" src="{% static 'cardiogram.svg' %}" class="mb-3 mr-2" style="display: inline-block"></img>
-                        <h2 style="display: inline-block">SEQIJCR - prognostisera vårdbehov</h2>
-                        <p><strong>Viktigt!</strong> Sedan den 12e mars har samtliga regioner valt att sluta testa misstänkta fall utanför riskgrupper, försök hitta trender
-                        i dödsfall och vårdtillfällen istället.</p>
+                        <h2 style="display: inline-block">SEQIJCR - {% blocktrans %}Estimate hospitalization needs{% endblocktrans %}</h2>
+                        <p><strong>{% trans 'Important' %}! </strong>{% blocktrans %}Since the 12th of March, Swedish agencies stopped testing cases outside of
+                            at-risk population. Look for trends in hospitalization or intensive care instead.
+                            {% endblocktrans %}</p>
                     </div>
 
                     <div class="subtext mt-2 pt-2">
@@ -126,35 +127,39 @@
             <div class="card mx-sm-2 mt-0 pt-4 z-depth-0 px-0">
 
                 <div class="card-body">
-                    <h1 class="pl-2 font-weight-light my-4">Bekräftade fall</h1>
+                    <h1 class="pl-2 font-weight-light my-4">{% trans 'Confirmed cases' %}</h1>
                     <div id="graph_1" class="chartdiv px-0" style="height: 400px;"></div>
                 </div>
             </div>
             <div class="card mx-sm-0 my-2 z-depth-0">
                 <div class="card-body">
-                    <h1 class="pl-2 font-weight-light my-4">Slutenvårdsfall</h1>
+                    <h1 class="pl-2 font-weight-light my-4">{% trans 'In hospital' %}</h1>
                     <div id="graph_2" class="chartdiv" style="height: 400px;"></div>
                 </div>
             </div>
             <div class="card mx-sm-0 my-2 z-depth-0">
                 <div class="card-body">
-                    <h1 class="pl-2 font-weight-light my-4">Intensivvårdsfall</h1>
+                    <h1 class="pl-2 font-weight-light my-4">{% trans 'In intensive care' %}</h1>
                     <div id="graph_3" class="chartdiv" style="height: 400px;"></div>
                 </div>
             </div>
             <div class="card mx-sm-0 my-2 z-depth-0">
                 <div class="card-body">
-                    <h1 class="pl-2 font-weight-light my-4">Dödsfall</h1>
+                    <h1 class="pl-2 font-weight-light my-4">{% trans 'Dead' %}</h1>
                     <div id="graph_4" class="chartdiv" style="height: 400px;"></div>
                 </div>
             </div>
             <div class="card mb-5 z-depth-0 p-5">
-                <h1>Flöden</h1>
-                <p class="font-weight-light mb-3">Vårdbehoven i den här modellen bygger på en utvidgat SEIR-modell som simulerar ett epidemiskt utbrott.
-                Människor delas in i grupperna S, E, Q, I, J, R, C och flödena mellan de olika kategorierna bestäms av parametrarna som anges här. De förinställda parametrarna
-                är en kvalificierad gissning men kan ändras med tiden i och med att vi ändrar våra beteenden.
-                För enkelhetens skull antar vi att människor som intensivvårdas har tidigare vårdats i slutenvård, och att patienter enbart dör i intensivvården.
-                Vi antar också att tillfrisknaden som sjuk är detsamma oavsett om man gått in i frivillig karantän eller inte.
+                <h1>{% trans 'Flows' %}</h1>
+                <p class="font-weight-light mb-3">
+                {% blocktrans %}
+                    The hospital care needs in this model builds on an extended SEIR-model that simulates an epidemic
+                    outbreak. People are divided into the groups S, E, Q, I, J, R, C and the flows inbetween the categories are decided
+                    by the parameters. The preset parameters are a qualified guess, but they could change with time. To change a parameter with time,
+                    please look at the code repo on github. For simplicity, we assume that people that are in intensive care have been hospitalized
+                    and that no one dies outside of intensive care. We also assume that the rate of becoming healthy again is the same regardless if you
+                    self-quarantine or not.
+                {% endblocktrans %}
                 </p>
 
                 <div class="model mt-4">
