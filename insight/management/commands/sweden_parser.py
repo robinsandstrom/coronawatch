@@ -128,18 +128,31 @@ class NewsParser:
 
 
     def parse_aftonbladet(self):
-        r = requests.get('https://tethys.aftonbladet.se/configurationdata/coronadata')
-        list_of_cases = r.json()['workSheets']['sverige']['rows']
+        r = requests.get('https://tethys.aftonbladet.se/configurationdata/coronaswenumbers')
+        pprint(r.json())
+        list_of_cases = r.json()['workSheets']['swe_numbers']['rows']
         summary = {}
         for case in list_of_cases:
             #print(case)
             d = case['date']
             region = case['region']
-            if d in summary:
-                summary[d][region]['new_cases'] += 1
-                summary[d]['Sverige']['new_cases'] += 1
-            else:
+            cases = int(case['confirmed'])
+            deaths = int(case['dead'])
 
+            if d in summary:
+                summary[d][region]['total_cases'] = cases
+                summary[d]['Sverige']['total_cases'] += cases
+                summary[d]['Sverige']['total_deaths'] += deaths
+
+                try:
+                    old_cases = int(summary[str(datetime.strptime(d, '%Y-%m-%d').date()-timedelta(days=1))][region]['total_cases'])
+                except:
+                    old_cases = 0
+
+                summary[d][region]['new_cases'] = cases-old_cases
+                summary[d]['Sverige']['new_cases'] += cases-old_cases
+
+            else:
                 summary[d] = {
                         'Stockholm': {
                             'new_cases': 0,
@@ -271,33 +284,19 @@ class NewsParser:
                             'new_cases': 0,
                             'new_deaths': 0,
                             'in_hospital': 0,
-                            'in_intensive_care': 0
+                            'in_intensive_care': 0,
+                            'total_cases': 0,
+                            'total_deaths': 0,
                         }
                 }
 
                 summary[d][region]['new_cases'] = 1
                 summary[d]['Sverige']['new_cases'] = 1
 
-
-
-        dead_site = 'https://tethys.aftonbladet.se/configurationdata/coronaswedead'
-        r = requests.get(dead_site)
-        list_of_cases = r.json()['workSheets']['swedead']['rows']
-
-        for case in list_of_cases:
-
-            d = case['date']
-            region = case['region']
-
-            if d in summary:
-                summary[d][region]['new_deaths'] += 1
-                summary[d]['Sverige']['new_deaths'] += 1
-            else:
-                pass
-
         in_care_site = 'https://tethys.aftonbladet.se/configurationdata/coronaregion'
         r = requests.get(in_care_site)
         list_of_cases = r.json()['workSheets']['region']['rows']
+
 
         for case in list_of_cases:
             if case['inlagda-totalt'] != 'nan':
@@ -310,60 +309,18 @@ class NewsParser:
                 summary[case['date']]['Sverige']['in_intensive_care'] += int(case['varav-iva'])
 
 
-        region_accu = {
-            'Stockholm': {'cases': 0, 'deaths': 0},
-            'Uppsala': {'cases': 0, 'deaths': 0},
-            'Sörmland': {'cases': 0, 'deaths': 0},
-            'Östergötland': {'cases': 0, 'deaths': 0},
-            'Jönköping': {'cases': 0, 'deaths': 0},
-            'Kronoberg': {'cases': 0, 'deaths': 0},
-            'Kalmar': {'cases': 0, 'deaths': 0},
-            'Gotland': {'cases': 0, 'deaths': 0},
-            'Blekinge': {'cases': 0, 'deaths': 0},
-            'Skåne': {'cases': 0, 'deaths': 0},
-            'Halland': {'cases': 0, 'deaths': 0},
-            'Västra Götaland': {'cases': 0, 'deaths': 0},
-            'Värmland': {'cases': 0, 'deaths': 0},
-            'Örebro': {'cases': 0, 'deaths': 0},
-            'Västmanland': {'cases': 0, 'deaths': 0},
-            'Dalarna': {'cases': 0, 'deaths': 0},
-            'Gävleborg': {'cases': 0, 'deaths': 0},
-            'Västernorrland': {'cases': 0, 'deaths': 0},
-            'Jämtland': {'cases': 0, 'deaths': 0},
-            'Västerbotten': {'cases': 0, 'deaths': 0},
-            'Norrbotten': {'cases': 0, 'deaths': 0},
-            'Sverige': {'cases': 0, 'deaths': 0}
-        }
-
-        stop = datetime.now().date()
-        today = stop-timedelta(days=4)
-        while today <= stop:
-            if str(today) in summary:
-                for name, region in summary[str(today)].items():
-                    if region['in_hospital'] == 0:
-                        region['in_hospital'] = summary[str(today-timedelta(days=1))][name]['in_hospital']
-
-                    if region['in_intensive_care'] == 0:
-                        region['in_intensive_care'] = summary[str(today-timedelta(days=1))][name]['in_intensive_care']
-            today+=timedelta(days=1)
-
-
+        pprint(summary)
 
         for date, regions in summary.items():
 
             for region, cases in regions.items():
-                region_accu[region]['cases']+=cases['new_cases']
-                region_accu[region]['deaths']+=cases['new_deaths']
-
                 cases['date'] = date
                 cases['country'] = region
-                cases['total_cases'] = region_accu[region]['cases']
-                cases['total_deaths'] = region_accu[region]['deaths']
 
                 ct = CountryTracker.objects.get_or_create(date=cases['date'], country=cases['country'])[0]
                 CountryTracker.objects.filter(id=ct.id).update(**cases)
 
-        pprint(summary)
+        #pprint(summary)
 
     def parse_dn(self):
         r = requests.get('https://api.quickshot-widgets.net/fields/1141')
