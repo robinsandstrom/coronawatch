@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-03 01:14+0200\n"
+"POT-Creation-Date: 2020-04-03 01:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,6 +36,10 @@ msgstr ""
 "Sedan den 12e mars har samtliga regioner valt att sluta testa misstänkta "
 "fall utanför riskgrupper, försök hitta trender i dödsfall och vårdtillfällen "
 "istället."
+
+#: insight/templates/insight/modeling.html:116
+msgid "Future days to calculate"
+msgstr "Antal dagar att beräkna i framtiden"
 
 #: insight/templates/insight/modeling.html:130
 msgid "Confirmed cases"
