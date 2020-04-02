@@ -141,16 +141,22 @@ class NewsParser:
 
             if d in summary:
                 summary[d][region]['total_cases'] = cases
+                summary[d][region]['total_cases'] = deaths
+
                 summary[d]['Sverige']['total_cases'] += cases
                 summary[d]['Sverige']['total_deaths'] += deaths
 
                 try:
                     old_cases = int(summary[str(datetime.strptime(d, '%Y-%m-%d').date()-timedelta(days=1))][region]['total_cases'])
+                    old_deaths = int(summary[str(datetime.strptime(d, '%Y-%m-%d').date()-timedelta(days=1))][region]['total_deaths'])
                 except:
                     old_cases = 0
+                    old_deaths = 0
 
                 summary[d][region]['new_cases'] = cases-old_cases
+                summary[d][region]['new_deaths'] = deaths-old_deaths
                 summary[d]['Sverige']['new_cases'] += cases-old_cases
+                summary[d]['Sverige']['new_deaths'] += deaths-old_deaths
 
             else:
                 summary[d] = {
