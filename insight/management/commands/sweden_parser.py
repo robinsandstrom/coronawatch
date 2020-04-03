@@ -165,7 +165,6 @@ class NewsParser:
             d = case['date']
             region = case['region']
             ct = CountryTracker.objects.get_or_create(date=d, country=region)[0]
-
             if case['inlagda-totalt'] != 'nan':
                 ct.in_hospital = case['inlagda-totalt']
 
@@ -184,11 +183,16 @@ class NewsParser:
             total_cases = daily_cases.aggregate(Sum('total_cases'))['total_cases__sum'] or 0
             new_deaths = daily_cases.aggregate(Sum('new_deaths'))['new_deaths__sum'] or 0
             total_deaths = daily_cases.aggregate(Sum('total_deaths'))['total_deaths__sum'] or 0
+            in_hospital = daily_cases.aggregate(Sum('in_hospital'))['in_hospital__sum'] or 0
+            in_intensive_care = daily_cases.aggregate(Sum('in_intensive_care'))['in_intensive_care__sum'] or 0
+
             ct = CountryTracker.objects.get_or_create(date=date, country='Sverige')[0]
             ct.new_cases = new_cases
             ct.total_cases = total_cases
             ct.new_deaths = new_deaths
             ct.total_deaths = total_deaths
+            ct.in_hospital = in_hospital
+            ct.in_intensive_care = in_intensive_care
             ct.save()
             date += timedelta(days=1)
 
