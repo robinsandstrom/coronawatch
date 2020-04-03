@@ -199,7 +199,7 @@ class SEQIJCR:
         print(self.Pi)
         print(self.pi)
 
-    def set_measurements(self, cases, minime=10):
+    def set_measurements(self, cases, minime=100):
         self.minime = minime
 
         x_confirmed = []
@@ -209,7 +209,14 @@ class SEQIJCR:
         intensive_care_confirmed = []
 
         i=0
-        for case in cases.filter(total_cases__gte=minime):
+        filtered_cases = cases.filter(total_cases__gte=minime)
+
+        if len(cases) < 5:
+            cases = cases
+        else:
+            cases = filtered_cases
+
+        for case in cases:
             x_confirmed.append(i)
             cases_confirmed.append(case.get('total_cases'))
             deaths_confirmed.append(case.get('total_deaths'))

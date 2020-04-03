@@ -200,6 +200,10 @@ class NewsParser:
                 case.in_hospital = previous_case.in_hospital
             if case.in_intensive_care == 0 or  case.in_intensive_care ==  None:
                 case.in_intensive_care = previous_case.in_intensive_care
+            if case.total_cases == 0 or  case.total_cases ==  None:
+                case.total_cases = previous_case.total_cases
+            if case.total_deaths == 0 or  case.total_deaths ==  None:
+                case.total_deaths = previous_case.total_deaths
             case.save()
 
 
